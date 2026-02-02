@@ -17,7 +17,7 @@ async function testCodeChef() {
         } else {
             console.log('Strategy 1 API returned no content.');
         }
-    } catch (e) {
+    } catch (e: any) {
         console.log('Strategy 1 failed:', e.message);
     }
 
@@ -41,7 +41,7 @@ async function testCodeChef() {
             if (i < 5) console.log($(el).text());
         });
 
-    } catch (e) {
+    } catch (e: any) {
         console.log('Strategy 2 failed:', e.message);
     }
 }

@@ -41,8 +41,19 @@ export async function fetchCodeChefSubmissions(username: string): Promise<Submis
             const problemUrl = `https://www.codechef.com${problemLink.attr('href')}`;
 
             // Extract timestamp from tooltip
-            const timeStr = $(cols).first().find('[title]').attr('title') || $(cols).first().text().trim();
-            const timestamp = Date.parse(timeStr) / 1000 || Math.floor(Date.now() / 1000);
+            // User says there's a timer icon with hover. 
+            // Often it's the first column: <td> <span title="DD/MM/YYYY HH:MM ..."> 2 min ago </span> </td>
+            const timeSpan = $(cols).first().find('span[title]');
+            let timeStr = timeSpan.attr('title');
+
+            if (!timeStr) {
+                // Fallback: try direct text if format allows, or look for other tooltips
+                timeStr = $(cols).first().text().trim();
+            }
+
+            // Clean up time string if needed (sometimes has ' sec ago' etc in text, but title should be date)
+            // CodeChef title format: "10:30 PM 02/02/2026"
+            const timestamp = Date.parse(timeStr || '') / 1000 || Math.floor(Date.now() / 1000);
 
             if (problemCode) {
                 submissions.push({

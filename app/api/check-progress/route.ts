@@ -56,40 +56,50 @@ export async function GET() {
                 submissions = await fetchCodeChefSubmissions(profile.username);
             }
 
+            // Track unique problems for this run to avoid duplicates in the same message
+            const seenForProfile = new Set();
+
             // Filter for today's problems
             for (const sub of submissions) {
-                // Filter: Check if solved today
+                // Filter: Check if solved today (IST)
                 if (sub.timestamp < startOfDayTimestamp) {
                     continue;
                 }
 
-                // Database: Try to save, but don't error if exists
+                // Deduplicate within this run: if we already saw this problem in the fetch list
+                // (e.g. multiple subms for same problem today), skip.
+                // Use titleSlug or ID for uniqueness
+                if (seenForProfile.has(sub.titleSlug)) {
+                    continue;
+                }
+                seenForProfile.add(sub.titleSlug);
+
+                // Database: Try to save, but update if exists (though created check is fine)
                 try {
-                    const exists = await prisma.solvedProblem.findUnique({
+                    await prisma.solvedProblem.upsert({
                         where: {
                             platform_problemId: {
                                 platform: profile.platform,
                                 problemId: sub.id,
                             }
+                        },
+                        update: {}, // Do nothing if exists
+                        create: {
+                            platform: profile.platform,
+                            problemId: sub.id,
+                            title: sub.title,
+                            solvedAt: new Date(sub.timestamp * 1000),
                         }
                     });
+                    totalNewProblems++;
 
-                    if (!exists) {
-                        await prisma.solvedProblem.create({
-                            data: {
-                                platform: profile.platform,
-                                problemId: sub.id, // Ensure ID is string
-                                title: sub.title,
-                                solvedAt: new Date(sub.timestamp * 1000),
-                            }
-                        });
-                        totalNewProblems++;
-                    }
                 } catch (e) {
-                    // Ignore DB errors (duplicates etc)
+                    // Ignore DB errors
                 }
 
-                // Notification: ADD REGARDLESS OF EXISTENCE (User Request)
+                // Notification: ADD REGARDLESS OF EXISTENCE in DB (User Request)
+                // But avoid adding duplicates globally in this message list if needed.
+                // Actually user said "links of solved problems", usually list is fine.
                 messages.push(sub.url);
             }
         }

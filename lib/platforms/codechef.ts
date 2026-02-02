@@ -1,7 +1,8 @@
 import axios from 'axios';
+import * as cheerio from 'cheerio';
 import { Submission } from './leetcode';
 
-const CC_API = 'https://www.codechef.com/api/list/bylimit/recent/ac';
+const CC_API = 'https://www.codechef.com/recent/user';
 
 export async function fetchCodeChefSubmissions(username: string): Promise<Submission[]> {
     try {
@@ -9,7 +10,7 @@ export async function fetchCodeChefSubmissions(username: string): Promise<Submis
             params: {
                 page: 0,
                 user_handle: username,
-                sort_by: 'code',
+                sort_by: 'timestamp',
                 sorting_order: 'desc',
             },
             headers: {
@@ -17,28 +18,47 @@ export async function fetchCodeChefSubmissions(username: string): Promise<Submis
             }
         });
 
-        if (!response.data || !response.data.data) {
+        if (!response.data || !response.data.content) {
             return [];
         }
 
-        const data = response.data.data;
+        // Parse HTML content
+        const $ = cheerio.load(response.data.content);
+        const submissions: Submission[] = [];
 
-        // The API usually returns HTML or JSON. If JSON:
-        // It seems to return an object with "data" field containing the list.
+        $('tr').each((_, row) => {
+            // Typical row: [Time, ProblemCode, Result, ...]
+            const cols = $(row).find('td');
+            if (cols.length === 0) return;
 
-        // Note: This API response structure varies. Usually it gives a list.
-        // Let's assume a standard structure found in similar reverse-engineered implementations.
+            // Result check (look for accepted icon or text)
+            const isAccepted = $(row).html()?.includes('/tick-icon.png') || $(row).html()?.includes('accepted');
 
-        return data.map((item: any) => ({
-            id: item.id.toString(),
-            title: `${item.contest_code}: ${item.problem_code}`,
-            titleSlug: item.problem_code,
-            timestamp: item.timestamp ? parseInt(item.timestamp) : Math.floor(Date.now() / 1000), // Fallback if missing
-            url: `https://www.codechef.com/problems/${item.problem_code}`,
-        }));
+            if (!isAccepted) return;
+
+            const problemLink = $(cols).find('a[href*="/problems/"]').first();
+            const problemCode = problemLink.text().trim();
+            const problemUrl = `https://www.codechef.com${problemLink.attr('href')}`;
+
+            // Extract timestamp from tooltip
+            const timeStr = $(cols).first().find('[title]').attr('title') || $(cols).first().text().trim();
+            const timestamp = Date.parse(timeStr) / 1000 || Math.floor(Date.now() / 1000);
+
+            if (problemCode) {
+                submissions.push({
+                    id: `${username}-${problemCode}-${timestamp}`,
+                    title: problemCode,
+                    titleSlug: problemCode,
+                    timestamp: timestamp,
+                    url: problemUrl
+                });
+            }
+        });
+
+        return submissions;
 
     } catch (error) {
-        console.warn('Note: CodeChef fetch failed (API might be protected). Returning empty.', error);
+        console.warn('CodeChef fetch failed:', error);
         return [];
     }
 }

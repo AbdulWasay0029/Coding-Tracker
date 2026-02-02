@@ -20,10 +20,30 @@ export async function GET() {
         let totalNewProblems = 0;
         const messages: string[] = [];
 
-        // Get start of today (00:00:00) in Unix timestamp
-        const startOfDay = new Date();
-        startOfDay.setHours(0, 0, 0, 0);
-        const startOfDayTimestamp = Math.floor(startOfDay.getTime() / 1000);
+        // Get start of today in IST (UTC+5:30)
+        const now = new Date();
+        // IST offset is +5.5 hours, so we add it to get IST time, then floor it, then subtract it back to compare timestamps?
+        // Easier: Get current time in IST, set hours to 0, get timestamp.
+
+        // Create a date object for the current time
+        const dateInIst = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+        dateInIst.setHours(0, 0, 0, 0);
+
+        // This dateInIst is "00:00 IST" but represents that abstract time. 
+        // We need the timestamp of that moment in UTC.
+        // We can do this by creating a Date object with these components relative to IST.
+        // But simpler: just use the offset.
+
+        // Let's use a robust method:
+        const istOffset = 5.5 * 60 * 60 * 1000;
+        const nowUTC = now.getTime();
+        const nowIST = nowUTC + istOffset;
+
+        const todayStartIST = new Date(nowIST);
+        todayStartIST.setUTCHours(0, 0, 0, 0);
+
+        // Subtract offset to get back to UTC timestamp for that IST moment
+        const startOfDayTimestamp = Math.floor((todayStartIST.getTime() - istOffset) / 1000);
 
         for (const profile of profiles) {
             let submissions: any[] = [];
@@ -36,38 +56,41 @@ export async function GET() {
                 submissions = await fetchCodeChefSubmissions(profile.username);
             }
 
-            // Filter for today's problems or just new ones not in DB
+            // Filter for today's problems
             for (const sub of submissions) {
                 // Filter: Check if solved today
                 if (sub.timestamp < startOfDayTimestamp) {
                     continue;
                 }
 
-                // Check if exists
-                const exists = await prisma.solvedProblem.findUnique({
-                    where: {
-                        platform_problemId: {
-                            platform: profile.platform,
-                            problemId: sub.id,
-                        }
-                    }
-                });
-
-                if (!exists) {
-                    // It's a new problem!
-                    await prisma.solvedProblem.create({
-                        data: {
-                            platform: profile.platform,
-                            problemId: sub.id, // Ensure ID is string
-                            title: sub.title,
-                            solvedAt: new Date(sub.timestamp * 1000),
+                // Database: Try to save, but don't error if exists
+                try {
+                    const exists = await prisma.solvedProblem.findUnique({
+                        where: {
+                            platform_problemId: {
+                                platform: profile.platform,
+                                problemId: sub.id,
+                            }
                         }
                     });
 
-                    // Only push the URL as requested
-                    messages.push(sub.url);
-                    totalNewProblems++;
+                    if (!exists) {
+                        await prisma.solvedProblem.create({
+                            data: {
+                                platform: profile.platform,
+                                problemId: sub.id, // Ensure ID is string
+                                title: sub.title,
+                                solvedAt: new Date(sub.timestamp * 1000),
+                            }
+                        });
+                        totalNewProblems++;
+                    }
+                } catch (e) {
+                    // Ignore DB errors (duplicates etc)
                 }
+
+                // Notification: ADD REGARDLESS OF EXISTENCE (User Request)
+                messages.push(sub.url);
             }
         }
 

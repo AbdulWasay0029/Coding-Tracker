@@ -20,6 +20,11 @@ export async function GET() {
         let totalNewProblems = 0;
         const messages: string[] = [];
 
+        // Get start of today (00:00:00) in Unix timestamp
+        const startOfDay = new Date();
+        startOfDay.setHours(0, 0, 0, 0);
+        const startOfDayTimestamp = Math.floor(startOfDay.getTime() / 1000);
+
         for (const profile of profiles) {
             let submissions: any[] = [];
 
@@ -33,6 +38,11 @@ export async function GET() {
 
             // Filter for today's problems or just new ones not in DB
             for (const sub of submissions) {
+                // Filter: Check if solved today
+                if (sub.timestamp < startOfDayTimestamp) {
+                    continue;
+                }
+
                 // Check if exists
                 const exists = await prisma.solvedProblem.findUnique({
                     where: {
@@ -54,7 +64,8 @@ export async function GET() {
                         }
                     });
 
-                    messages.push(`**${profile.username}** solved **${sub.title}** on ${profile.platform}!\n${sub.url}`);
+                    // Only push the URL as requested
+                    messages.push(sub.url);
                     totalNewProblems++;
                 }
             }

@@ -51,9 +51,50 @@ export async function fetchCodeChefSubmissions(username: string): Promise<Submis
                 timeStr = $(cols).first().text().trim();
             }
 
-            // Clean up time string if needed (sometimes has ' sec ago' etc in text, but title should be date)
-            // CodeChef title format: "10:30 PM 02/02/2026"
-            const timestamp = Date.parse(timeStr || '') / 1000 || Math.floor(Date.now() / 1000);
+            // Clean up time string if needed
+            // CodeChef format examples: "8 min ago", "09:09 PM 28/01/26"
+
+            let timestamp: number;
+
+            if (timeStr?.includes('ago')) {
+                // Parse relative time
+                const num = parseInt(timeStr.match(/\d+/)?.[0] || '0');
+                const now = Math.floor(Date.now() / 1000);
+                if (timeStr.includes('sec')) timestamp = now - num;
+                else if (timeStr.includes('min')) timestamp = now - num * 60;
+                else if (timeStr.includes('hour')) timestamp = now - num * 3600;
+                else if (timeStr.includes('day')) timestamp = now - num * 86400;
+                else timestamp = now;
+            } else {
+                // Parse absolute time: "09:09 PM 28/01/26"
+                // Split date and time
+                try {
+                    // Normalize to simpler format if possible or parse manually
+                    // Assume DD/MM/YY
+                    const parts = timeStr?.split(' ') || [];
+                    if (parts.length >= 3) {
+                        const timePart = parts[0]; // 09:09
+                        const ampm = parts[1];      // PM
+                        const datePart = parts[2];  // 28/01/26
+
+                        const [hours, mins] = timePart.split(':').map(Number);
+                        const [day, month, yearShort] = datePart.split('/').map(Number);
+                        const year = 2000 + yearShort;
+
+                        let hour24 = hours;
+                        if (ampm === 'PM' && hours !== 12) hour24 += 12;
+                        if (ampm === 'AM' && hours === 12) hour24 = 0;
+
+                        const dateObj = new Date(year, month - 1, day, hour24, mins);
+                        timestamp = Math.floor(dateObj.getTime() / 1000);
+                    } else {
+                        // Fallback
+                        timestamp = Math.floor(Date.now() / 1000);
+                    }
+                } catch (e) {
+                    timestamp = Math.floor(Date.now() / 1000);
+                }
+            }
 
             if (problemCode) {
                 submissions.push({

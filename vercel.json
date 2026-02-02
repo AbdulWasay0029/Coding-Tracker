@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/check-progress",
+      "schedule": "0 23 * * *"
+    }
+  ]
+}

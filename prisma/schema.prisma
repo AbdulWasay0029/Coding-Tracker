@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model UserProfile {
+  id        String   @id @default(uuid())
+  platform  String   // "LEETCODE", "CODEFORCES", "CODECHEF"
+  username  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([platform, username])
+}
+
+model SolvedProblem {
+  id          String   @id @default(uuid())
+  platform    String
+  problemId   String   // The unique slug or ID from the platform
+  title       String
+  solvedAt    DateTime // When it was solved (or scraped)
+  createdAt   DateTime @default(now())
+
+  @@unique([platform, problemId])
+}
+
+model GlobalConfig {
+  id String @id @default("config")
+  discordWebhookUrl String?
+}

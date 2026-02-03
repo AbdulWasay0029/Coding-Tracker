@@ -65,5 +65,4 @@ A: We use strict **IST (Indian Standard Time)** midnights. If you solve a proble
 
 ---
 
-**Built within the Antigravity Scratchpad.**
 *Optimizing for the best time complexity, in code and in life :D*

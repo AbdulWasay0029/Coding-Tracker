@@ -39,7 +39,6 @@ Create a `.env` file. This is where the magic happens:
 ```env
 DATABASE_URL="file:./dev.db"
 SMARTINTERVIEWS_TOKEN="your_jwt_token_here"  # Optional: For that deep SmartInterviews tracking
-SMARTINTERVIEWS_TOKEN="your_jwt_token_here"
 ```
 *   **How to get it**: Log in to SmartInterviews, open Developer Tools (F12) > Network Tab, refresh, find a request to `/api/...`, and copy the `authorization` header value (without the word "Token ").
 

@@ -39,7 +39,10 @@ Create a `.env` file. This is where the magic happens:
 ```env
 DATABASE_URL="file:./dev.db"
 SMARTINTERVIEWS_TOKEN="your_jwt_token_here"  # Optional: For that deep SmartInterviews tracking
+SMARTINTERVIEWS_TOKEN="your_jwt_token_here"
 ```
+*   **How to get it**: Log in to SmartInterviews, open Developer Tools (F12) > Network Tab, refresh, find a request to `/api/...`, and copy the `authorization` header value (without the word "Token ").
+
 
 ### 3. Launch the Mothership (Dashboard)
 ```bash
@@ -56,8 +59,6 @@ Set up a Cron Job (or deploy to Vercel). The default schedule is **11:00 PM IST*
 
 ## ❓ FAQ / Troubleshooting
 
-**Q: SmartInterviews missing some problems?**
-A: Currently, CodeSync tracks the **Recent 10 Submissions** from your profile. If you go beast mode and solve 50 problems in one day, some might slip through the specific link tracking, but the "Activity Heatmap" won't lie!
 
 **Q: The dates feel wrong?**
 A: We use strict **IST (Indian Standard Time)** midnights. If you solve a problem at 11:59 PM and run the tracker at 12:01 AM, it belongs to *yesterday*. Precision matters!

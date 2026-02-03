@@ -56,7 +56,7 @@ The system is configured to run automatically everyday at **11:00 PM IST** (17:3
 - **LeetCode**: ✅ Full Support
 - **Codeforces**: ✅ Full Support
 - **CodeChef**: ✅ Parsing Support
-- **SmartInterviews**: 🚧 (Pending - protected API)
+- **SmartInterviews**: ⚠️ Activity Only (Tracks count, links unavailable)
 
 ## Troubleshooting
 - **No messages?**: Ensure you solved a problem *today (IST)*. The tracker strictly filters timestamps.

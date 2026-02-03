@@ -81,6 +81,7 @@ export default async function Home() {
                     <option value="LEETCODE">LeetCode</option>
                     <option value="CODEFORCES">Codeforces</option>
                     <option value="CODECHEF">CodeChef</option>
+                    <option value="SMARTINTERVIEWS">SmartInterviews</option>
                   </select>
                 </div>
                 <div>

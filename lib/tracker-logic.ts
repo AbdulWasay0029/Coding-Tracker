@@ -2,6 +2,7 @@ import { prisma } from './prisma';
 import { fetchLeetCodeSubmissions } from './platforms/leetcode';
 import { fetchCodeforcesSubmissions } from './platforms/codeforces';
 import { fetchCodeChefSubmissions } from './platforms/codechef';
+import { fetchSmartInterviewsSubmissions } from './platforms/smartinterviews';
 import { sendDiscordNotification } from './discord';
 
 export async function checkAndNotifyProgress(startTimestamp: number, endTimestamp: number) {
@@ -30,6 +31,8 @@ export async function checkAndNotifyProgress(startTimestamp: number, endTimestam
                     submissions = await fetchCodeforcesSubmissions(profile.username);
                 } else if (profile.platform === 'CODECHEF') {
                     submissions = await fetchCodeChefSubmissions(profile.username);
+                } else if (profile.platform === 'SMARTINTERVIEWS') {
+                    submissions = await fetchSmartInterviewsSubmissions(profile.username);
                 }
             } catch (err) {
                 console.error(`[Tracker] Failed to fetch ${profile.platform}:`, err);

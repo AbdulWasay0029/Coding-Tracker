@@ -22,6 +22,7 @@ npm install
 Create a `.env` file (or use the existing one):
 ```env
 DATABASE_URL="file:./dev.db"
+SMARTINTERVIEWS_TOKEN="optional_jwt_token_for_accurate_links"
 ```
 
 ### 3. Database
@@ -56,7 +57,7 @@ The system is configured to run automatically everyday at **11:00 PM IST** (17:3
 - **LeetCode**: ✅ Full Support
 - **Codeforces**: ✅ Full Support
 - **CodeChef**: ✅ Parsing Support
-- **SmartInterviews**: ⚠️ Activity Only (Tracks count, links unavailable)
+- **SmartInterviews**: ✅ Full Support (Requires JWT Token)
 
 ## Troubleshooting
 - **No messages?**: Ensure you solved a problem *today (IST)*. The tracker strictly filters timestamps.

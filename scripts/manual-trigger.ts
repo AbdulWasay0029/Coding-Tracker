@@ -1,4 +1,9 @@
 import readline from 'readline';
+import dotenv from 'dotenv';
+import path from 'path';
+
+// Load env
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 import { checkAndNotifyProgress } from '../lib/tracker-logic';
 
 async function main() {

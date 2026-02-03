@@ -39,9 +39,6 @@ export async function fetchSmartInterviewsSubmissions(username: string): Promise
 
                 if (data.data && data.data.submissions && Array.isArray(data.data.submissions)) {
                     for (const sub of data.data.submissions) {
-                        // Check verdict (assuming 'Accepted' is the string, need to verify if it differs in this API)
-                        // Based on typical SI responses, it's likely 'Accepted'.
-                        // Let's print one to debug log if needed, but for now assume standard field names or map them.
 
                         // Map fields based on our "Gold Mine" payload success
                         // usually: submittedAt, problem.title, etc.
@@ -49,29 +46,30 @@ export async function fetchSmartInterviewsSubmissions(username: string): Promise
                         // We need to know the shape of a submission object in this list.
                         // It usually has 'problem' object inside.
 
+                        // Debug logs show keys are direct: problemSlug, problemTitle, solutionId
+                        // NOT nested in 'problem' object, and 'solutionId' instead of '_id'
+
                         const isAccepted = sub.verdict === 'Accepted';
                         if (!isAccepted) continue;
 
-                        // Deduplicate
-                        if (seenIds.has(sub._id)) continue;
-                        seenIds.add(sub._id);
+                        // Deduplicate using solutionId
+                        if (seenIds.has(sub.solutionId)) continue;
+                        seenIds.add(sub.solutionId);
 
                         const timestamp = Math.floor(new Date(sub.submittedAt).getTime() / 1000);
 
                         // Construct URL
-                        // We have contestSlug from the loop, and sub.problem.slug usually
-                        const problemSlug = sub.problem?.slug || sub.problemSlug;
-                        const solutionId = sub._id; // usually _id is the solution ID
+                        const problemSlug = sub.problemSlug;
 
-                        let url = `https://hive.smartinterviews.in/submission/${solutionId}`;
+                        let url = `https://hive.smartinterviews.in/submission/${sub.solutionId}`;
                         if (problemSlug) {
                             url = `https://hive.smartinterviews.in/contest/${contestSlug}/problem/${problemSlug}`;
                         }
 
                         submissions.push({
-                            id: `SI-${solutionId}`,
-                            title: sub.problem?.title || sub.problemTitle || 'Unknown Problem',
-                            titleSlug: problemSlug || `si-problem-${solutionId}`,
+                            id: `SI-${sub.solutionId}`,
+                            title: sub.problemTitle || 'Unknown Problem',
+                            titleSlug: problemSlug || `si-problem-${sub.solutionId}`,
                             timestamp: timestamp,
                             url: url
                         });

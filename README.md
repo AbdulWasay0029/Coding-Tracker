@@ -1,64 +1,68 @@
-# Coding Platform Tracker (CodeSync)
+# 🚀 CodeSync: The Ultimate Coding Tracker
 
-Automated tracking for **LeetCode**, **Codeforces**, and **CodeChef** solved problems. Notifies you daily on **Discord** with links to the problems you solved that day.
+**CodeSync** is your personal, automated "hype man" for competitive programming. It watches your activity on **LeetCode**, **Codeforces**, **CodeChef**, and **SmartInterviews**, and delivers a sleek daily report straight to your Discord.
 
-## Features
-- 🕒 **Daily Updates**: Checked automatically at **11 PM IST**.
-- 🧹 **Clean Notifications**: Sends **only the links** of solved problems.
-- 📆 **Daily Filter**: Only sends problems solved "Today" (IST).
-- 🔄 **Manual Trigger**: Run a script to trigger the update instantly.
-- 💅 **UI Management**: Use the Dashboard to manage usernames and webhook URL.
+---
 
-## Setup
+## ⚡ What Makes This Special?
 
-### 1. Installation
+*   🔥 **Zero Effort**: You solve, we track. No manual updates needed.
+*   🧠 **Smart Filtering**: We *only* care about what you solved **TODAY**. No old noise.
+*   💎 **Premium Notifications**: Clean, minimalist Discord messages containing *direct links* to your victories.
+*   🕹️ **Interactive Dashboard**: A beautiful, real-time control panel to manage your accounts.
+*   🎩 **Manual & Auto**: Runs automatically at **11 PM**, or trigger it manually whenever you want a dopamine hit.
+
+---
+
+## 🛠️ Supported Platforms & Superpowers
+
+| Platform | Status | Superpower |
+| :--- | :--- | :--- |
+| **LeetCode** | ✅ **Active** | Full history tracking & direct links. |
+| **Codeforces** | ✅ **Active** | Real-time submission monitoring. |
+| **CodeChef** | ✅ **Active** | Smart date parsing (relative & absolute times). |
+| **SmartInterviews** | 🔐 **Unlocked** | **JWT-Powered** deep tracking! (Requires Token) |
+
+---
+
+## 🚀 Quick Start Guide
+
+### 1. Clone & Ignite
 ```bash
 git clone https://github.com/AbdulWasay0029/Coding-Tracker.git
 cd Coding-Tracker
 npm install
 ```
 
-### 2. Environment Variables
-Create a `.env` file (or use the existing one):
+### 2. Secrets & Keys 🗝️
+Create a `.env` file. This is where the magic happens:
 ```env
 DATABASE_URL="file:./dev.db"
-SMARTINTERVIEWS_TOKEN="optional_jwt_token_for_accurate_links"
+SMARTINTERVIEWS_TOKEN="your_jwt_token_here"  # Optional: For that deep SmartInterviews tracking
 ```
 
-### 3. Database
-```bash
-npx prisma generate
-npx prisma db push
-```
-
-### 4. Running Locally
+### 3. Launch the Mothership (Dashboard)
 ```bash
 npm run dev
 ```
-Visit `http://localhost:3000` to configure your **Discord Webhook** and **Usernames**.
+👉 **Visit**: `http://localhost:3000`
+Here you can adding usernames, set your Discord Webhook, and view your army of tracked profiles.
 
-## User Manual
+### 4. Deploy & Forget
+Set up a Cron Job (or deploy to Vercel). The default schedule is **11:00 PM IST**.
+*   **Manual Trigger**: Double-click `trigger_update.bat` in the folder. Boom. Done.
 
-### How to Add/Remove Profiles
-1. Go to the Dashboard (http://localhost:3000).
-2. Enter the **Platform** (e.g., LeetCode) and **Username**.
-3. Click **Add to Watchlist**.
-4. To remove, click the trash icon on the profile card.
+---
 
-### How to Trigger Manually
-If you want to send the daily report *right now* instead of waiting for 11 PM:
-1. Double-click the `trigger_update.bat` file in the root folder.
-2. OR run: `npx tsx scripts/manual-trigger.ts`
+## ❓ FAQ / Troubleshooting
 
-### Cron Job (Automatic)
-The system is configured to run automatically everyday at **11:00 PM IST** (17:30 UTC) when deployed to Vercel.
+**Q: SmartInterviews missing some problems?**
+A: Currently, CodeSync tracks the **Recent 10 Submissions** from your profile. If you go beast mode and solve 50 problems in one day, some might slip through the specific link tracking, but the "Activity Heatmap" won't lie!
 
-## Supported Platforms
-- **LeetCode**: ✅ Full Support
-- **Codeforces**: ✅ Full Support
-- **CodeChef**: ✅ Parsing Support
-- **SmartInterviews**: ✅ Full Support (Requires JWT Token)
+**Q: The dates feel wrong?**
+A: We use strict **IST (Indian Standard Time)** midnights. If you solve a problem at 11:59 PM and run the tracker at 12:01 AM, it belongs to *yesterday*. Precision matters!
 
-## Troubleshooting
-- **No messages?**: Ensure you solved a problem *today (IST)*. The tracker strictly filters timestamps.
-- **Duplicates?**: If you run the manual trigger multiple times, it *will* resend the links for today as per your request. The automatic cron will only run once a day.
+---
+
+**Built within the Antigravity Scratchpad.**
+*Optimizing for the best time complexity, in code and in life :D*

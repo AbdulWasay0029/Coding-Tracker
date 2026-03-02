@@ -3,9 +3,9 @@ import { Submission } from './leetcode';
 
 const SI_API_GOLDMINE = 'https://hive.smartinterviews.in/api/contest/allUserSubmissions';
 
-export async function fetchSmartInterviewsSubmissions(username: string): Promise<Submission[]> {
+export async function fetchSmartInterviewsSubmissions(username: string, tokenOverride?: string): Promise<Submission[]> {
     try {
-        const token = process.env.SMARTINTERVIEWS_TOKEN;
+        const token = tokenOverride || process.env.SMARTINTERVIEWS_TOKEN;
         // If no token, return empty (or we could keep heatmap fallback, 
         // but user seems to have token now so let's focus on quality).
         if (!token) {

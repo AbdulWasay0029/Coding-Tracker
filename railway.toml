@@ -1,0 +1,8 @@
+# Railway uses this to know how to start the bot.
+# It runs `npm run bot:start` which executes `tsx bot/index.ts`.
+[build]
+builder = "nixpacks"
+
+[deploy]
+startCommand = "npx prisma migrate deploy && npm run bot:start"
+restartPolicyType = "always"

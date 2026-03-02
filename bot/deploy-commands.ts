@@ -46,9 +46,21 @@ const commands = [
         .setName('check')
         .setDescription('Fetch all problems you solved and post the links')
         .addStringOption(o => o
+            .setName('when')
+            .setDescription('Quick pick: today or yesterday')
+            .setRequired(false)
+            .addChoices(
+                { name: 'Today', value: 'today' },
+                { name: 'Yesterday', value: 'yesterday' },
+            ))
+        .addStringOption(o => o
             .setName('date')
-            .setDescription('Date to check — YYYY-MM-DD (defaults to today IST)')
+            .setDescription('Specific date — YYYY-MM-DD (overrides when)')
             .setRequired(false)),
+
+    new SlashCommandBuilder()
+        .setName('help')
+        .setDescription('Show all commands and usage tips'),
 ].map(c => c.toJSON());
 
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_BOT_TOKEN!);

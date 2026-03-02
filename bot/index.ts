@@ -8,7 +8,8 @@ import { handleAddProfile } from './commands/add-profile';
 import { handleRemoveProfile } from './commands/remove-profile';
 import { handleListProfiles } from './commands/list-profiles';
 import { handleCheck } from './commands/check';
-import { handleRecheckButton } from './commands/check'; // button re-uses check logic
+import { handleRecheckButton } from './commands/check';
+import { handleHelp } from './commands/help';
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -24,6 +25,7 @@ client.on('interactionCreate', async (interaction: Interaction) => {
                 case 'remove-profile': await handleRemoveProfile(interaction); break;
                 case 'list-profiles': await handleListProfiles(interaction); break;
                 case 'check': await handleCheck(interaction); break;
+                case 'help': await handleHelp(interaction); break;
             }
         } else if (interaction.isButton()) {
             if (interaction.customId.startsWith('recheck:')) {

@@ -25,8 +25,8 @@ async function runAndReply(
     startTimestamp: number,
     endTimestamp: number,
     dateStr: string,
-    reply: (opts: { content: string; components?: any[] }) => Promise<void>,
-    followUp: (opts: { content: string }) => Promise<void>
+    reply: (opts: { content: string; components?: any[] }) => Promise<unknown>,
+    followUp: (opts: { content: string }) => Promise<unknown>
 ) {
     const result = await runTrackerForUser(userId, startTimestamp, endTimestamp);
     const button = buildRecheckButton(userId, startTimestamp, endTimestamp);
@@ -77,14 +77,22 @@ async function runAndReply(
 export async function handleCheck(interaction: ChatInputCommandInteraction) {
     await interaction.deferReply();
 
-    const dateParam = interaction.options.getString('date');
+    const when = interaction.options.getString('when');   // "today" | "yesterday" | null
+    const dateParam = interaction.options.getString('date'); // "YYYY-MM-DD" | null
 
-    if (dateParam && !/^\d{4}-\d{2}-\d{2}$/.test(dateParam)) {
-        await interaction.editReply('❌ Invalid date format. Use `YYYY-MM-DD`, e.g. `2026-03-01`');
-        return;
+    // 'when' takes priority, then 'date', then default today
+    let resolvedDate: string | null = null;
+    if (when === 'yesterday') {
+        resolvedDate = 'yesterday';
+    } else if (dateParam) {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(dateParam)) {
+            await interaction.editReply('❌ Invalid date format. Use `YYYY-MM-DD`, e.g. `2026-03-01`');
+            return;
+        }
+        resolvedDate = dateParam;
     }
 
-    const { startTimestamp, endTimestamp, dateStr } = getTimestampsForDate(dateParam);
+    const { startTimestamp, endTimestamp, dateStr } = getTimestampsForDate(resolvedDate);
 
     await runAndReply(
         interaction.user.id,

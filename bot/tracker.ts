@@ -90,13 +90,22 @@ export async function runTrackerForUser(
     return { links, errors };
 }
 
-/** Converts a date string or "today" into IST-aligned Unix timestamps */
+/** Converts a date param ("yesterday", "YYYY-MM-DD", or null=today) into IST-aligned Unix timestamps */
 export function getTimestampsForDate(dateParam?: string | null): {
     startTimestamp: number;
     endTimestamp: number;
     dateStr: string;
 } {
     const istOffset = 5.5 * 60 * 60 * 1000;
+
+    if (dateParam === 'yesterday') {
+        const nowIST = Date.now() + istOffset;
+        const yesterdayIST = new Date(nowIST - 86400000);
+        yesterdayIST.setUTCHours(0, 0, 0, 0);
+        const startTimestamp = Math.floor((yesterdayIST.getTime() - istOffset) / 1000);
+        const dateStr = yesterdayIST.toISOString().split('T')[0];
+        return { startTimestamp, endTimestamp: startTimestamp + 86400, dateStr };
+    }
 
     if (dateParam) {
         const target = new Date(dateParam);
@@ -106,6 +115,7 @@ export function getTimestampsForDate(dateParam?: string | null): {
         return { startTimestamp, endTimestamp: startTimestamp + 86400, dateStr: dateParam };
     }
 
+    // Default: today (IST)
     const nowIST = Date.now() + istOffset;
     const dayStart = new Date(nowIST);
     dayStart.setUTCHours(0, 0, 0, 0);
@@ -114,3 +124,4 @@ export function getTimestampsForDate(dateParam?: string | null): {
 
     return { startTimestamp, endTimestamp: startTimestamp + 86400, dateStr };
 }
+

@@ -5,5 +5,5 @@ builder = "nixpacks"
 buildCommand = "echo 'Bot build complete'"
 
 [deploy]
-startCommand = "npx prisma migrate deploy && npm run bot:start"
+startCommand = "npx prisma db push --accept-data-loss && npm run bot:start"
 restartPolicyType = "always"

@@ -2,6 +2,7 @@
 # It runs `npm run bot:start` which executes `tsx bot/index.ts`.
 [build]
 builder = "nixpacks"
+buildCommand = "echo 'Bot build complete'"
 
 [deploy]
 startCommand = "npx prisma migrate deploy && npm run bot:start"

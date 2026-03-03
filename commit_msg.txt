@@ -1,1 +1,1 @@
-feat: add HackerRank support (public API, no token needed)
+fix: suppress Discord link embeds by wrapping URLs in angle brackets

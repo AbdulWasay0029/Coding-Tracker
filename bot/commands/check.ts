@@ -48,10 +48,11 @@ async function runAndReply(
     }
 
     // Chunk links into Discord-safe message sizes (≤2000 chars)
+    // Wrapping in <> suppresses Discord's link preview embeds
     const chunks: string[] = [];
     let current = '';
     for (const link of result.links) {
-        const line = link + '\n\n';
+        const line = `<${link}>\n\n`;
         if (current.length + line.length > 1900) {
             chunks.push(current.trim());
             current = '';

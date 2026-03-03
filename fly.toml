@@ -6,7 +6,7 @@ app = "codesync-bot"         # Change this if the name is taken on Fly.io
 primary_region = "sin"       # Singapore — closest to India
 
 [build]
-  dockerfile = "Dockerfile"
+  dockerfile = "fly.Dockerfile"
 
 [env]
   NODE_ENV = "production"

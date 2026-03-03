@@ -1,1 +1,1 @@
-feat: Fly.io support, .bat fallback, HackerRank, updated README
+fix: rename Dockerfile to fly.Dockerfile so Railway uses Nixpacks correctly

@@ -2,5 +2,4 @@
 echo CodeSync - Quick Check (Today)
 echo ================================
 cd /d "%~dp0"
-npx tsx scripts/quick-check.ts
-pause
+cmd /k "npx tsx scripts/quick-check.ts"

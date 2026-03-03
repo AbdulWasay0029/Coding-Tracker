@@ -1,1 +1,1 @@
-chore: remove all Fly.io traces, clean up README
+fix: bat fallback now reads profiles from .env (no database needed)

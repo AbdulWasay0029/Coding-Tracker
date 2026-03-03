@@ -11,14 +11,13 @@ echo.
 set /p choice="Enter choice (1-3): "
 
 if "%choice%"=="1" (
-    npx tsx scripts/quick-check.ts
+    cmd /k "npx tsx scripts/quick-check.ts"
 ) else if "%choice%"=="2" (
-    npx tsx scripts/quick-check.ts yesterday
+    cmd /k "npx tsx scripts/quick-check.ts yesterday"
 ) else if "%choice%"=="3" (
     set /p custom="Enter date (YYYY-MM-DD): "
-    npx tsx scripts/quick-check.ts %custom%
+    cmd /k "npx tsx scripts/quick-check.ts %custom%"
 ) else (
     echo Invalid choice.
+    pause
 )
-
-pause

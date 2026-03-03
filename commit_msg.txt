@@ -1,1 +1,1 @@
-fix: suppress Discord link embeds by wrapping URLs in angle brackets
+feat: Fly.io support, .bat fallback, HackerRank, updated README

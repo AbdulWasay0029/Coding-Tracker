@@ -1,8 +1,17 @@
 import { Client, GatewayIntentBits, Interaction } from 'discord.js';
 import dotenv from 'dotenv';
 import path from 'path';
+import http from 'http';
 
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
+
+// Fly.io health check — only starts when PORT env var is set (on Fly.io)
+// Railway and local runs are unaffected
+if (process.env.PORT) {
+    http.createServer((_, res) => { res.writeHead(200); res.end('ok'); })
+        .listen(Number(process.env.PORT));
+    console.log(`Health check on :${process.env.PORT}`);
+}
 
 import { handleAddProfile } from './commands/add-profile';
 import { handleRemoveProfile } from './commands/remove-profile';

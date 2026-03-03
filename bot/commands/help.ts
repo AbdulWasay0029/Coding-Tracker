@@ -3,7 +3,7 @@ import { ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
 export async function handleHelp(interaction: ChatInputCommandInteraction) {
     const embed = new EmbedBuilder()
         .setTitle('🚀 CodeSync — Command Reference')
-        .setDescription('Track your competitive programming progress across LeetCode, Codeforces, CodeChef & SmartInterviews.')
+        .setDescription('Track your competitive programming progress across LeetCode, Codeforces, CodeChef, HackerRank & SmartInterviews.')
         .setColor(0x8B5CF6) // purple
         .addFields(
             {

@@ -10,6 +10,7 @@ import { fetchLeetCodeSubmissions } from '../lib/platforms/leetcode';
 import { fetchCodeforcesSubmissions } from '../lib/platforms/codeforces';
 import { fetchCodeChefSubmissions } from '../lib/platforms/codechef';
 import { fetchSmartInterviewsSubmissions } from '../lib/platforms/smartinterviews';
+import { fetchHackerRankSubmissions } from '../lib/platforms/hackerrank';
 
 export interface TrackerResult {
     links: string[];
@@ -46,6 +47,8 @@ export async function runTrackerForUser(
                     profile.username,
                     profile.token ?? undefined
                 );
+            } else if (profile.platform === 'HACKERRANK') {
+                submissions = await fetchHackerRankSubmissions(profile.username);
             }
         } catch (err: any) {
             console.error(`[Tracker] Failed ${profile.platform}/${profile.username}:`, err.message);

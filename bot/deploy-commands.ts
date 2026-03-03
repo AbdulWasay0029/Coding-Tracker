@@ -15,6 +15,7 @@ const PLATFORM_CHOICES = [
     { name: 'Codeforces', value: 'CODEFORCES' },
     { name: 'CodeChef', value: 'CODECHEF' },
     { name: 'SmartInterviews', value: 'SMARTINTERVIEWS' },
+    { name: 'HackerRank', value: 'HACKERRANK' },
 ];
 
 const commands = [

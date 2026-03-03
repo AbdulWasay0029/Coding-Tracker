@@ -1,1 +1,0 @@
-fix: bat fallback now reads profiles from .env (no database needed)

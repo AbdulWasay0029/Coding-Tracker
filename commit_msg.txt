@@ -1,1 +1,1 @@
-fix(codechef): scrape up to 5 submission pages to handle WA spam
+docs: update README to document CodeChef 5-page scraping

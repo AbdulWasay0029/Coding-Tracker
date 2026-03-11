@@ -21,7 +21,7 @@
 | :--- | :--- | :--- |
 | **LeetCode** | None | Public API |
 | **Codeforces** | None | Public API |
-| **CodeChef** | None | Public profile scraping |
+| **CodeChef** | None | HTML scraping (fetches up to 5 pages to bypass WA spam) |
 | **HackerRank** | None | Public API |
 | **SmartInterviews** | JWT token | See token guide below |
 

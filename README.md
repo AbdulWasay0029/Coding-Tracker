@@ -10,6 +10,14 @@ Run `/check` in Discord → get a list of every problem you solved today, with d
 
 ---
 
+## Demo
+
+<p align="center">
+  <img src="assets/check.gif" width="650" alt="Bot demo — /check command" />
+</p>
+
+---
+
 ## Platforms
 
 | Platform | Method | Notes |

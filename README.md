@@ -67,13 +67,14 @@ Railway Hobby plan runs ~$5/month flat. Actual compute usage is under $0.50.
 
 ### Option 2 — Local `.bat` fallback (Windows, free)
 
-For a quick manual check from your PC without the hosted bot:
+For a quick manual check from your PC without the hosted discord bot or database:
 
-1. Set `DISCORD_WEBHOOK_URL` in `.env`
-2. Run `trigger_update.bat` → posts today's links to webhook
-3. Run `manual_trigger_ui.bat` → pick a date interactively
+1. Double-click `trigger_update.bat` or `manual_trigger_ui.bat`.
+2. The script will automatically create a `config.json` file in the folder and close.
+3. Open `config.json` and paste your Discord Webhook URL and your usernames into the template.
+4. Run the `.bat` file again!
 
-Requires your PC to be on. Reads from the same DB the bot uses.
+> Webhook URL is found in: Discord server → Settings → Integrations → Webhooks → New Webhook → Copy URL
 
 ---
 
@@ -84,8 +85,6 @@ Requires your PC to be on. Reads from the same DB the bot uses.
 | `DATABASE_URL` | ✅ | PostgreSQL connection string |
 | `DISCORD_BOT_TOKEN` | ✅ | From Discord Developer Portal → Bot |
 | `DISCORD_CLIENT_ID` | ✅ | From Discord Developer Portal → General |
-| `DISCORD_WEBHOOK_URL` | `.bat` only | For local fallback script |
-| `SMARTINTERVIEWS_TOKEN` | Optional | Fallback SI token (users supply their own via `/add-profile`) |
 
 ---
 

@@ -1,20 +1,12 @@
 /**
  * quick-check.ts — Local fallback script (used by .bat files)
  *
- * Reads platform profiles from .env (no database needed).
- * Set QUICK_CHECK_PROFILES in .env — no cloud DB or network setup required.
- *
- * Usage:
- *   npx tsx scripts/quick-check.ts            ← today (IST)
- *   npx tsx scripts/quick-check.ts yesterday  ← yesterday
- *   npx tsx scripts/quick-check.ts 2026-03-01 ← specific date
+ * Reads platform profiles from a local config.json file.
  */
 
-import dotenv from 'dotenv';
 import path from 'path';
 import axios from 'axios';
-
-dotenv.config({ path: path.resolve(__dirname, '../.env') });
+import fs from 'fs';
 
 import { fetchLeetCodeSubmissions } from '../lib/platforms/leetcode';
 import { fetchCodeforcesSubmissions } from '../lib/platforms/codeforces';
@@ -22,9 +14,7 @@ import { fetchCodeChefSubmissions } from '../lib/platforms/codechef';
 import { fetchSmartInterviewsSubmissions } from '../lib/platforms/smartinterviews';
 import { fetchHackerRankSubmissions } from '../lib/platforms/hackerrank';
 
-// ─── Profile parser ───────────────────────────────────────────────────────────
-// Format in .env:
-//   QUICK_CHECK_PROFILES="LEETCODE:username|CODEFORCES:username|HACKERRANK:username|SMARTINTERVIEWS:username:jwt_token"
+// ─── Profile & Config parser ──────────────────────────────────────────────────
 
 interface Profile {
     platform: string;
@@ -32,23 +22,39 @@ interface Profile {
     token?: string;
 }
 
-function loadProfiles(): Profile[] {
-    const raw = process.env.QUICK_CHECK_PROFILES;
-    if (!raw) {
-        console.error('❌ Set QUICK_CHECK_PROFILES in your .env file.');
-        console.error('   Example:');
-        console.error('   QUICK_CHECK_PROFILES="LEETCODE:yourname|CODEFORCES:yourname|HACKERRANK:yourname"');
+interface Config {
+    discord_webhook_url: string;
+    profiles: Profile[];
+}
+
+const CONFIG_PATH = path.resolve(__dirname, '../config.json');
+
+function loadConfig(): Config {
+    if (!fs.existsSync(CONFIG_PATH)) {
+        const template: Config = {
+            discord_webhook_url: "PASTE_YOUR_DISCORD_WEBHOOK_URL_HERE",
+            profiles: [
+                { platform: "LEETCODE", username: "your_leetcode_username" },
+                { platform: "CODEFORCES", username: "your_codeforces_username" },
+                { platform: "CODECHEF", username: "your_codechef_username" },
+                { platform: "HACKERRANK", username: "your_hackerrank_username" },
+                { platform: "SMARTINTERVIEWS", username: "your_username", token: "your_jwt_token_here_if_using" }
+            ]
+        };
+        fs.writeFileSync(CONFIG_PATH, JSON.stringify(template, null, 4));
+        console.error('❌ No config.json found!');
+        console.error('✅ I just created a new "config.json" file for you in the main folder.');
+        console.error('👉 Please open "config.json", paste your Discord Webhook URL and usernames, then run this .bat script again.');
         process.exit(1);
     }
 
-    return raw.split('|').map(entry => {
-        const parts = entry.trim().split(':');
-        return {
-            platform: parts[0].toUpperCase(),
-            username: parts[1],
-            token: parts[2], // optional, only for SmartInterviews
-        };
-    }).filter(p => p.platform && p.username);
+    try {
+        const fileData = fs.readFileSync(CONFIG_PATH, 'utf-8');
+        return JSON.parse(fileData) as Config;
+    } catch (err) {
+        console.error('❌ Failed to read config.json. Make sure you did not break the JSON format!');
+        process.exit(1);
+    }
 }
 
 // ─── Timestamp helpers ────────────────────────────────────────────────────────
@@ -80,13 +86,15 @@ function getWindow(dateArg?: string): { start: number; end: number; label: strin
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 async function main() {
-    const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
-    if (!webhookUrl || webhookUrl.includes('your-webhook-url-here')) {
-        console.error('❌ Set DISCORD_WEBHOOK_URL in your .env file!');
+    const config = loadConfig();
+    const webhookUrl = config.discord_webhook_url;
+    
+    if (!webhookUrl || webhookUrl.includes('PASTE_YOUR_DISCORD_WEBHOOK_URL_HERE')) {
+        console.error('❌ You forgot to set your discord_webhook_url in config.json!');
         process.exit(1);
     }
 
-    const profiles = loadProfiles();
+    const profiles = config.profiles.filter(p => !p.username.includes('your_'));
     const { start, end, label } = getWindow(process.argv[2]);
 
     console.log(`\n📅 Checking: ${label} (IST)`);
@@ -100,15 +108,16 @@ async function main() {
         let submissions: any[] = [];
 
         try {
-            if (profile.platform === 'LEETCODE') {
+            const platformUpper = profile.platform.toUpperCase();
+            if (platformUpper === 'LEETCODE') {
                 submissions = await fetchLeetCodeSubmissions(profile.username);
-            } else if (profile.platform === 'CODEFORCES') {
+            } else if (platformUpper === 'CODEFORCES') {
                 submissions = await fetchCodeforcesSubmissions(profile.username);
-            } else if (profile.platform === 'CODECHEF') {
+            } else if (platformUpper === 'CODECHEF') {
                 submissions = await fetchCodeChefSubmissions(profile.username);
-            } else if (profile.platform === 'SMARTINTERVIEWS') {
+            } else if (platformUpper === 'SMARTINTERVIEWS') {
                 submissions = await fetchSmartInterviewsSubmissions(profile.username, profile.token);
-            } else if (profile.platform === 'HACKERRANK') {
+            } else if (platformUpper === 'HACKERRANK') {
                 submissions = await fetchHackerRankSubmissions(profile.username);
             }
         } catch (err: any) {
@@ -131,7 +140,7 @@ async function main() {
 
     if (links.length === 0) {
         console.log(`📭 No problems solved on ${label}`);
-        return;
+        process.exit(0);
     }
 
     console.log(`📬 Posting ${links.length} links to Discord...`);

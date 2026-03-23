@@ -55,10 +55,6 @@ const commands = [
         .addStringOption(o => o
             .setName('date')
             .setDescription('Specific date — YYYY-MM-DD (overrides when)')
-            .setRequired(false))
-        .addUserOption(o => o
-            .setName('target')
-            .setDescription('Another user to check (they must have added profiles!)')
             .setRequired(false)),
 
     new SlashCommandBuilder()

@@ -30,14 +30,12 @@ const commands = [
         .addStringOption(o => o
             .setName('token').setDescription('JWT token — SmartInterviews only').setRequired(false)),
 
-    new SlashCommandBuilder()
+  new SlashCommandBuilder()
         .setName('remove-profile')
-        .setDescription('Remove a tracked profile')
+        .setDescription('Remove your tracked profile for a platform')
         .addStringOption(o => o
-            .setName('platform').setDescription('The platform').setRequired(true)
-            .addChoices(...PLATFORM_CHOICES))
-        .addStringOption(o => o
-            .setName('username').setDescription('Your username').setRequired(true)),
+            .setName('platform').setDescription('The platform to remove').setRequired(true)
+            .addChoices(...PLATFORM_CHOICES)),
 
     new SlashCommandBuilder()
         .setName('list-profiles')
@@ -57,6 +55,10 @@ const commands = [
         .addStringOption(o => o
             .setName('date')
             .setDescription('Specific date — YYYY-MM-DD (overrides when)')
+            .setRequired(false))
+        .addUserOption(o => o
+            .setName('target')
+            .setDescription('Another user to check (they must have added profiles!)')
             .setRequired(false)),
 
     new SlashCommandBuilder()

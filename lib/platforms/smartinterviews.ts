@@ -13,10 +13,26 @@ export async function fetchSmartInterviewsSubmissions(username: string, tokenOve
             return [];
         }
 
+        let siUsername = username;
+
+        // SmartInterviews JWT tokens contain the real username in the middle part (base64)
+        // We'll decode it so casing/mismatches don't break the fetch
+        try {
+            const parts = token.split('.');
+            if (parts.length === 3) {
+                const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString());
+                if (payload.username) {
+                    siUsername = payload.username;
+                }
+            }
+        } catch (decodeErr) {
+            console.warn(`[SI Debug] Could not decode token for ${username}, falling back to typed name.`);
+        }
+
         const headers = {
             'authorization': `Token ${token}`,
             'role': 'USER',
-            'username': username,
+            'username': siUsername,
             'User-Agent': 'Mozilla/5.0',
             'Content-Type': 'application/json'
         };
@@ -37,7 +53,12 @@ export async function fetchSmartInterviewsSubmissions(username: string, tokenOve
 
                 const { data } = await axios.post(SI_API_GOLDMINE, payload, { headers });
 
-                if (data.data && data.data.submissions && Array.isArray(data.data.submissions)) {
+                if (!data || !data.data || !data.data.submissions) {
+                    console.log(`[SI Debug] No submissions found for ${username} in ${contestSlug}. Response keys:`, Object.keys(data?.data || {}));
+                    continue;
+                }
+
+                if (Array.isArray(data.data.submissions)) {
                     for (const sub of data.data.submissions) {
 
                         // Map fields based on our "Gold Mine" payload success
@@ -76,8 +97,8 @@ export async function fetchSmartInterviewsSubmissions(username: string, tokenOve
                     }
                 }
 
-            } catch (contestErr) {
-                // console.warn(`Failed to fetch contest ${contestSlug}:`, contestErr);
+            } catch (contestErr: any) {
+                console.warn(`[SI Debug] Failed contest ${contestSlug} for ${username}:`, contestErr.response?.data || contestErr.message);
             }
         }
 

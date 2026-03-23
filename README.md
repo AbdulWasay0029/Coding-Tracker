@@ -35,7 +35,7 @@ Run `/check` in Discord → get a list of every problem you solved today, with d
 | Command | Description |
 |---|---|
 | `/add-profile` | Register a platform account |
-| `/remove-profile` | Remove a tracked account |
+| `/remove-profile` | Remove your tracked profile for a platform |
 | `/list-profiles` | View all your registered accounts |
 | `/check` | Today's solved problems (IST) |
 | `/check when:yesterday` | Yesterday's problems |
@@ -91,7 +91,9 @@ Requires your PC to be on. Reads from the same DB the bot uses.
 
 ## SmartInterviews Token Setup
 
-Log into SmartInterviews → F12 → Network tab → any `/api/` request → copy the `authorization` header value (exclude the `"Token "` prefix). Pass it as the `token` option when running `/add-profile`.
+Log into SmartInterviews → F12 → Network tab → any `/api/` request → copy the `authorization` header value (exclude the `"Token "` prefix). Pass it as the `token` option when running `/add-profile`. 
+
+*Note: The bot automatically extracts your true SmartInterviews username directly from the JWT token, so it will work regardless of how you format the username argument in Discord!*
 
 ---
 

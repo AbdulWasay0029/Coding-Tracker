@@ -2,6 +2,14 @@
 echo CodeSync - Manual Trigger
 echo ==========================
 cd /d "%~dp0"
+
+IF NOT EXIST "node_modules\" (
+    echo [CodeSync] First time setup detected! Installing dependencies...
+    echo [CodeSync] This may take a minute...
+    call npm install
+    echo.
+)
+
 echo.
 echo Select date range:
 echo   1. Today (IST)

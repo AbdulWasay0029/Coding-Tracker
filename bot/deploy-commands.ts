@@ -21,45 +21,51 @@ const PLATFORM_CHOICES = [
 const commands = [
     new SlashCommandBuilder()
         .setName('add-profile')
-        .setDescription('Add a coding platform profile to track')
+        .setDescription('Track a platform (LeetCode, Codeforces, etc.)')
         .addStringOption(o => o
-            .setName('platform').setDescription('The platform').setRequired(true)
+            .setName('platform').setDescription('Which platform?').setRequired(true)
             .addChoices(...PLATFORM_CHOICES))
         .addStringOption(o => o
-            .setName('username').setDescription('Your username on that platform').setRequired(true))
+            .setName('username').setDescription('Your handle/username').setRequired(true))
         .addStringOption(o => o
-            .setName('token').setDescription('JWT token — SmartInterviews only').setRequired(false)),
+            .setName('token').setDescription('JWT — SmartInterviews only (ey...)').setRequired(false)),
 
-  new SlashCommandBuilder()
+    new SlashCommandBuilder()
         .setName('remove-profile')
-        .setDescription('Remove your tracked profile for a platform')
+        .setDescription('Untrack a platform')
         .addStringOption(o => o
             .setName('platform').setDescription('The platform to remove').setRequired(true)
             .addChoices(...PLATFORM_CHOICES)),
 
     new SlashCommandBuilder()
         .setName('list-profiles')
-        .setDescription('List all your currently tracked profiles'),
+        .setDescription('Show your tracked platforms'),
 
     new SlashCommandBuilder()
         .setName('check')
-        .setDescription('Fetch all problems you solved and post the links')
-        .addStringOption(o => o
-            .setName('when')
-            .setDescription('Quick pick: today or yesterday')
-            .setRequired(false)
-            .addChoices(
-                { name: 'Today', value: 'today' },
-                { name: 'Yesterday', value: 'yesterday' },
-            ))
+        .setDescription('Fetch your solved problems today/yesterday')
         .addStringOption(o => o
             .setName('date')
-            .setDescription('Specific date — YYYY-MM-DD (overrides when)')
+            .setDescription('Quick choice (today/yesterday) or custom YYYY-MM-DD')
             .setRequired(false)),
 
     new SlashCommandBuilder()
+        .setName('refresh')
+        .setDescription('Force-sync all your tracked profiles immediately'),
+
+    new SlashCommandBuilder()
+        .setName('setup')
+        .setDescription('ADMIN: Configure server settings (welcome/reminders)')
+        .addChannelOption(o => o
+            .setName('welcome-channel').setDescription('Where to post onboarding info').setRequired(false))
+        .addChannelOption(o => o
+            .setName('reminder-channel').setDescription('Where to post daily reminders').setRequired(false))
+        .addStringOption(o => o
+            .setName('reminder-time').setDescription('Remind at (HH:mm IST, e.g. 21:30)').setRequired(false)),
+
+    new SlashCommandBuilder()
         .setName('help')
-        .setDescription('Show all commands and usage tips'),
+        .setDescription('How to use CodeSync'),
 ].map(c => c.toJSON());
 
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_BOT_TOKEN!);

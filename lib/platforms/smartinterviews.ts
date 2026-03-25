@@ -61,14 +61,6 @@ export async function fetchSmartInterviewsSubmissions(username: string, tokenOve
                 if (Array.isArray(data.data.submissions)) {
                     for (const sub of data.data.submissions) {
 
-                        // Map fields based on our "Gold Mine" payload success
-                        // usually: submittedAt, problem.title, etc.
-                        // Wait, in the test script we saw keys: [ 'submissions', 'total', 'contestData' ]
-                        // We need to know the shape of a submission object in this list.
-                        // It usually has 'problem' object inside.
-
-                        // Debug logs show keys are direct: problemSlug, problemTitle, solutionId
-                        // NOT nested in 'problem' object, and 'solutionId' instead of '_id'
 
                         const isAccepted = sub.verdict === 'Accepted';
                         if (!isAccepted) continue;

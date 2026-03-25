@@ -32,3 +32,13 @@ model SolvedProblem {
 
   @@unique([discordUserId, platform, problemId])
 }
+
+// Per-server configuration (admins only)
+model GuildConfig {
+  guildId           String   @id
+  welcomeChannelId  String?  // Where to post onboarding info
+  reminderChannelId String?  // Where to post daily check reminders
+  reminderTime      String   @default("22:00") // HH:mm in IST
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}

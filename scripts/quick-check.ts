@@ -154,11 +154,12 @@ async function runSetupWizard(): Promise<Config> {
             console.log('  │  How to get it:                                │');
             console.log('  │  1. Login to hive.smartinterviews.in           │');
             console.log('  │  2. Press F12 → go to Network tab             │');
-            console.log('  │  3. Reload the page / click anything           │');
-            console.log('  │  4. Click any request → look at Headers       │');
+            console.log('  │  3. Refresh (F5) and search for                │');
+            console.log('  │     "populateProfile" in the filter box.       │');
+            console.log('  │  4. Click the request → Headers                │');
             console.log('  │  5. Find "authorization" header               │');
-            console.log('  │  6. Copy the value AFTER "Token "             │');
-            console.log('  │     (don\'t include the word "Token ")         │');
+            console.log('  │  6. Copy value starting with "ey..."           │');
+            console.log('  │     (don\'t include "Token " prefix)           │');
             console.log('  └────────────────────────────────────────────────┘');
             console.log('');
 

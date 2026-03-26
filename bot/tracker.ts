@@ -13,7 +13,8 @@ import { fetchSmartInterviewsSubmissions } from '../lib/platforms/smartinterview
 import { fetchHackerRankSubmissions } from '../lib/platforms/hackerrank';
 
 export interface TrackerResult {
-    links: string[];
+    links: string[]; // Flat list for general logic
+    groupedLinks: Record<string, string[]>; // platform -> urls
     errors: string[];
 }
 
@@ -22,17 +23,20 @@ export async function runTrackerForUser(
     startTimestamp: number,
     endTimestamp: number
 ): Promise<TrackerResult> {
-    const links: string[] = [];
+    const flatLinks: string[] = [];
+    const groupedLinks: Record<string, string[]> = {};
     const errors: string[] = [];
 
     const profiles = await prisma.userProfile.findMany({ where: { discordUserId } });
 
     if (profiles.length === 0) {
-        return { links, errors: ['no_profiles'] };
+        return { links: [], groupedLinks: {}, errors: ['no_profiles'] };
     }
 
     for (const profile of profiles) {
         let submissions: any[] = [];
+        const platformKey = profile.platform.toUpperCase();
+        const links: string[] = [];
 
         try {
             if (profile.platform === 'LEETCODE') {
@@ -88,9 +92,14 @@ export async function runTrackerForUser(
 
             links.push(sub.url);
         }
+
+        if (links.length > 0) {
+            flatLinks.push(...links);
+            groupedLinks[platformKey] = (groupedLinks[platformKey] || []).concat(links);
+        }
     }
 
-    return { links, errors };
+    return { links: flatLinks, groupedLinks, errors };
 }
 
 /** Converts a date param ("yesterday", "YYYY-MM-DD", or null=today) into IST-aligned Unix timestamps */

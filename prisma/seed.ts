@@ -1,47 +1,42 @@
 import { prisma } from '../lib/prisma';
 
+// Replace with your real Discord User ID if you want to seed local testing
+const MY_DISCORD_ID = "1478104744391344359";
+
 async function main() {
-    // 1. Configure Webhook
-    await prisma.globalConfig.upsert({
-        where: { id: 'config' },
-        update: {
-            discordWebhookUrl: "https://discord.com/api/webhooks/1467944403422281939/PYwtcrk_9Qd5ypcg_PIcZxDkeUJKYGrqlFxcKuIQ6V9eB0aSaljW9G5V2Neyma8qt70Z"
-        },
-        create: {
-            id: 'config',
-            discordWebhookUrl: "https://discord.com/api/webhooks/1467944403422281939/PYwtcrk_9Qd5ypcg_PIcZxDkeUJKYGrqlFxcKuIQ6V9eB0aSaljW9G5V2Neyma8qt70Z"
-        }
-    });
+    console.log('🌱 Seeding database...');
 
-    console.log('✅ Webhook configured');
-
-    // 2. Add Profiles
+    // 1. Add Profiles for the user
     const profiles = [
         { platform: 'LEETCODE', username: 'abdulwasay0029' },
         { platform: 'CODECHEF', username: 'abdulwasay0029' },
-        { platform: 'CODEFORCES', username: 'abdulwasay0029' } // Assumed
+        { platform: 'CODEFORCES', username: 'abdulwasay0029' }
     ];
 
     for (const p of profiles) {
         try {
             await prisma.userProfile.upsert({
                 where: {
-                    platform_username: {
+                    discordUserId_platform_username: {
+                        discordUserId: MY_DISCORD_ID,
                         platform: p.platform,
                         username: p.username
                     }
                 },
                 update: {},
                 create: {
+                    discordUserId: MY_DISCORD_ID,
                     platform: p.platform,
-                    username: p.username
+                    username: p.username,
                 }
             });
-            console.log(`✅ Added ${p.platform} profile: ${p.username}`);
-        } catch (e) {
-            console.error(`Error adding ${p.platform}:`, e);
+            console.log(`✅ Seeded ${p.platform} profile for ${p.username}`);
+        } catch (e: any) {
+            console.error(`Error adding ${p.platform}:`, e.message);
         }
     }
+
+    console.log('✅ Seed complete.');
 }
 
 main()

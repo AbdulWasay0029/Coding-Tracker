@@ -2,46 +2,56 @@ import { ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
 
 export async function handleHelp(interaction: ChatInputCommandInteraction) {
     const embed = new EmbedBuilder()
-        .setTitle('🚀 CodeSync — Command Reference')
-        .setDescription('Track your competitive programming progress across LeetCode, Codeforces, CodeChef, HackerRank & SmartInterviews.')
-        .setColor(0x8B5CF6) // purple
+        .setTitle('🚀 CodeSync — Help Guide')
+        .setDescription('Track your coding progress across LeetCode, Codeforces, CodeChef, HackerRank & SmartInterviews.')
+        .setColor(0x5865F2)
         .addFields(
             {
-                name: '📋 Profile Setup',
+                name: '👤 Profile Setup',
                 value: [
-                    '`/add-profile` — Add a platform account to track',
-                    '`/remove-profile` — Remove a tracked account',
-                    '`/list-profiles` — Show all your tracked accounts',
+                    '`/add-profile` — Add your accounts (LeetCode, etc.)',
+                    '`/remove-profile` — Untrack a platform',
+                    '`/list-profiles` — Show your accounts',
                 ].join('\n'),
             },
             {
                 name: '🔍 Check Progress',
                 value: [
-                    '`/check` — Today\'s solved problems (IST)',
-                    '`/check when:yesterday` — Yesterday\'s problems',
-                    '`/check date:2026-03-01` — Any specific date (YYYY-MM-DD)',
+                    '`/check` — Todays solved problems',
+                    '`/check date:yesterday` — Yesterday\'s problems',
+                    '`/check date:2026-03-25` — Specific date (YYYY-MM-DD)',
+                    '• **Grouped output** — links labeled by platform',
+                    '• **📋 Copy Links** — text block for your batch',
+                    '• **🔁 Re-check** — refresh the result',
                 ].join('\n'),
             },
             {
-                name: '🔐 SmartInterviews Token',
+                name: '⚙️ Server Admin',
                 value: [
-                    'SmartInterviews requires a JWT token to fetch your submissions.',
-                    '**How to get it:** Log in → F12 → Network tab → any `/api/` request → copy the `authorization` header value (without "Token ").',
-                    'Pass it as the `token` option in `/add-profile`.',
+                    '`/setup` — Configure welcome channel & daily reminders',
+                ].join('\n'),
+            },
+            {
+                name: '🟣 SmartInterviews Token',
+                value: [
+                    '**1.** Login to SmartInterviews hive',
+                    '**2.** Press **F12** → **Network** tab',
+                    '**3.** Refresh (**F5**) → search "**populateProfile**"',
+                    '**4.** Copy value of "**authorization**" (starts with `ey...`)',
+                    '**5.** Run `/add-profile` and paste it!',
                 ].join('\n'),
             },
             {
                 name: '💡 Tips',
                 value: [
-                    '• All times are **IST** (Indian Standard Time)',
-                    '• The **🔁 Re-check** button on any result reruns the same check instantly',
-                    '• Profile setup is per-user — you only need to do it once',
-                    '• Multiple users can use the bot independently in the same server',
+                    '• Times are in **IST** (India Standard Time)',
+                    '• Setup is linked to your Discord ID — use it in any server!',
+                    '• Links are wrapped in `<>` to keep the chat clean (no embeds)',
                 ].join('\n'),
             },
         )
-        .setFooter({ text: 'CodeSync • Hosted on Railway' })
+        .setFooter({ text: 'CodeSync • Industrial Standard Tracker' })
         .setTimestamp();
 
-    await interaction.reply({ embeds: [embed], ephemeral: true });
+    await interaction.reply({ embeds: [embed] });
 }

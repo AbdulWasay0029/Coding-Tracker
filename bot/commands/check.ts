@@ -4,18 +4,52 @@ import {
     ActionRowBuilder,
     ButtonBuilder,
     ButtonStyle,
+    EmbedBuilder,
 } from 'discord.js';
 import { runTrackerForUser, getTimestampsForDate } from '../tracker';
 
-// ─── Shared: build the Re-check button row ───────────────────────────────────
+// ─── Constants for labeling ──────────────────────────────────────────────────
 
-function buildRecheckButton(discordUserId: string, start: number, end: number) {
-    return new ActionRowBuilder<ButtonBuilder>().addComponents(
+const PLATFORM_NAMES: Record<string, string> = {
+    LEETCODE: 'LeetCode',
+    CODEFORCES: 'Codeforces',
+    CODECHEF: 'CodeChef',
+    HACKERRANK: 'HackerRank',
+    SMARTINTERVIEWS: 'SmartInterviews',
+};
+
+const PLATFORM_EMOJI: Record<string, string> = {
+    LEETCODE: '🟡',
+    CODEFORCES: '🔵',
+    CODECHEF: '🟤',
+    HACKERRANK: '🟢',
+    SMARTINTERVIEWS: '🟣',
+};
+
+// ─── Shared: build button row ────────────────────────────────────────────────
+
+function buildActionRow(discordUserId: string, start: number, end: number, hasLinks: boolean) {
+    const row = new ActionRowBuilder<ButtonBuilder>();
+
+    row.addComponents(
         new ButtonBuilder()
             .setCustomId(`recheck:${discordUserId}:${start}:${end}`)
-            .setLabel('🔁 Re-check')
+            .setLabel('Re-check')
             .setStyle(ButtonStyle.Secondary)
+            .setEmoji('🔁')
     );
+
+    if (hasLinks) {
+        row.addComponents(
+            new ButtonBuilder()
+                .setCustomId(`copy_links:${discordUserId}:${start}:${end}`)
+                .setLabel('Get Copyable List')
+                .setStyle(ButtonStyle.Primary)
+                .setEmoji('📋')
+        );
+    }
+
+    return row;
 }
 
 // ─── Shared: run check + format reply ────────────────────────────────────────
@@ -25,51 +59,55 @@ async function runAndReply(
     startTimestamp: number,
     endTimestamp: number,
     dateStr: string,
-    reply: (opts: { content: string; components?: any[] }) => Promise<unknown>,
-    followUp: (opts: { content: string }) => Promise<unknown>
+    reply: (opts: any) => Promise<unknown>,
+    followUp: (opts: any) => Promise<unknown>
 ) {
     const result = await runTrackerForUser(userId, startTimestamp, endTimestamp);
-    const button = buildRecheckButton(userId, startTimestamp, endTimestamp);
 
     if (result.errors.includes('no_profiles')) {
+        const welcomeEmbed = new EmbedBuilder()
+            .setTitle('👋 Welcome to CodeSync!')
+            .setDescription('I checked for your solved problems, but it looks like you haven\'t added any coding profiles yet.')
+            .addFields(
+                { name: 'How to start', value: 'Use **/add-profile** to register your accounts (LeetCode, Codeforces, etc.).' },
+                { name: 'Need help?', value: 'Use **/help** for a full guide on getting your tokens/usernames.' }
+            )
+            .setColor(0x5865F2);
+
+        await reply({ embeds: [welcomeEmbed], components: [] });
+        return;
+    }
+
+    const hasLinks = result.links.length > 0;
+    const row = buildActionRow(userId, startTimestamp, endTimestamp, hasLinks);
+
+    if (!hasLinks) {
         await reply({
-            content: "You have no profiles set up. Use `/add-profile` to add one first.",
-            components: [],
+            content: `📅 **${dateStr}** — No problems solved yet today. Keep grinding!`,
+            components: [row],
         });
         return;
     }
 
-    if (result.links.length === 0) {
-        await reply({
-            content: `📅 **${dateStr}** — No problems solved yet.`,
-            components: [button],
-        });
-        return;
-    }
+    // Format grouped links
+    let content = `📅 **${dateStr}** — ${result.links.length} problem(s) solved:\n\n`;
 
-    // Chunk links into Discord-safe message sizes (≤2000 chars)
-    // Wrapping in <> suppresses Discord's link preview embeds
-    const chunks: string[] = [];
-    let current = '';
-    for (const link of result.links) {
-        const line = `<${link}>\n\n`;
-        if (current.length + line.length > 1900) {
-            chunks.push(current.trim());
-            current = '';
+    for (const [platform, urls] of Object.entries(result.groupedLinks)) {
+        const name = PLATFORM_NAMES[platform] || platform;
+        const emoji = PLATFORM_EMOJI[platform] || '⚪';
+        content += `${emoji} **${name}** (${urls.length})\n`;
+        for (const url of urls) {
+            content += `<${url}>\n`; // Angle brackets suppress embeds
         }
-        current += line;
+        content += '\n';
     }
-    if (current.trim()) chunks.push(current.trim());
 
-    // First chunk — includes the header and the Re-check button
-    await reply({
-        content: `📅 **${dateStr}** — ${result.links.length} problem(s):\n\n${chunks[0]}`,
-        components: [button],
-    });
-
-    // Overflow chunks (no button on follow-ups to avoid clutter)
-    for (let i = 1; i < chunks.length; i++) {
-        await followUp({ content: chunks[i] });
+    // Handle Discord's 2000 char limit
+    if (content.length <= 2000) {
+        await reply({ content, components: [row] });
+    } else {
+        // Simple fallback if it expires char limit (unlikely with just links but possible)
+        await reply({ content: `📅 **${dateStr}** — ${result.links.length} links (too many to show in one message, use "Get Copyable List")`, components: [row] });
     }
 }
 
@@ -78,22 +116,8 @@ async function runAndReply(
 export async function handleCheck(interaction: ChatInputCommandInteraction) {
     await interaction.deferReply();
 
-    const when = interaction.options.getString('when');   // "today" | "yesterday" | null
-    const dateParam = interaction.options.getString('date'); // "YYYY-MM-DD" | null
-
-    // 'when' takes priority, then 'date', then default today
-    let resolvedDate: string | null = null;
-    if (when === 'yesterday') {
-        resolvedDate = 'yesterday';
-    } else if (dateParam) {
-        if (!/^\d{4}-\d{2}-\d{2}$/.test(dateParam)) {
-            await interaction.editReply('❌ Invalid date format. Use `YYYY-MM-DD`, e.g. `2026-03-01`');
-            return;
-        }
-        resolvedDate = dateParam;
-    }
-
-    const { startTimestamp, endTimestamp, dateStr } = getTimestampsForDate(resolvedDate);
+    const dateVal = interaction.options.getString('date') || 'today';
+    const { startTimestamp, endTimestamp, dateStr } = getTimestampsForDate(dateVal);
 
     await runAndReply(
         interaction.user.id,
@@ -105,31 +129,51 @@ export async function handleCheck(interaction: ChatInputCommandInteraction) {
     );
 }
 
+// ─── 📋 Copy Links button handler ─────────────────────────────────────────────
+
+export async function handleCopyLinksButton(interaction: ButtonInteraction) {
+    const [, userId, startStr, endStr] = interaction.customId.split(':');
+
+    if (interaction.user.id !== userId) {
+        return interaction.reply({ content: '❌ Only the person who ran the check can use this button.', ephemeral: true });
+    }
+
+    await interaction.deferReply({ ephemeral: true });
+
+    const start = parseInt(startStr, 10);
+    const end = parseInt(endStr, 10);
+    const result = await runTrackerForUser(userId, start, end);
+
+    if (result.links.length === 0) {
+        return interaction.editReply('No links found.');
+    }
+
+    // Provide links in a clean block format
+    const block = result.links.join('\n');
+    await interaction.editReply({
+        content: `Here are your links for today. Copy-paste them into your batch channel:\n\n\`\`\`\n${block}\n\`\`\``
+    });
+}
+
 // ─── 🔁 Re-check button handler ───────────────────────────────────────────────
 
 export async function handleRecheckButton(interaction: ButtonInteraction) {
-    // customId format: recheck:{discordUserId}:{startTimestamp}:{endTimestamp}
     const [, userId, startStr, endStr] = interaction.customId.split(':');
 
-    // Only the original user can trigger their own re-check
     if (interaction.user.id !== userId) {
-        await interaction.reply({
-            content: '❌ This check belongs to someone else.',
-            ephemeral: true,
-        });
-        return;
+        return interaction.reply({ content: '❌ Only the person who ran the check can use this button.', ephemeral: true });
     }
 
     await interaction.deferReply();
 
-    const startTimestamp = parseInt(startStr, 10);
-    const endTimestamp = parseInt(endStr, 10);
-    const dateStr = new Date((startTimestamp + 5.5 * 3600) * 1000).toISOString().split('T')[0];
+    const start = parseInt(startStr, 10);
+    const end = parseInt(endStr, 10);
+    const dateStr = new Date((start + 5.5 * 3600) * 1000).toISOString().split('T')[0];
 
     await runAndReply(
         userId,
-        startTimestamp,
-        endTimestamp,
+        start,
+        end,
         dateStr,
         opts => interaction.editReply(opts),
         opts => interaction.followUp(opts).then(() => undefined),

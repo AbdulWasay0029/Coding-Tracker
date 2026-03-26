@@ -72,13 +72,22 @@ const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_BOT_TOKEN!
 
 (async () => {
     try {
-        console.log('Registering slash commands globally...');
-        await rest.put(
-            Routes.applicationCommands(process.env.DISCORD_CLIENT_ID!),
-            { body: commands }
-        );
-        console.log('✅ Done! Commands may take up to 1 hour to appear globally.');
-        console.log('   Tip: For instant testing, use guild commands instead.');
+        const guildId = process.env.DISCORD_GUILD_ID;
+
+        if (guildId) {
+            console.log(`Registering slash commands for GUILD ${guildId} (Instant)...`);
+            await rest.put(
+                Routes.applicationGuildCommands(process.env.DISCORD_CLIENT_ID!, guildId),
+                { body: commands }
+            );
+        } else {
+            console.log('Registering slash commands GLOBALLY (Takes up to 1 hour)...');
+            await rest.put(
+                Routes.applicationCommands(process.env.DISCORD_CLIENT_ID!),
+                { body: commands }
+            );
+        }
+        console.log('✅ Done!');
     } catch (err) {
         console.error('Failed to register commands:', err);
     }

@@ -1,9 +1,7 @@
-# Railway uses this to know how to start the bot.
-# It runs `npm run bot:start` which executes `tsx bot/index.ts`.
 [build]
-builder = "nixpacks"
-buildCommand = "echo 'Bot build complete'"
+builder = "NIXPACKS"
 
 [deploy]
-startCommand = "npx prisma db push --accept-data-loss && npm run bot:start"
-restartPolicyType = "always"
+startCommand = "npm run bot:start"
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3

@@ -24,7 +24,7 @@ app.listen(port, () => console.log(`🌍 Health check server on port ${port}`));
 const client = new Client({ 
     intents: [
         GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMembers, 
+        GatewayIntentBits.GuildMembers,
     ] 
 });
 

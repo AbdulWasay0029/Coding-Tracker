@@ -34,8 +34,8 @@ export async function handleSetup(interaction: ChatInputCommandInteraction) {
         if (reminderChannel) msg += `- Daily reminders: <#${reminderChannel.id}> at ${reminderTime || '22:00'} IST\n`;
 
         await interaction.editReply(msg);
-    } catch (err) {
-        console.error('[Setup] Error:', err);
-        await interaction.editReply('❌ Failed to update server settings.');
+    } catch (err: any) {
+        console.error('[Setup] Detailed Error:', err);
+        await interaction.editReply(`❌ Failed to update server settings: ${err.message || 'Unknown database error'}`);
     }
 }

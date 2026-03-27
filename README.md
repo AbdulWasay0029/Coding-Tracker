@@ -1,20 +1,20 @@
-# Coding Tracker
+# CodeSync
 
-A Discord bot that aggregates your daily competitive programming activity across five platforms into a single command. Built because manually tracking solved problems across LeetCode, Codeforces, CodeChef, HackerRank, and SmartInterviews every day gets old fast.
-
----
-
-## What it does
-
-Run `/check` in Discord → get a list of every problem you solved today, with direct links, grouped by platform. Works on mobile. Supports date filtering. Handles multiple users independently.
+A Discord bot that tracks students' daily competitive programming activity across five platforms and posts all links automatically every night — no manual effort needed.
 
 ---
 
-## Demo
+## Architecture
 
-<p align="center">
-  <img src="assets/check.gif" width="650" alt="Bot demo — /check command" />
-</p>
+```
+Neon PostgreSQL (Free Forever)
+    ↕               ↕
+HeavenCloud Bot    GitHub Actions (Nightly)
+/add-profile       Runs every night at 9 PM IST
+/check             Posts ALL students' links to Discord
+/setup             No one needs to do anything manually
+/help
+```
 
 ---
 
@@ -30,69 +30,75 @@ Run `/check` in Discord → get a list of every problem you solved today, with d
 
 ---
 
-## Commands
+## Bot Commands
 
-| Command | Description |
-|---|---|
-| `/add-profile` | Register a platform account |
-| `/remove-profile` | Remove your tracked profile for a platform |
-| `/list-profiles` | View all your registered accounts |
-| `/check` | Today's solved problems (IST) |
-| `/check when:yesterday` | Yesterday's problems |
-| `/check date:2026-03-01` | Any specific date |
-| `/help` | Command reference |
+| Command | Who | Description |
+|---|---|---|
+| `/add-profile` | Students | Register a platform account |
+| `/remove-profile` | Students | Remove a tracked profile |
+| `/list-profiles` | Students | View all your registered accounts |
+| `/check` | Students | View today's solved problems, grouped by platform |
+| `/check when:yesterday` | Students | Yesterday's problems |
+| `/check date:2026-03-01` | Students | Any specific date |
+| `/setup` | Admins only | Configure welcome channel and daily reminder channel |
+| `/help` | Everyone | Full command reference |
 
 ---
 
 ## Stack
 
-**TypeScript · Node.js · PostgreSQL · discord.js · Prisma**
+**TypeScript · Node.js · PostgreSQL (Neon) · discord.js · Prisma · GitHub Actions**
 
 ---
 
 ## Deployment
 
-### Option 1 — Railway (Recommended)
+### 1. Database — Neon (Free Forever)
+1. Go to [neon.tech](https://neon.tech) → Create account (no card needed)
+2. Create a new project → Copy the `DATABASE_URL`
+3. Run `npx prisma db push` locally to create tables
 
-1. Fork this repo
-2. Connect to [Railway](https://railway.app) → New Project → Deploy from GitHub
-3. Add the **PostgreSQL** plugin — Railway auto-injects `DATABASE_URL`
-4. Set environment variables (see table below)
-5. Register slash commands once:
+### 2. Bot — HeavenCloud (Free)
+1. Go to [heavencloud.in](https://heavencloud.in) → Create account (no card needed)
+2. Create server → Select **Node.js 20**
+3. Set environment variables (see table below)
+4. Upload a ZIP of this project (exclude `node_modules`)
+5. Set startup command: `npm run bot:setup`
+6. Register slash commands once (run locally):
    ```bash
    npx tsx bot/deploy-commands.ts
    ```
 
-Railway Hobby plan runs ~$5/month flat. Actual compute usage is under $0.50.
-
-### Option 2 — Local `.bat` fallback (Windows, free)
-
-For a quick manual check from your PC without the hosted discord bot or database:
-
-1. Double-click `trigger_update.bat` or `manual_trigger_ui.bat`.
-2. The script will automatically create a `config.json` file in the folder and close.
-3. Open `config.json` and paste your Discord Webhook URL and your usernames into the template.
-4. Run the `.bat` file again!
-
-> Webhook URL is found in: Discord server → Settings → Integrations → Webhooks → New Webhook → Copy URL
+### 3. Auto-Tracker — GitHub Actions
+- Runs every night at 9 PM IST automatically
+- Posts all students' daily links to your Discord webhook
+- Workflow file: `.github/workflows/daily-tracker.yml`
+- No setup needed beyond adding GitHub Secrets (see below)
 
 ---
 
 ## Environment Variables
 
-| Variable | Required | Description |
+| Variable | Required For | Description |
 |---|---|---|
-| `DATABASE_URL` | ✅ | PostgreSQL connection string |
-| `DISCORD_BOT_TOKEN` | ✅ | From Discord Developer Portal → Bot |
-| `DISCORD_CLIENT_ID` | ✅ | From Discord Developer Portal → General |
+| `DATABASE_URL` | Bot + GitHub Actions | Neon PostgreSQL connection string |
+| `DISCORD_BOT_TOKEN` | Bot | From Discord Developer Portal → Bot |
+| `DISCORD_CLIENT_ID` | Bot | From Discord Developer Portal → General |
+| `DISCORD_GUILD_ID` | Local deploy only | Your server ID for instant command registration |
+| `DISCORD_WEBHOOK_URL` | GitHub Actions | Webhook URL for nightly auto-post |
+
+> **Note**: Set these as **Secrets** in HeavenCloud (under Environment tab) and as **Repository Secrets** in GitHub (Settings → Secrets and variables → Actions). Never commit these to git.
 
 ---
 
 ## SmartInterviews Token Setup
 
-Log into SmartInterviews → F12 → Network tab → any `/api/` request → copy the `authorization` header value (exclude the `"Token "` prefix). Pass it as the `token` option when running `/add-profile`. 
-
-*Note: The bot automatically extracts your true SmartInterviews username directly from the JWT token, so it will work regardless of how you format the username argument in Discord!*
+1. Login to [hive.smartinterviews.in](https://hive.smartinterviews.in)
+2. Press **F12** → open the **Network** tab
+3. Refresh the page (**F5**) and search for `populateProfile` in the filter
+4. Click that request → **Headers** tab
+5. Find the `authorization` header → copy the value starting with `ey...`
+6. Paste this when running `/add-profile` for SmartInterviews
 
 ---
 
@@ -100,15 +106,16 @@ Log into SmartInterviews → F12 → Network tab → any `/api/` request → cop
 
 ```
 ├── bot/
-│   ├── index.ts                  # Entry point
+│   ├── index.ts                  # Entry point + health check server
 │   ├── deploy-commands.ts        # Run once to register slash commands
-│   ├── tracker.ts                # Core tracking logic
+│   ├── tracker.ts                # Core tracking + grouping logic
 │   └── commands/
-│       ├── add-profile.ts
-│       ├── remove-profile.ts
-│       ├── list-profiles.ts
-│       ├── check.ts              # /check + re-check button handler
-│       └── help.ts
+│       ├── add-profile.ts        # /add-profile
+│       ├── remove-profile.ts     # /remove-profile
+│       ├── list-profiles.ts      # /list-profiles
+│       ├── check.ts              # /check + re-check + copy-links buttons
+│       ├── setup.ts              # /setup (admins only)
+│       └── help.ts               # /help
 ├── lib/
 │   ├── platforms/
 │   │   ├── leetcode.ts
@@ -116,14 +123,27 @@ Log into SmartInterviews → F12 → Network tab → any `/api/` request → cop
 │   │   ├── codechef.ts
 │   │   ├── hackerrank.ts
 │   │   └── smartinterviews.ts
-│   └── prisma.ts
+│   └── prisma.ts                 # Prisma client singleton
 ├── scripts/
-│   └── quick-check.ts            # .bat fallback script
+│   └── quick-check.ts            # Local CLI runner (uses config.json)
+├── .github/
+│   └── workflows/
+│       └── daily-tracker.yml     # Nightly GitHub Actions workflow
 ├── prisma/
 │   └── schema.prisma
-├── railway.toml
-├── trigger_update.bat
-└── manual_trigger_ui.bat
+├── codesync.bat                  # Windows shortcut for local quick-check
+└── config.json                   # Local profiles config (not committed)
+```
+
+---
+
+## Discord Server Channel Setup
+
+```
+📂 CODESYNC
+  📌 #cs-how-to-use     ← Pinned setup instructions
+  🤖 #cs-commands       ← Where students run bot commands
+  📊 #cs-daily-links    ← GitHub Actions posts here nightly (read-only)
 ```
 
 ---

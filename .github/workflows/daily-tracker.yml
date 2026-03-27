@@ -1,0 +1,33 @@
+name: Daily Problem Tracker
+
+on:
+  schedule:
+    # 9:00 PM IST = 3:30 PM UTC
+    - cron: '30 15 * * *'
+  workflow_dispatch: # Allow manual trigger from GitHub UI
+
+jobs:
+  track:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma client
+        run: npx prisma generate
+
+      - name: Run daily tracker
+        run: npx tsx scripts/github-tracker.ts
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}

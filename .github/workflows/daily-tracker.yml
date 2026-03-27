@@ -2,8 +2,8 @@ name: Daily Problem Tracker
 
 on:
   schedule:
-    # 9:00 PM IST = 3:30 PM UTC
-    - cron: '30 15 * * *'
+    # 11:00 PM IST = 5:30 PM UTC
+    - cron: '30 17 * * *'
   workflow_dispatch: # Allow manual trigger from GitHub UI
 
 jobs:

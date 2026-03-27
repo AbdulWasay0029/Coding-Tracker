@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Each Discord user can have multiple platform profiles
+model UserProfile {
+  id            String   @id @default(uuid())
+  discordUserId String   // Discord user snowflake ID
+  platform      String   // "LEETCODE", "CODEFORCES", "CODECHEF", "SMARTINTERVIEWS"
+  username      String
+  token         String?  // Optional — only needed for SmartInterviews
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([discordUserId, platform, username])
+}
+
+// Tracks solved problems per user to avoid re-posting duplicates
+model SolvedProblem {
+  id            String   @id @default(uuid())
+  discordUserId String
+  platform      String
+  problemId     String
+  title         String
+  solvedAt      DateTime
+  createdAt     DateTime @default(now())
+
+  @@unique([discordUserId, platform, problemId])
+}
+
+// Per-server configuration (admins only)
+model GuildConfig {
+  guildId           String   @id
+  welcomeChannelId  String?  // Where to post onboarding info
+  reminderChannelId String?  // Where to post daily check reminders
+  reminderTime      String   @default("22:00") // HH:mm in IST
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}

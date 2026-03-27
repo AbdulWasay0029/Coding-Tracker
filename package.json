@@ -12,7 +12,8 @@
     "lint": "eslint",
     "postinstall": "prisma generate",
     "bot:deploy": "tsx bot/deploy-commands.ts",
-    "bot:start": "tsx bot/index.ts"
+    "bot:start": "tsx bot/index.ts",
+    "bot:setup": "npx prisma generate && tsx bot/index.ts"
   },
   "dependencies": {
     "axios": "^1.13.4",

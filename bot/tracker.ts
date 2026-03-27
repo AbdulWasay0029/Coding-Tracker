@@ -134,6 +134,12 @@ export function getTimestampsForDate(dateParam?: string | null): {
         return { startTimestamp, endTimestamp: startTimestamp + 86400, dateStr };
     }
 
+    // Support DD/MM/YYYY (Indian standard) — convert to YYYY-MM-DD internally
+    if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateParam)) {
+        const [dd, mm, yyyy] = dateParam.split('/');
+        dateParam = `${yyyy}-${mm}-${dd}`;
+    }
+
     // Must be YYYY-MM-DD format 
     if (/^\d{4}-\d{2}-\d{2}$/.test(dateParam)) {
         const target = new Date(dateParam + 'T00:00:00Z'); // Parse as UTC midnight
@@ -148,7 +154,7 @@ export function getTimestampsForDate(dateParam?: string | null): {
     const today = todayWindow();
     return {
         ...today,
-        warning: `⚠️ \"${dateParam}\" is not a valid date format. Use **YYYY-MM-DD** (e.g. \`2026-03-25\`). Showing **today** instead.`,
+        warning: `⚠️ \"${dateParam}\" is not a valid date. Use **DD/MM/YYYY** (e.g. \`27/03/2026\`) or **YYYY-MM-DD** (e.g. \`2026-03-27\`). Showing **today** instead.`,
     };
 }
 

@@ -46,7 +46,7 @@ const commands = [
         .setDescription('Fetch your solved problems today/yesterday')
         .addStringOption(o => o
             .setName('date')
-            .setDescription('Quick choice (today/yesterday) or custom YYYY-MM-DD')
+            .setDescription('today / yesterday / DD/MM/YYYY (e.g. 27/03/2026)')
             .setRequired(false)),
 
     new SlashCommandBuilder()

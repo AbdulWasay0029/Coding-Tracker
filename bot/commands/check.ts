@@ -117,7 +117,12 @@ export async function handleCheck(interaction: ChatInputCommandInteraction) {
     await interaction.deferReply();
 
     const dateVal = interaction.options.getString('date') || 'today';
-    const { startTimestamp, endTimestamp, dateStr } = getTimestampsForDate(dateVal);
+    const { startTimestamp, endTimestamp, dateStr, warning } = getTimestampsForDate(dateVal);
+
+    // Show a warning if the user gave an invalid date format
+    if (warning) {
+        await interaction.followUp({ content: warning, ephemeral: true });
+    }
 
     await runAndReply(
         interaction.user.id,

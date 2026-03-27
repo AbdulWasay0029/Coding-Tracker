@@ -102,13 +102,28 @@ export async function runTrackerForUser(
     return { links: flatLinks, groupedLinks, errors };
 }
 
-/** Converts a date param ("yesterday", "YYYY-MM-DD", or null=today) into IST-aligned Unix timestamps */
+/** Converts a date param ("yesterday", "YYYY-MM-DD", or null/today) into IST-aligned Unix timestamps */
 export function getTimestampsForDate(dateParam?: string | null): {
     startTimestamp: number;
     endTimestamp: number;
     dateStr: string;
+    warning?: string; // Set if the user provided an invalid format
 } {
     const istOffset = 5.5 * 60 * 60 * 1000;
+
+    // Helper: get today's window
+    function todayWindow() {
+        const nowIST = Date.now() + istOffset;
+        const dayStart = new Date(nowIST);
+        dayStart.setUTCHours(0, 0, 0, 0);
+        const startTimestamp = Math.floor((dayStart.getTime() - istOffset) / 1000);
+        const dateStr = dayStart.toISOString().split('T')[0];
+        return { startTimestamp, endTimestamp: startTimestamp + 86400, dateStr };
+    }
+
+    if (!dateParam || dateParam === 'today') {
+        return todayWindow();
+    }
 
     if (dateParam === 'yesterday') {
         const nowIST = Date.now() + istOffset;
@@ -119,21 +134,21 @@ export function getTimestampsForDate(dateParam?: string | null): {
         return { startTimestamp, endTimestamp: startTimestamp + 86400, dateStr };
     }
 
-    if (dateParam) {
-        const target = new Date(dateParam);
-        const startIST = new Date(target);
-        startIST.setHours(0, 0, 0, 0);
-        const startTimestamp = Math.floor((startIST.getTime() - istOffset) / 1000);
-        return { startTimestamp, endTimestamp: startTimestamp + 86400, dateStr: dateParam };
+    // Must be YYYY-MM-DD format 
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateParam)) {
+        const target = new Date(dateParam + 'T00:00:00Z'); // Parse as UTC midnight
+        if (!isNaN(target.getTime())) {
+            // Treat the YYYY-MM-DD as an IST calendar day
+            const startTimestamp = Math.floor((target.getTime() - istOffset) / 1000);
+            return { startTimestamp, endTimestamp: startTimestamp + 86400, dateStr: dateParam };
+        }
     }
 
-    // Default: today (IST)
-    const nowIST = Date.now() + istOffset;
-    const dayStart = new Date(nowIST);
-    dayStart.setUTCHours(0, 0, 0, 0);
-    const startTimestamp = Math.floor((dayStart.getTime() - istOffset) / 1000);
-    const dateStr = dayStart.toISOString().split('T')[0];
-
-    return { startTimestamp, endTimestamp: startTimestamp + 86400, dateStr };
+    // Invalid format — fall back to today with a warning
+    const today = todayWindow();
+    return {
+        ...today,
+        warning: `⚠️ \"${dateParam}\" is not a valid date format. Use **YYYY-MM-DD** (e.g. \`2026-03-25\`). Showing **today** instead.`,
+    };
 }
 

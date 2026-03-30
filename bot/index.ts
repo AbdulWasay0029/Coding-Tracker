@@ -11,7 +11,11 @@ import { handleListProfiles } from './commands/list-profiles';
 import { handleCheck, handleRecheckButton, handleCopyLinksButton } from './commands/check';
 import { handleHelp } from './commands/help';
 import { handleSetup } from './commands/setup';
+import { RateLimiter } from '../lib/rate-limiter';
 import express from 'express';
+
+// Initialize a 30-second cooldown specifically for hitting the scraping APIs
+const checkLimiter = new RateLimiter(30);
 
 const app = express();
 const port = process.env.PORT || 7860;
@@ -39,12 +43,24 @@ client.on('interactionCreate', async (interaction: Interaction) => {
                 case 'add-profile': await handleAddProfile(interaction); break;
                 case 'remove-profile': await handleRemoveProfile(interaction); break;
                 case 'list-profiles': await handleListProfiles(interaction); break;
-                case 'check': await handleCheck(interaction); break;
+                case 'check': 
+                    if (checkLimiter.isRateLimited(interaction.user.id)) {
+                        const remaining = Math.ceil(checkLimiter.getRemainingSeconds(interaction.user.id));
+                        await interaction.reply({ content: `⏳ You are checking too fast! Please wait **${remaining}s** before scraping profiles again.`, ephemeral: true });
+                        break;
+                    }
+                    await handleCheck(interaction); 
+                    break;
                 case 'setup': await handleSetup(interaction); break;
                 case 'help': await handleHelp(interaction); break;
             }
         } else if (interaction.isButton()) {
             if (interaction.customId.startsWith('recheck:')) {
+                if (checkLimiter.isRateLimited(interaction.user.id)) {
+                    const remaining = Math.ceil(checkLimiter.getRemainingSeconds(interaction.user.id));
+                    await interaction.reply({ content: `⏳ Please wait **${remaining}s** before re-checking. APIs need a break! 🤖`, ephemeral: true });
+                    return;
+                }
                 await handleRecheckButton(interaction);
             } else if (interaction.customId.startsWith('copy_links:')) {
                 await handleCopyLinksButton(interaction);

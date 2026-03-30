@@ -42,3 +42,12 @@ model GuildConfig {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 }
+
+// Analytics tracking to understand bot usage
+model AnalyticsEvent {
+  id            String   @id @default(uuid())
+  discordUserId String
+  command       String   // e.g., "check", "add-profile", "copy-links", "github-tracker"
+  metadata      String?  // Any extra info as JSON string
+  createdAt     DateTime @default(now())
+}

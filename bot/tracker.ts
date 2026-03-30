@@ -11,6 +11,7 @@ import { fetchCodeforcesSubmissions } from '../lib/platforms/codeforces';
 import { fetchCodeChefSubmissions } from '../lib/platforms/codechef';
 import { fetchSmartInterviewsSubmissions } from '../lib/platforms/smartinterviews';
 import { fetchHackerRankSubmissions } from '../lib/platforms/hackerrank';
+import { decrypt } from '../lib/encryption';
 
 export interface TrackerResult {
     links: string[]; // Flat list for general logic
@@ -33,10 +34,10 @@ export async function runTrackerForUser(
         return { links: [], groupedLinks: {}, errors: ['no_profiles'] };
     }
 
-    for (const profile of profiles) {
+    // Parallelize all requests to save huge amounts of waiting time O(M*N) -> O(Max(M))
+    const fetchPromises = profiles.map(async (profile) => {
         let submissions: any[] = [];
         const platformKey = profile.platform.toUpperCase();
-        const links: string[] = [];
 
         try {
             if (profile.platform === 'LEETCODE') {
@@ -46,20 +47,30 @@ export async function runTrackerForUser(
             } else if (profile.platform === 'CODECHEF') {
                 submissions = await fetchCodeChefSubmissions(profile.username);
             } else if (profile.platform === 'SMARTINTERVIEWS') {
-                // Pass per-user token stored in DB; falls back to env var if null
+                // Pass per-user token stored in DB; decrypt it.
                 submissions = await fetchSmartInterviewsSubmissions(
                     profile.username,
-                    profile.token ?? undefined
+                    profile.token ? decrypt(profile.token) : undefined
                 );
             } else if (profile.platform === 'HACKERRANK') {
                 submissions = await fetchHackerRankSubmissions(profile.username);
             }
+            return { profile, platformKey, submissions, error: null };
         } catch (err: any) {
             console.error(`[Tracker] Failed ${profile.platform}/${profile.username}:`, err.message);
-            errors.push(`${profile.platform}: fetch failed`);
+            return { profile, platformKey, submissions: [], error: `${profile.platform}: fetch failed` };
+        }
+    });
+
+    const results = await Promise.all(fetchPromises);
+
+    for (const { profile, platformKey, submissions, error } of results) {
+        if (error) {
+            errors.push(error);
             continue;
         }
 
+        const links: string[] = [];
         const seen = new Set<string>();
 
         for (const sub of submissions) {

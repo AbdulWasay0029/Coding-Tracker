@@ -1,10 +1,16 @@
 import { ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
 import { prisma } from '../../lib/prisma';
+import { encrypt } from '../../lib/encryption';
 
 export async function handleAddProfile(interaction: ChatInputCommandInteraction) {
     const platform = interaction.options.getString('platform', true).toUpperCase();
     const username = interaction.options.getString('username', true);
     let token = interaction.options.getString('token');
+
+    // Basic Input Sanitization rules (No strange characters/XSS)
+    if (!/^[a-zA-Z0-9_.-]+$/.test(username)) {
+        return interaction.reply({ content: '❌ Invalid username format. Please use only letters, numbers, hyphens, and underscores.', ephemeral: true });
+    }
 
     // Special handling for SmartInterviews missing token
     if (platform === 'SMARTINTERVIEWS' && !token) {
@@ -41,8 +47,17 @@ export async function handleAddProfile(interaction: ChatInputCommandInteraction)
                 discordUserId: interaction.user.id,
                 platform,
                 username,
-                token,
+                token: encrypt(token || ''),
             },
+        });
+
+        // Record Analytics
+        await prisma.analyticsEvent.create({
+            data: {
+                discordUserId: interaction.user.id,
+                command: 'add-profile',
+                metadata: JSON.stringify({ platform })
+            }
         });
 
         await interaction.editReply(`✅ Successfully added **${platform}** profile for **${username}**.\n\nType \`/check\` to see your today's solved problems!`);

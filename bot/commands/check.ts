@@ -7,6 +7,7 @@ import {
     EmbedBuilder,
 } from 'discord.js';
 import { runTrackerForUser, getTimestampsForDate } from '../tracker';
+import { prisma } from '../../lib/prisma';
 
 // ─── Constants for labeling ──────────────────────────────────────────────────
 
@@ -130,10 +131,18 @@ export async function handleCheck(interaction: ChatInputCommandInteraction) {
         endTimestamp,
         dateStr,
         opts => interaction.editReply(opts),
-        opts => interaction.followUp(opts).then(() => undefined),
+        opts => interaction.followUp(opts).then(() => undefined)
     );
-}
 
+    // Record Analytics
+    await prisma.analyticsEvent.create({
+        data: {
+            discordUserId: interaction.user.id,
+            command: 'check',
+            metadata: JSON.stringify({ date: dateStr })
+        }
+    });
+}
 // ─── 📋 Copy Links button handler ─────────────────────────────────────────────
 
 export async function handleCopyLinksButton(interaction: ButtonInteraction) {
@@ -145,16 +154,21 @@ export async function handleCopyLinksButton(interaction: ButtonInteraction) {
 
     await interaction.deferReply({ ephemeral: true });
 
-    const start = parseInt(startStr, 10);
-    const end = parseInt(endStr, 10);
-    const result = await runTrackerForUser(userId, start, end);
+    // Extract links straight from the embed/message to avoid re-scraping -> O(1) Local Cache Trick
+    const messageContent = interaction.message.content;
+    const regex = /<(https?:\/\/[^\s>]+)>/g;
+    const links: string[] = [];
+    let match;
+    while ((match = regex.exec(messageContent)) !== null) {
+        links.push(match[1]);
+    }
 
-    if (result.links.length === 0) {
-        return interaction.editReply('No links found.');
+    if (links.length === 0) {
+        return interaction.editReply('No links found in the original message to copy.');
     }
 
     // Provide links in a clean block format
-    const block = result.links.join('\n');
+    const block = links.join('\n');
     await interaction.editReply({
         content: `Here are your links for today. Copy-paste them into your batch channel:\n\n\`\`\`\n${block}\n\`\`\``
     });

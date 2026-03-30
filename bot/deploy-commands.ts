@@ -57,11 +57,7 @@ const commands = [
         .setName('setup')
         .setDescription('ADMIN: Configure server settings (welcome/reminders)')
         .addChannelOption(o => o
-            .setName('welcome-channel').setDescription('Where to post onboarding info').setRequired(false))
-        .addChannelOption(o => o
-            .setName('reminder-channel').setDescription('Where to post daily reminders').setRequired(false))
-        .addStringOption(o => o
-            .setName('reminder-time').setDescription('Remind at (HH:mm IST, e.g. 21:30)').setRequired(false)),
+            .setName('welcome-channel').setDescription('Where to post onboarding info').setRequired(false)),
 
     new SlashCommandBuilder()
         .setName('help')

@@ -14,6 +14,7 @@ dotenv.config();
 
 import axios from 'axios';
 import { PrismaClient } from '@prisma/client';
+import { decrypt } from '../lib/encryption';
 
 import { fetchLeetCodeSubmissions } from '../lib/platforms/leetcode';
 import { fetchCodeforcesSubmissions } from '../lib/platforms/codeforces';
@@ -157,7 +158,7 @@ async function main() {
                 const links = await fetchLinks(
                     profile.platform,
                     profile.username,
-                    profile.token,
+                    profile.token ? decrypt(profile.token) : null,
                     start,
                     end
                 );
@@ -165,7 +166,7 @@ async function main() {
                 if (links.length > 0) {
                     const emoji = PLATFORM_EMOJI[profile.platform] || '⚪';
                     const name = PLATFORM_NAMES[profile.platform] || profile.platform;
-                    userLines.push(`  ${emoji} **${name}**: ${links.map(l => `<${l}>`).join(' · ')}`);
+                    userLines.push(`  ${emoji} **${name}**:\n    ${links.map(l => `<${l}>`).join('\n    ')}`);
                     totalLinks += links.length;
                 }
             } catch (err: any) {
@@ -179,6 +180,9 @@ async function main() {
             lines.push('');
             studentsWithLinks++;
         }
+
+        // Anti-Rate-Limit padding (Don't hammer APIs all at once)
+        await new Promise(r => setTimeout(r, 600));
     }
 
     if (studentsWithLinks === 0) {
@@ -190,6 +194,15 @@ async function main() {
     const message = lines.join('\n');
     console.log(`📬 Posting to Discord (${totalLinks} links from ${studentsWithLinks} students)...`);
     await postToDiscord(webhookUrl, message);
+
+    await prisma.analyticsEvent.create({
+        data: {
+            discordUserId: 'SYSTEM',
+            command: 'github-tracker',
+            metadata: JSON.stringify({ studentsWithLinks, totalLinks })
+        }
+    });
+
     console.log('✅ Done!');
 
     await prisma.$disconnect();

@@ -85,7 +85,7 @@ async function runAndReply(
     if (!hasLinks) {
         let emptyContent = `📅 **${dateStr}** — No problems solved yet today. Keep grinding!`;
         if (result.errors && result.errors.length > 0) {
-            emptyContent += `\n\n⚠️ **Fetch Errors:**\n${result.errors.map((e: string) => `- ${e}`).join('\n')}\n*(Tokens expire! If a platform failed, run /add-profile again to refresh it.)*`;
+            emptyContent += `\n\n-# ⚠️ Errors: ${result.errors.map((e: string) => e).join(', ')} (Tokens expire! Run /add-profile to refresh)`;
         }
         await reply({
             content: emptyContent,
@@ -108,7 +108,7 @@ async function runAndReply(
     }
 
     if (result.errors && result.errors.length > 0) {
-        content += `\n⚠️ **Fetch Errors:**\n${result.errors.map(e => `- ${e}`).join('\n')}\n*(If a token failed, try running /add-profile again to refresh it!)*\n`;
+        content += `\n-# ⚠️ Errors: ${result.errors.map(e => e).join(', ')} (Tokens expire! Run /add-profile to refresh)\n`;
     }
 
     // Handle Discord's 2000 char limit

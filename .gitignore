@@ -7,7 +7,3 @@ Zip/
 package-lock.json
 *.log
 .DS_Store
-
-# Documentation artifacts
-PROJECT_HISTORY.md
-v3_upgrade_report.md

@@ -83,8 +83,12 @@ async function runAndReply(
     const row = buildActionRow(userId, startTimestamp, endTimestamp, hasLinks);
 
     if (!hasLinks) {
+        let emptyContent = `📅 **${dateStr}** — No problems solved yet today. Keep grinding!`;
+        if (result.errors && result.errors.length > 0) {
+            emptyContent += `\n\n⚠️ **Fetch Errors:**\n${result.errors.map((e: string) => `- ${e}`).join('\n')}\n*(Tokens expire! If a platform failed, run /add-profile again to refresh it.)*`;
+        }
         await reply({
-            content: `📅 **${dateStr}** — No problems solved yet today. Keep grinding!`,
+            content: emptyContent,
             components: [row],
         });
         return;
@@ -101,6 +105,10 @@ async function runAndReply(
             content += `<${url}>\n`; // Angle brackets suppress embeds
         }
         content += '\n';
+    }
+
+    if (result.errors && result.errors.length > 0) {
+        content += `\n⚠️ **Fetch Errors:**\n${result.errors.map(e => `- ${e}`).join('\n')}\n*(If a token failed, try running /add-profile again to refresh it!)*\n`;
     }
 
     // Handle Discord's 2000 char limit

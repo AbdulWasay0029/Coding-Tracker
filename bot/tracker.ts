@@ -9,9 +9,10 @@ import { prisma } from '../lib/prisma';
 import { fetchLeetCodeSubmissions } from '../lib/platforms/leetcode';
 import { fetchCodeforcesSubmissions } from '../lib/platforms/codeforces';
 import { fetchCodeChefSubmissions } from '../lib/platforms/codechef';
-import { fetchSmartInterviewsSubmissions } from '../lib/platforms/smartinterviews';
 import { fetchHackerRankSubmissions } from '../lib/platforms/hackerrank';
+import { fetchSmartInterviewsSubmissions } from '../lib/platforms/smartinterviews';
 import { decrypt } from '../lib/encryption';
+import { withCache } from '../lib/cache';
 
 export interface TrackerResult {
     links: string[]; // Flat list for general logic
@@ -41,19 +42,18 @@ export async function runTrackerForUser(
 
         try {
             if (profile.platform === 'LEETCODE') {
-                submissions = await fetchLeetCodeSubmissions(profile.username);
+                submissions = await withCache(`lc-${profile.username}`, 300, () => fetchLeetCodeSubmissions(profile.username));
             } else if (profile.platform === 'CODEFORCES') {
-                submissions = await fetchCodeforcesSubmissions(profile.username);
+                submissions = await withCache(`cf-${profile.username}`, 300, () => fetchCodeforcesSubmissions(profile.username));
             } else if (profile.platform === 'CODECHEF') {
-                submissions = await fetchCodeChefSubmissions(profile.username);
+                submissions = await withCache(`cc-${profile.username}`, 300, () => fetchCodeChefSubmissions(profile.username));
             } else if (profile.platform === 'SMARTINTERVIEWS') {
-                // Pass per-user token stored in DB; decrypt it.
-                submissions = await fetchSmartInterviewsSubmissions(
+                submissions = await withCache(`si-${profile.username}`, 300, () => fetchSmartInterviewsSubmissions(
                     profile.username,
                     profile.token ? decrypt(profile.token) : undefined
-                );
+                ));
             } else if (profile.platform === 'HACKERRANK') {
-                submissions = await fetchHackerRankSubmissions(profile.username);
+                submissions = await withCache(`hr-${profile.username}`, 300, () => fetchHackerRankSubmissions(profile.username));
             }
             return { profile, platformKey, submissions, error: null };
         } catch (err: any) {

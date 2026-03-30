@@ -90,14 +90,20 @@ export async function fetchSmartInterviewsSubmissions(username: string, tokenOve
                 }
 
             } catch (contestErr: any) {
-                console.warn(`[SI Debug] Failed contest ${contestSlug} for ${username}:`, contestErr.response?.data || contestErr.message);
+                const errData = contestErr.response?.data;
+                console.warn(`[SI Debug] Failed contest ${contestSlug} for ${username}:`, errData || contestErr.message);
+                
+                // If the token is actively rejected by the API, throw it upward so the user sees it in Discord!
+                if (errData?.message?.includes('Authentication failed') || contestErr.response?.status === 401) {
+                    throw new Error('Authentication failed (Token Expired!)');
+                }
             }
         }
 
         return submissions;
 
-    } catch (error) {
-        console.warn('SmartInterviews fetch failed:', error);
-        return [];
+    } catch (error: any) {
+        console.warn('SmartInterviews fetch exception:', error.message);
+        throw error;
     }
 }

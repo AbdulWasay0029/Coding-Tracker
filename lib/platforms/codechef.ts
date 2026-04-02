@@ -88,8 +88,10 @@ export async function fetchCodeChefSubmissions(username: string): Promise<Submis
                             if (ampm === 'PM' && hours !== 12) hour24 += 12;
                             if (ampm === 'AM' && hours === 12) hour24 = 0;
 
-                            const dateObj = new Date(year, month - 1, day, hour24, mins);
-                            timestamp = Math.floor(dateObj.getTime() / 1000);
+                            // CodeChef timestamps are IST — construct as UTC then subtract IST offset
+                            const dateObj = new Date(Date.UTC(year, month - 1, day, hour24, mins));
+                            const IST_OFFSET_SECONDS = 5.5 * 3600; // 5 hours 30 minutes
+                            timestamp = Math.floor(dateObj.getTime() / 1000) - IST_OFFSET_SECONDS;
                         } else {
                             timestamp = Math.floor(Date.now() / 1000);
                         }

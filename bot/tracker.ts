@@ -64,51 +64,56 @@ export async function runTrackerForUser(
 
     const results = await Promise.all(fetchPromises);
 
-    for (const { profile, platformKey, submissions, error } of results) {
+    const globalUpsertPromises: Promise<any>[] = [];
+    
+    for (const { profile, submissions, error } of results) {
         if (error) {
             errors.push(error);
             continue;
         }
 
+        const platformKey = profile.platform.toUpperCase();
         const links: string[] = [];
         const seen = new Set<string>();
-        const upsertPromises: Promise<any>[] = [];
 
         for (const sub of submissions) {
             if (sub.timestamp < startTimestamp || sub.timestamp >= endTimestamp) continue;
             if (seen.has(sub.titleSlug)) continue;
             seen.add(sub.titleSlug);
 
-            // Queue up the DB upsert so we can execute them concurrently instead of sequentially blocking
-            const p = prisma.solvedProblem.upsert({
-                where: {
-                    discordUserId_platform_problemId: {
+            // Cluster all DB writes into a single global array
+            globalUpsertPromises.push(
+                prisma.solvedProblem.upsert({
+                    where: {
+                        discordUserId_platform_problemId: {
+                            discordUserId,
+                            platform: profile.platform,
+                            problemId: sub.id,
+                        },
+                    },
+                    update: {},
+                    create: {
                         discordUserId,
                         platform: profile.platform,
                         problemId: sub.id,
+                        title: sub.title,
+                        solvedAt: new Date(sub.timestamp * 1000),
                     },
-                },
-                update: {},
-                create: {
-                    discordUserId,
-                    platform: profile.platform,
-                    problemId: sub.id,
-                    title: sub.title,
-                    solvedAt: new Date(sub.timestamp * 1000),
-                },
-            });
-            upsertPromises.push(p);
+                })
+            );
 
             links.push(sub.url);
         }
-
-        // Fire all database writes for this user simultaneously!
-        await Promise.allSettled(upsertPromises);
 
         if (links.length > 0) {
             flatLinks.push(...links);
             groupedLinks[platformKey] = (groupedLinks[platformKey] || []).concat(links);
         }
+    }
+
+    // FIRE EVERYTHING AT ONCE. O(N) database latency -> O(1)
+    if (globalUpsertPromises.length > 0) {
+        await Promise.allSettled(globalUpsertPromises);
     }
 
     return { links: flatLinks, groupedLinks, errors };

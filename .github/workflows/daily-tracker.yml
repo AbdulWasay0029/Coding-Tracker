@@ -6,7 +6,7 @@ on:
     - cron: '30 17 * * *'
   workflow_dispatch:
   repository_dispatch:
-  types: [external-trigger] # Allow manual trigger from GitHub UI
+    types: [external-trigger] # Allow manual trigger from GitHub UI
 
 jobs:
   track:

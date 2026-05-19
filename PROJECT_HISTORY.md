@@ -1,50 +1,48 @@
-# 🚀 CodeSync: Project Evolution Log
-*A chronological technical history of the CodeSync tracking engine, documenting its growth from a local batch script into a high-performance Discord architecture.*
+# CodeSync: Project Evolution
+
+## The Vision
+**What it started as:** A localized Next.js web dashboard and batch scripting tool, designed for a single user to manually track daily coding submissions via local webhooks.
+
+**What it became now:** A headless, high-performance, cloud-native Discord bot for entire communities. It features military-grade encryption, parallelized database clustering, in-memory caching, and fully autonomous scheduled tracking via external cron jobs.
 
 ---
 
-## 🌱 Phase 1: Local Script Automation (Early Feb 2026)
-**The Objective:** Automate the manual process of pulling competitive programming stats across LeetCode, Codeforces, CodeChef, and SmartInterviews to generate daily wrap-up reports.
+## Chronological Evolution
 
-*   **Initial Prototype:** The project was architectured utilizing a local Next.js environment backed by an SQLite database. Original blueprints planned to build a comprehensive configuration UI utilizing Vercel Cron jobs for scheduling.
-*   **The Pivot to Batch Automation:** We quickly abandoned Vercel due to deployment complexities for a simple tracker. Instead, we shifted entirely to a local-first approach. We engineered `.bat` scripts (`trigger_update.bat`) tied directly to the Windows Task Scheduler, designed to silently run at 11:00 PM IST daily and shoot formatted Markdown payloads directly to a plain Discord Webhook.
-*   **The Scraping Engine & Timezone Math:** Built custom fetchers utilizing GraphQL (LeetCode) and REST APIs (Codeforces). We were forced to build strict native timezone logic to convert all incoming UTC timestamps from these varied APIs into strict "Indian Standard Time (IST) midnight-to-midnight" windows to prevent off-by-one daily errors.
-*   **The SmartInterviews Breakthrough:** SmartInterviews completely lacked public API documentation. We bypassed this by heavily inspecting network traffic, uncovering the hidden `POST /api/contest/allUserSubmissions` "Gold Mine" endpoint which required dynamically isolating and injecting JWT Bearer tokens extracted natively from the browser.
+### Phase 1: The Local Dashboard Era (Early February 2026)
+*The project begins as a web dashboard and local scripting tool.*
 
----
+In early February, the project was born out of a need to automate the tracking of coding platforms like LeetCode, Codeforces, and CodeChef. Originally, it was architected as a full web application. Users would spin up a local Next.js server and visit a dashboard in their browser to configure their usernames and Discord Webhooks. Original blueprints planned to use Vercel Cron jobs for scheduling, but this was quickly abandoned due to deployment complexities for a simple tracker.
 
-## 🤖 Phase 2: The Discord Bot Evolution (Early Mar 2026)
-**The Objective:** Transform the rigid one-way Webhook script into an interactive, 24/7 autonomous bot where students could asynchronously self-manage their profiles.
+Instead, the system shifted to a local-first approach relying on Windows `.bat` scripts tied directly to the Windows Task Scheduler. These scripts triggered a scraping engine that fetched the day's solved problems. A major challenge here was **timezone math**; custom logic had to be built to strictly convert UTC timestamps from varied APIs into "Indian Standard Time (IST) midnight-to-midnight" windows to prevent off-by-one daily errors.
 
-*   **Bot Architecture Upgrade:** We executed a full migration from the Next.js framework into a persistent `discord.js` Node application, replacing the Webhook entirely.
-*   **Database Migration (Prisma ORM):** Local SQLite was abandoned as it could not scale to multiple users. We built a heavily-typed relational Prisma schema mapping `UserProfile` handles directly to `SolvedProblem` arrays. This schema was migrated to a clustered **Neon PostgreSQL** endpoint, ensuring problem uniqueness and data persistence across bot sessions.
-*   **Command Set & UI:** Implemented interactive `/check`, `/add-profile`, and a `/yesterday` shortcut. We discovered that rendering 20+ problems simultaneously was physically lagging the Discord client UI, so we aggressively suppressed native Discord link embeds by wrapping all scraped URLs in angle brackets `<url>`.
-*   **Cloud Hosting Initiatives:** Transitioned hosting off local Windows environments onto Railway. Enforced container engines to strictly use `Node v20.0` to resolve deep `discord.js` dependency pipeline crashes causing the bot to randomly die.
+During this phase, support for SmartInterviews was introduced. Because SmartInterviews lacked public API documentation, a custom solution was engineered by heavily inspecting network traffic. The hidden `POST /api/contest/allUserSubmissions` "Gold Mine" endpoint was uncovered, requiring users to dynamically extract a JWT token from their browser to securely tap into their protected submissions data.
 
----
+### Phase 2: The Discord Bot Pivot (March 3, 2026)
+*A massive architectural pivot. The web UI is destroyed in favor of an interactive Discord bot.*
 
-## 🏗️ Phase 3: Scaling & Server Hardening (Mid Mar 2026)
-**The Objective:** Resolve severe tracking inaccuracies generated by highly active students, and build a professional classroom environment for the bot to live in.
+By early March, it became clear that running a local web app and manual batch scripts was too clunky for a seamless, always-on experience. In a massive architectural overhaul, the entire web interface was completely scrapped. The rigid one-way webhook scripts were transformed into a headless, interactive, 24/7 autonomous Discord bot powered by `discord.js`.
 
-*   **Classroom Rollout:** We shifted focus entirely to the Discord UI aesthetic. Designed a multi-tiered workspace architecture mapping out dedicated Role hierarchies (`🛡️ Server Admin`, `👨🏫 Lecturer`, `🎓 Student`) and private moderation channels to simulate a competitive programming classroom.
-*   **CodeChef Deep-Scraping:** High-activity students testing edge cases were pushing their daily 'Right Answers' completely off the front page. We scaled the Cheerio HTML scraper to dynamically recursively crawl up to 5 submission pages (100+ entries) deep. We also wrote custom parsing scripts to handle CodeChef's frustrating relative timestamps (e.g., "1 hour ago", "Today") and convert them into absolute Unix timestamps.
-*   **JWT Token Decoding:** Students were failing the `/add-profile` onboarding because of simple casing typos in their usernames. Built a native decoder to dynamically extract the true `username` out of the base64 JWT token claims, bypassing human casing mismatch errors completely.
+The product was officially reborn as **CodeSync**. Instead of dealing with local webhooks, users could now asynchronously self-manage their profiles using Slash commands (`/check`, `/add-profile`) from any device. The database was migrated from a temporary local SQLite file to a permanent, clustered PostgreSQL database, transforming the project into a persistent community platform.
 
----
+**UX Discoveries:** Early on, rendering 20+ solved problems simultaneously was physically lagging the Discord client UI. To fix this, the bot was updated to aggressively suppress native Discord link embeds by wrapping all scraped URLs in angle brackets. HackerRank support was also seamlessly integrated into this new architecture.
 
-## 🌩️ Phase 4: Permanent Setup & Automation (Late Mar 2026)
-**The Objective:** Completely decouple heavy scraping tasks from the Discord interface's memory to ensure 24/7 stability.
+### Phase 3: Infrastructure Hardening & Automation (Mid-to-Late March 2026)
+*Resolving tracking inaccuracies and moving to permanent cloud infrastructure.*
 
-*   **HeavenCloud Containerization:** Safely migrated the bot infrastructure off temporary Railway instances and onto a dedicated HeavenCloud (Pterodactyl Panel) Linux container instance for isolated runtime performance.
-*   **Interactive UI Statelessness:** Built stateless O(1) interactive buttons (`🔁 Re-check`) attached to `/check` embeds. Instead of reserving memory for user sessions, we dynamically encoded ISO timestamps and user IDs straight into the button payload, allowing interactive components to survive bot restarts seamlessly.
-*   **GitHub Actions Automation:** Node.js `setInterval` loops were brittle and crashing the bot during heavy API sweeps. We removed them entirely and built a standalone `.github/workflows/daily-tracker.yml` Cron Job. Now, GitHub spins up an isolated Ubuntu pipeline nightly, silently scrapes students with 600ms organic HTTP padding limits, triggers the Discord batch report, and safely terminates the container.
+As the bot grew in usage within classroom environments, edge cases began to emerge:
+- **CodeChef Deep-Scraping:** Highly active students testing edge cases were submitting so many "Wrong Answers" that their correct solutions were being pushed completely off the front page. The scraper engine was significantly upgraded to dynamically crawl up to 5 submission pages deep to guarantee accuracy.
+- **JWT Token Decoding:** Students were failing the onboarding process because of simple casing typos in their usernames. A native decoder was built to dynamically extract the true `username` out of the base64 JWT token claims, bypassing human casing mismatch errors entirely.
 
----
+The deployment of the bot also went through an evolution. After briefly experimenting with various cloud hosts like Railway and Fly.io, the infrastructure settled permanently on HeavenCloud for isolated runtime performance. 
 
-## 🛡️ Phase 5: Hardening & Performance Clustering (Today)
-**The Objective:** Secure vulnerable user credentials, eliminate aggressive API IP Bans, and maximize command execution latency.
+**Stateless UI & Automation:** To decouple heavy scraping tasks from the interface's memory, interactive components were made stateless. "Re-check" buttons dynamically encoded ISO timestamps straight into the payload so they could survive bot restarts seamlessly. For automation, Node.js `setInterval` loops were removed as they were brittle and crashed the bot during heavy sweeps. This was replaced by a **GitHub Actions** cron job (and eventually pivoted to an external trigger via **cron-job.org**) to silently scrape students with organic HTTP padding limits, triggering the Discord batch report effortlessly.
 
-*   **Military-Grade Encryption (AES-256):** Audited the PostgreSQL database and realized SmartInterviews JWT tokens were stored in plaintext. Interfaced with Node’s native `crypto` library to actively intercept, encrypt (`aes-256-cbc`), and secure these tokens natively across the schema. Decryption happens purely on-the-fly in memory.
-*   **In-Memory LRU Caching (`lib/cache.ts`):** Defended against IP bans caused by impatient students spamming the `/check` command by establishing a 5-minute (300 TTL) Caching Map deep in the HTTP router. Consecutive identical requests resolve instantly from RAM in 0ms.
-*   **Parallel DB Clustering:** Identified a massive 4-second interaction bottleneck caused by sequentially inserting 500+ problems into Neon. Decoupled the entire tracking loop using `Promise.allSettled(upsertPromises)`. By clustering the database writes simultaneously, interactive UI latency dropped to near baseline.
-*   **Visible Error Surfacing:** Upgraded the regex parser to gracefully catch API timeouts or 401 Unauthorized tokens dynamically, rendering a subtle red `"⚠️ Fetch Errors"` warning securely below student links via native Discord subtext (`-#`).
+### Phase 4: Production Scaling & Security (Late March - April 2026)
+*Refactoring for extreme performance, security, and Discord UX.*
+
+Entering late March, the project reached its "V3" milestone, focusing heavily on enterprise-grade hardening:
+- **Military-Grade Security:** The system recognized that SmartInterviews JWT tokens were highly sensitive. An AES-256 encryption layer was built directly into the database pipeline using Node's native `crypto` library, ensuring that user tokens were strictly encrypted at rest and only decrypted purely on-the-fly in memory.
+- **API Protection:** To prevent enthusiastic users from spamming the `/check` command and getting the bot IP-banned by coding platforms, a lightweight in-memory caching layer was introduced. Consecutive identical requests resolve instantly from RAM in 0ms.
+- **High-Performance Architecture:** As the database grew, tracking loops began to experience noticeable lag (up to 4 seconds). The database write operations were fundamentally decoupled using parallel `Promise.allSettled` clusters. This brought the data-saving latency down to near baseline, providing a lightning-fast UI experience in Discord.
+- **Graceful Error Handling:** Instead of crashing the bot or failing silently when a user's token expired or an API went down, the system was upgraded to gracefully catch timeouts or 401 errors. It now surfaces elegant, non-intrusive warnings directly within the Discord UI via native subtext (`-#`), empowering users to safely resolve their own credential issues.

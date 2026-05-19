@@ -13,14 +13,14 @@ A highly professional, autonomous Discord bot designed to track and aggregate da
 CodeSync has evolved from local `.bat` scripts into a robust, cloud-native application:
 1. **Hosting**: Hosted 24/7 on **HeavenCloud** (Pterodactyl Panel) as a compiled Node.js bot. Uses `express` to bind a port and maintain a permanent "Online" status.
 2. **Database**: Serverless PostgreSQL via **Neon**. This acts as the long-term memory for users' profiles, mapped platform usernames, and historical solved problems (preventing duplicate counting across multiple checks).
-3. **Daily Automation**: A strictly scheduled **GitHub Actions** workflow (`daily-tracker.yml`) runs every day at 9:00 PM IST. It interacts directly with the database to generate a comprehensive daily report of all students and pushes it via Webhook to the `📊・daily-links` channel.
+3. **Daily Automation**: A strictly scheduled **cron-job.org** external trigger pings a GitHub Actions workflow (`daily-tracker.yml`) every day at 9:00 PM IST. This guarantees precision timing without queue delays, generating a comprehensive daily report of all students and pushing it via Webhook to the `📊・daily-links` channel.
 
 ## 🛠️ Bot Commands
 - `/setup` - Server administrators run this to configure the tracking channel and announcement channel.
 - `/add-profile` - Users map their Discord account to their various coding platform usernames (and SmartInterviews JWT).
 - `/remove-profile` - Users can unlink an incorrect mapping.
 - `/list-profiles` - Confirms which platforms are currently mapped to the user.
-- `/check [date]` - Manually generates a personal progress report for the current day (or a specific past date formatted as DD/MM/YYYY).
+- `/check [date]` - Manually generates a personal progress report for the current day (or a specific past date formatted as DD/MM/YYYY, up to 30 days ago).
 - `/help` - Displays the command list and usage.
 
 ## 💻 Local Development

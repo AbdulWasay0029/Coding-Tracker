@@ -3,7 +3,7 @@ import { Submission } from './leetcode';
 
 const SI_API_GOLDMINE = 'https://hive.smartinterviews.in/api/contest/allUserSubmissions';
 
-export async function fetchSmartInterviewsSubmissions(username: string, tokenOverride?: string): Promise<Submission[]> {
+export async function fetchSmartInterviewsSubmissions(username: string, tokenOverride?: string, stopBeforeTimestamp?: number): Promise<Submission[]> {
     try {
         const token = tokenOverride || process.env.SMARTINTERVIEWS_TOKEN;
         // If no token, return empty (or we could keep heatmap fallback, 
@@ -44,59 +44,74 @@ export async function fetchSmartInterviewsSubmissions(username: string, tokenOve
         const contests = ['smart-interviews-basic', 'smart-interviews-primary'];
 
         for (const contestSlug of contests) {
-            try {
-                const payload = {
-                    page: 0,
-                    pageSize: 25, // Fetch a decent chunk
-                    contestSlug: contestSlug
-                };
+            let page = 0;
+            let hitOlderDate = false;
+            // Fetch at most 10 pages if we have a target date to avoid infinite loops
+            const MAX_PAGES = stopBeforeTimestamp ? 10 : 1; 
 
-                const { data } = await axios.post(SI_API_GOLDMINE, payload, { headers });
+            while (page < MAX_PAGES) {
+                if (hitOlderDate) break;
 
-                if (!data || !data.data || !data.data.submissions) {
-                    console.log(`[SI Debug] No submissions found for ${username} in ${contestSlug}. Response keys:`, Object.keys(data?.data || {}));
-                    continue;
-                }
+                try {
+                    const payload = {
+                        page: page,
+                        pageSize: stopBeforeTimestamp ? 50 : 25, 
+                        contestSlug: contestSlug
+                    };
 
-                if (Array.isArray(data.data.submissions)) {
-                    for (const sub of data.data.submissions) {
+                    const { data } = await axios.post(SI_API_GOLDMINE, payload, { headers });
 
-
-                        const isAccepted = sub.verdict === 'Accepted';
-                        if (!isAccepted) continue;
-
-                        // Deduplicate using solutionId
-                        if (seenIds.has(sub.solutionId)) continue;
-                        seenIds.add(sub.solutionId);
-
-                        const timestamp = Math.floor(new Date(sub.submittedAt).getTime() / 1000);
-
-                        // Construct URL
-                        const problemSlug = sub.problemSlug;
-
-                        let url = `https://hive.smartinterviews.in/submission/${sub.solutionId}`;
-                        if (problemSlug) {
-                            url = `https://hive.smartinterviews.in/contest/${contestSlug}/problem/${problemSlug}`;
-                        }
-
-                        submissions.push({
-                            id: `SI-${sub.solutionId}`,
-                            title: sub.problemTitle || 'Unknown Problem',
-                            titleSlug: problemSlug || `si-problem-${sub.solutionId}`,
-                            timestamp: timestamp,
-                            url: url
-                        });
+                    if (!data || !data.data || !data.data.submissions || data.data.submissions.length === 0) {
+                        break; // No more submissions for this contest
                     }
-                }
 
-            } catch (contestErr: any) {
-                const errData = contestErr.response?.data;
-                console.warn(`[SI Debug] Failed contest ${contestSlug} for ${username}:`, errData || contestErr.message);
-                
-                // If the token is actively rejected by the API, throw it upward so the user sees it in Discord!
-                if (errData?.message?.includes('Authentication failed') || contestErr.response?.status === 401) {
-                    throw new Error('Authentication failed (Token Expired!)');
+                    if (Array.isArray(data.data.submissions)) {
+                        for (const sub of data.data.submissions) {
+                            const timestamp = Math.floor(new Date(sub.submittedAt).getTime() / 1000);
+
+                            if (stopBeforeTimestamp && timestamp < stopBeforeTimestamp) {
+                                hitOlderDate = true;
+                                break; 
+                            }
+
+                            const isAccepted = sub.verdict === 'Accepted';
+                            if (!isAccepted) continue;
+
+                            // Deduplicate using solutionId
+                            if (seenIds.has(sub.solutionId)) continue;
+                            seenIds.add(sub.solutionId);
+
+
+                            // Construct URL
+                            const problemSlug = sub.problemSlug;
+
+                            let url = `https://hive.smartinterviews.in/submission/${sub.solutionId}`;
+                            if (problemSlug) {
+                                url = `https://hive.smartinterviews.in/contest/${contestSlug}/problem/${problemSlug}`;
+                            }
+
+                            submissions.push({
+                                id: `SI-${sub.solutionId}`,
+                                title: sub.problemTitle || 'Unknown Problem',
+                                titleSlug: problemSlug || `si-problem-${sub.solutionId}`,
+                                timestamp: timestamp,
+                                url: url
+                            });
+                        }
+                    }
+
+                } catch (contestErr: any) {
+                    const errData = contestErr.response?.data;
+                    console.warn(`[SI Debug] Failed contest ${contestSlug} on page ${page} for ${username}:`, errData || contestErr.message);
+                    
+                    // If the token is actively rejected by the API, throw it upward so the user sees it in Discord!
+                    if (errData?.message?.includes('Authentication failed') || contestErr.response?.status === 401) {
+                        throw new Error('Authentication failed (Token Expired!)');
+                    }
+                    break; // stop paginating this contest on other errors
                 }
+                
+                page++;
             }
         }
 

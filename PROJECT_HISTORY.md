@@ -36,7 +36,7 @@ As the bot grew in usage within classroom environments, edge cases began to emer
 
 The deployment of the bot also went through an evolution. After briefly experimenting with various cloud hosts like Railway and Fly.io, the infrastructure settled permanently on HeavenCloud for isolated runtime performance. 
 
-**Stateless UI & Automation:** To decouple heavy scraping tasks from the interface's memory, interactive components were made stateless. "Re-check" buttons dynamically encoded ISO timestamps straight into the payload so they could survive bot restarts seamlessly. For automation, Node.js `setInterval` loops were removed as they were brittle and crashed the bot during heavy sweeps. This was replaced by a **GitHub Actions** cron job (and eventually pivoted to an external trigger via **cron-job.org**) to silently scrape students with organic HTTP padding limits, triggering the Discord batch report effortlessly.
+**Stateless UI & Automation:** To decouple heavy scraping tasks from the interface's memory, interactive components were made stateless. "Re-check" buttons dynamically encoded ISO timestamps straight into the payload so they could survive bot restarts seamlessly. For automation, Node.js `setInterval` loops were removed as they were brittle and crashed the bot during heavy sweeps. This was replaced by a **GitHub Actions** cron job to silently scrape students with organic HTTP padding limits, triggering the Discord batch report effortlessly.
 
 ### Phase 4: Production Scaling & Security (Late March - April 2026)
 *Refactoring for extreme performance, security, and Discord UX.*
@@ -46,3 +46,10 @@ Entering late March, the project reached its "V3" milestone, focusing heavily on
 - **API Protection:** To prevent enthusiastic users from spamming the `/check` command and getting the bot IP-banned by coding platforms, a lightweight in-memory caching layer was introduced. Consecutive identical requests resolve instantly from RAM in 0ms.
 - **High-Performance Architecture:** As the database grew, tracking loops began to experience noticeable lag (up to 4 seconds). The database write operations were fundamentally decoupled using parallel `Promise.allSettled` clusters. This brought the data-saving latency down to near baseline, providing a lightning-fast UI experience in Discord.
 - **Graceful Error Handling:** Instead of crashing the bot or failing silently when a user's token expired or an API went down, the system was upgraded to gracefully catch timeouts or 401 errors. It now surfaces elegant, non-intrusive warnings directly within the Discord UI via native subtext (`-#`), empowering users to safely resolve their own credential issues.
+
+### Phase 5: Dynamic Scaling & External Automation (Mid-May 2026)
+*Refining scraper efficiency and optimizing scheduled triggers.*
+
+As the bot continued to scale, the hardcoded pagination limits in platform scrapers (like CodeChef) were replaced with dynamic date-based loops. Scrapers now intelligently crawl backwards and stop early exactly when they hit submissions older than the target window (up to a strict max limit of 30 days), drastically reducing unnecessary network calls. 
+
+Additionally, the automated nightly trigger was completely migrated away from GitHub Actions' internal cron scheduling—which often suffered from severe queueing delays—to an external, highly reliable trigger via **cron-job.org**, ensuring the daily tracker runs precisely on time.

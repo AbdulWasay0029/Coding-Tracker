@@ -10,7 +10,8 @@ export interface Submission {
 
 const LEETCODE_API = 'https://leetcode.com/graphql';
 
-export async function fetchLeetCodeSubmissions(username: string, limit = 20): Promise<Submission[]> {
+export async function fetchLeetCodeSubmissions(username: string, stopBeforeTimestamp?: number): Promise<Submission[]> {
+    const limit = stopBeforeTimestamp ? 100 : 20;
     const query = `
     query getRecentSubmissions($username: String!, $limit: Int) {
       recentAcSubmissionList(username: $username, limit: $limit) {
@@ -45,13 +46,21 @@ export async function fetchLeetCodeSubmissions(username: string, limit = 20): Pr
         const data = response.data.data.recentAcSubmissionList;
         if (!Array.isArray(data)) return [];
 
-        return data.map((item: any) => ({
-            id: item.id,
-            title: item.title,
-            titleSlug: item.titleSlug,
-            timestamp: parseInt(item.timestamp),
-            url: `https://leetcode.com/problems/${item.titleSlug}/`,
-        }));
+        const submissions: Submission[] = [];
+        for (const item of data) {
+            const timestamp = parseInt(item.timestamp);
+            if (stopBeforeTimestamp && timestamp < stopBeforeTimestamp) {
+                break; // Found older submissions, safe to stop
+            }
+            submissions.push({
+                id: item.id,
+                title: item.title,
+                titleSlug: item.titleSlug,
+                timestamp: timestamp,
+                url: `https://leetcode.com/problems/${item.titleSlug}/`,
+            });
+        }
+        return submissions;
     } catch (error) {
         console.error('Error fetching LeetCode submissions:', error);
         return [];

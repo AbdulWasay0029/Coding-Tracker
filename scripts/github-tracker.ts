@@ -66,15 +66,15 @@ async function fetchLinks(
     let submissions: any[] = [];
 
     if (platform === 'LEETCODE') {
-        submissions = await fetchLeetCodeSubmissions(username);
+        submissions = await fetchLeetCodeSubmissions(username, start);
     } else if (platform === 'CODEFORCES') {
-        submissions = await fetchCodeforcesSubmissions(username);
+        submissions = await fetchCodeforcesSubmissions(username, start);
     } else if (platform === 'CODECHEF') {
-        submissions = await fetchCodeChefSubmissions(username);
+        submissions = await fetchCodeChefSubmissions(username, start);
     } else if (platform === 'SMARTINTERVIEWS') {
-        submissions = await fetchSmartInterviewsSubmissions(username, token ?? undefined);
+        submissions = await fetchSmartInterviewsSubmissions(username, token ? decrypt(token) : undefined, start);
     } else if (platform === 'HACKERRANK') {
-        submissions = await fetchHackerRankSubmissions(username);
+        submissions = await fetchHackerRankSubmissions(username, start);
     }
 
     const seen = new Set<string>();

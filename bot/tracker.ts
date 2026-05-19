@@ -42,18 +42,20 @@ export async function runTrackerForUser(
 
         try {
             if (profile.platform === 'LEETCODE') {
-                submissions = await withCache(`lc-${profile.username}`, 300, () => fetchLeetCodeSubmissions(profile.username));
+                submissions = await withCache(`lc-${profile.username}`, 300, () => fetchLeetCodeSubmissions(profile.username, startTimestamp));
             } else if (profile.platform === 'CODEFORCES') {
-                submissions = await withCache(`cf-${profile.username}`, 300, () => fetchCodeforcesSubmissions(profile.username));
+                submissions = await withCache(`cf-${profile.username}`, 300, () => fetchCodeforcesSubmissions(profile.username, startTimestamp));
             } else if (profile.platform === 'CODECHEF') {
-                submissions = await withCache(`cc-${profile.username}`, 300, () => fetchCodeChefSubmissions(profile.username));
+                submissions = await withCache(`cc-${profile.username}`, 300, () => fetchCodeChefSubmissions(profile.username, startTimestamp));
             } else if (profile.platform === 'SMARTINTERVIEWS') {
+                const decryptedToken = profile.token ? decrypt(profile.token) : undefined;
                 submissions = await withCache(`si-${profile.username}`, 300, () => fetchSmartInterviewsSubmissions(
                     profile.username,
-                    profile.token ? decrypt(profile.token) : undefined
+                    decryptedToken,
+                    startTimestamp
                 ));
             } else if (profile.platform === 'HACKERRANK') {
-                submissions = await withCache(`hr-${profile.username}`, 300, () => fetchHackerRankSubmissions(profile.username));
+                submissions = await withCache(`hr-${profile.username}`, 300, () => fetchHackerRankSubmissions(profile.username, startTimestamp));
             }
             return { profile, platformKey, submissions, error: null };
         } catch (err: any) {
@@ -161,6 +163,14 @@ export function getTimestampsForDate(dateParam?: string | null): {
     if (/^\d{4}-\d{2}-\d{2}$/.test(dateParam)) {
         const target = new Date(dateParam + 'T00:00:00Z'); // Parse as UTC midnight
         if (!isNaN(target.getTime())) {
+            // Check if older than 30 days
+            if (Date.now() - target.getTime() > 30 * 86400000) {
+                const today = todayWindow();
+                return {
+                    ...today,
+                    warning: `⚠️ The date \`${dateParam}\` is older than 30 days. Our scraping range is limited to the last 30 days to protect resources. Showing **today** instead.`,
+                };
+            }
             // Treat the YYYY-MM-DD as an IST calendar day
             const startTimestamp = Math.floor((target.getTime() - istOffset) / 1000);
             return { startTimestamp, endTimestamp: startTimestamp + 86400, dateStr: dateParam };

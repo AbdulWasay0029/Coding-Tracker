@@ -4,9 +4,11 @@ import { Submission } from './leetcode';
 
 const CC_API = 'https://www.codechef.com/recent/user';
 
-export async function fetchCodeChefSubmissions(username: string): Promise<Submission[]> {
+export async function fetchCodeChefSubmissions(username: string, stopBeforeTimestamp?: number): Promise<Submission[]> {
     const submissions: Submission[] = [];
-    const MAX_PAGES = 5; // Scrape up to 5 pages
+    const MAX_PAGES = stopBeforeTimestamp ? 50 : 5; // Go deeper if we have a target date, otherwise 5 for safety
+
+    let hitOlderDate = false;
 
     for (let page = 0; page < MAX_PAGES; page++) {
         try {
@@ -37,6 +39,8 @@ export async function fetchCodeChefSubmissions(username: string): Promise<Submis
             let pageHasAccepted = false;
 
             $('tr').each((_, row) => {
+                if (hitOlderDate) return; // Stop processing rows if we hit the limit
+
                 // Typical row: [Time, ProblemCode, Result, ...]
                 const cols = $(row).find('td');
                 if (cols.length === 0) return;
@@ -100,6 +104,11 @@ export async function fetchCodeChefSubmissions(username: string): Promise<Submis
                     }
                 }
 
+                if (stopBeforeTimestamp && timestamp < stopBeforeTimestamp) {
+                    hitOlderDate = true;
+                    return; // break out of jQuery each
+                }
+
                 if (problemCode) {
                     submissions.push({
                         id: `${username}-${problemCode}-${timestamp}`,
@@ -110,6 +119,8 @@ export async function fetchCodeChefSubmissions(username: string): Promise<Submis
                     });
                 }
             });
+
+            if (hitOlderDate) break; // End of relevant submissions
 
             // If the max_page returned tells us we reached the end, we could break too:
             // if (response.data.max_page && page >= response.data.max_page) break;

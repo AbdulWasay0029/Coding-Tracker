@@ -3,15 +3,16 @@ import { Submission } from './leetcode';
 
 const BASE = 'https://www.hackerrank.com';
 
-export async function fetchHackerRankSubmissions(username: string): Promise<Submission[]> {
+export async function fetchHackerRankSubmissions(username: string, stopBeforeTimestamp?: number): Promise<Submission[]> {
     try {
         const submissions: Submission[] = [];
         const seen = new Set<string>();
 
-        // Fetch up to 50 recent challenges (2 pages of 25)
-        // — cursor pagination for older, but 25 is plenty for a daily check
+        const limit = stopBeforeTimestamp ? 200 : 50;
+
+        // Fetch recent challenges
         const { data } = await axios.get(
-            `${BASE}/rest/hackers/${encodeURIComponent(username)}/recent_challenges?limit=50&offset=0`,
+            `${BASE}/rest/hackers/${encodeURIComponent(username)}/recent_challenges?limit=${limit}&offset=0`,
             {
                 headers: {
                     'User-Agent': 'Mozilla/5.0',
@@ -23,13 +24,17 @@ export async function fetchHackerRankSubmissions(username: string): Promise<Subm
         if (!data.models || !Array.isArray(data.models)) return [];
 
         for (const challenge of data.models) {
+            const timestamp = Math.floor(new Date(challenge.created_at).getTime() / 1000);
+            if (stopBeforeTimestamp && timestamp < stopBeforeTimestamp) {
+                break; // Found older submissions, safe to stop
+            }
+
             const slug: string = challenge.ch_slug || challenge.url?.split('/').pop() || '';
 
             // Deduplicate by slug
             if (seen.has(slug)) continue;
             seen.add(slug);
 
-            const timestamp = Math.floor(new Date(challenge.created_at).getTime() / 1000);
             const url = `${BASE}${challenge.url}`;
 
             submissions.push({

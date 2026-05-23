@@ -46,7 +46,7 @@ export async function handleLeaderboard(interaction: ChatInputCommandInteraction
             .setTitle(`🏆 Server Leaderboard (Last 7 Days)`)
             .setDescription(description)
             .setColor(0xFFD700)
-            .setFooter({ text: 'Ranks update dynamically based on /check commands' });
+            .setFooter({ text: 'Keep grinding to climb the ranks! 💻🔥' });
 
         await interaction.editReply({ embeds: [embed] });
 

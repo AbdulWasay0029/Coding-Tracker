@@ -13,7 +13,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import axios from 'axios';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '../lib/prisma';
 import { runTrackerForUser, getTimestampsForDate } from '../bot/tracker';
 
 // ─── Post to Discord (chunked to respect 2000 char limit) ────────────────────

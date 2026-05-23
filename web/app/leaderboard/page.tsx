@@ -48,9 +48,15 @@ export default async function LeaderboardPage() {
 
     return (
         <main className="max-w-5xl mx-auto px-4 py-16">
-            <div className="mb-12 border-b border-border pb-6 text-center animate-reveal stagger-1">
-                <h1 className="text-5xl font-black text-white uppercase tracking-tight">Global Leaderboard</h1>
-                <p className="text-primary mt-4 font-mono text-sm tracking-widest uppercase">Last 7 Days // Live Ranking</p>
+            <div className="mb-8 border-b border-border pb-6 animate-reveal stagger-1 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-3xl font-bold text-white tracking-tight">Global Leaderboard</h1>
+                    <p className="text-text-secondary mt-2 text-sm">Real-time ranking of top developers based on problems solved in the last 7 days.</p>
+                </div>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-medium text-primary">
+                    <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                    Live Ranking
+                </div>
             </div>
 
             <div className="bg-[#05070A] border border-border rounded-xl overflow-hidden animate-reveal stagger-2">

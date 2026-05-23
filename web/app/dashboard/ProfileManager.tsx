@@ -1,19 +1,21 @@
 'use client';
 
 import { useState } from 'react';
-import { Trash2, Plus } from 'lucide-react';
+import { Trash2, Plus, Edit2, X, Check, Link as LinkIcon, ExternalLink } from 'lucide-react';
 
 type Profile = {
     id: string;
     platform: string;
     username: string;
+    token?: string;
 };
 
 export function ProfileManager({ initialProfiles }: { initialProfiles: Profile[] }) {
     const [profiles, setProfiles] = useState<Profile[]>(initialProfiles);
     const [isAdding, setIsAdding] = useState(false);
+    const [editingId, setEditingId] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
-    const [deletingId, setDeletingId] = useState<string | null>(null);
+    const [actionId, setActionId] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     const [form, setForm] = useState({
@@ -22,8 +24,14 @@ export function ProfileManager({ initialProfiles }: { initialProfiles: Profile[]
         token: ''
     });
 
+    const [editForm, setEditForm] = useState({
+        username: '',
+        token: ''
+    });
+
     const handleDelete = async (id: string) => {
-        setDeletingId(id);
+        if (!confirm('Are you sure you want to disconnect this platform?')) return;
+        setActionId(id);
         setError(null);
         try {
             const res = await fetch(`/api/profiles?id=${id}`, {
@@ -34,7 +42,7 @@ export function ProfileManager({ initialProfiles }: { initialProfiles: Profile[]
         } catch (err) {
             setError('Failed to delete profile');
         } finally {
-            setDeletingId(null);
+            setActionId(null);
         }
     };
 
@@ -61,112 +69,210 @@ export function ProfileManager({ initialProfiles }: { initialProfiles: Profile[]
         }
     };
 
+    const handleUpdate = async (e: React.FormEvent, id: string) => {
+        e.preventDefault();
+        setActionId(id);
+        setError(null);
+        try {
+            const res = await fetch('/api/profiles', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, ...editForm })
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Failed to update profile');
+            
+            setProfiles(profiles.map(p => p.id === id ? { ...p, username: data.username } : p));
+            setEditingId(null);
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setActionId(null);
+        }
+    };
+
+    const startEditing = (p: Profile) => {
+        setEditingId(p.id);
+        setEditForm({ username: p.username, token: '' });
+    };
+
     return (
-        <div className="pt-4 animate-reveal stagger-2">
-            <div className="flex justify-between items-baseline mb-8">
+        <div className="bg-surface border border-border rounded-xl shadow-sm overflow-hidden animate-reveal">
+            <div className="p-6 border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-2xl font-extrabold tracking-tight text-white">Platforms</h2>
-                    <p className="text-sm text-text-secondary mt-1">Manage the accounts tracked on your dashboard.</p>
+                    <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+                        <LinkIcon className="w-5 h-5 text-text-secondary" />
+                        Connected Platforms
+                    </h2>
+                    <p className="text-sm text-text-secondary mt-1">Link your coding accounts to sync your solved problems.</p>
                 </div>
                 {!isAdding && (
                     <button 
                         onClick={() => setIsAdding(true)}
-                        className="flex items-center gap-2 text-sm font-bold text-primary hover:text-white transition-colors btn-interactive"
+                        className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-[#0B0E14] bg-white rounded-md hover:bg-gray-200 transition-colors shadow-sm"
                     >
-                        <Plus className="w-4 h-4" /> Add Account
+                        <Plus className="w-4 h-4 mr-2" /> Add Account
                     </button>
                 )}
             </div>
 
             {error && (
-                <div className="text-danger text-sm font-mono mb-8 border-l-2 border-danger pl-4">
-                    Error: {error}
+                <div className="mx-6 mt-6 p-4 bg-danger/10 border border-danger/20 rounded-md text-danger text-sm flex items-center">
+                    <span className="font-semibold mr-2">Error:</span> {error}
                 </div>
             )}
 
             {isAdding && (
-                <form onSubmit={handleAdd} className="mb-12 space-y-6 animate-reveal">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="flex flex-col gap-2">
-                            <label className="text-xs font-bold text-text-secondary uppercase tracking-widest">Platform</label>
-                            <select 
-                                value={form.platform}
-                                onChange={(e) => setForm({...form, platform: e.target.value})}
-                                className="w-full bg-transparent border-b-2 border-border text-white text-base py-2 focus:border-primary outline-none transition-colors rounded-none appearance-none cursor-pointer"
+                <div className="p-6 bg-[#0B0E14]/50 border-b border-border">
+                    <form onSubmit={handleAdd} className="space-y-4 max-w-2xl">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="space-y-1.5">
+                                <label className="text-sm font-medium text-text-primary">Platform</label>
+                                <select 
+                                    value={form.platform}
+                                    onChange={(e) => setForm({...form, platform: e.target.value})}
+                                    className="w-full bg-background border border-border text-white text-sm rounded-md px-3 py-2 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-shadow"
+                                >
+                                    <option value="LEETCODE">LeetCode</option>
+                                    <option value="CODEFORCES">Codeforces</option>
+                                    <option value="HACKERRANK">HackerRank</option>
+                                    <option value="CODECHEF">CodeChef</option>
+                                    <option value="SMARTINTERVIEWS">SmartInterviews</option>
+                                </select>
+                            </div>
+                            <div className="space-y-1.5">
+                                <label className="text-sm font-medium text-text-primary">Username</label>
+                                <input 
+                                    type="text"
+                                    required
+                                    value={form.username}
+                                    onChange={(e) => setForm({...form, username: e.target.value})}
+                                    placeholder="e.g. tourist"
+                                    className="w-full bg-background border border-border text-white text-sm rounded-md px-3 py-2 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-shadow placeholder:text-text-secondary/50"
+                                />
+                            </div>
+                        </div>
+
+                        {form.platform === 'SMARTINTERVIEWS' && (
+                            <div className="space-y-1.5">
+                                <label className="text-sm font-medium text-text-primary">Authentication Token</label>
+                                <input 
+                                    type="text"
+                                    value={form.token}
+                                    onChange={(e) => setForm({...form, token: e.target.value})}
+                                    placeholder="Required for SmartInterviews API"
+                                    className="w-full bg-background border border-border text-white text-sm rounded-md px-3 py-2 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-shadow placeholder:text-text-secondary/50"
+                                />
+                                <p className="text-xs text-text-secondary">Paste your session cookie or auth token here to allow sync.</p>
+                            </div>
+                        )}
+
+                        <div className="flex gap-3 pt-2">
+                            <button 
+                                type="submit"
+                                disabled={loading}
+                                className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-[#0B0E14] bg-primary rounded-md hover:bg-primary/90 transition-colors shadow-sm disabled:opacity-50"
                             >
-                                <option value="LEETCODE" className="bg-background">LeetCode</option>
-                                <option value="CODEFORCES" className="bg-background">Codeforces</option>
-                                <option value="HACKERRANK" className="bg-background">HackerRank</option>
-                                <option value="CODECHEF" className="bg-background">CodeChef</option>
-                                <option value="SMARTINTERVIEWS" className="bg-background">SmartInterviews</option>
-                            </select>
+                                {loading ? 'Connecting...' : 'Connect Account'}
+                            </button>
+                            <button 
+                                type="button"
+                                onClick={() => setIsAdding(false)}
+                                className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-surface border border-border rounded-md hover:bg-border transition-colors"
+                            >
+                                Cancel
+                            </button>
                         </div>
-                        <div className="flex flex-col gap-2">
-                            <label className="text-xs font-bold text-text-secondary uppercase tracking-widest">Username</label>
-                            <input 
-                                type="text"
-                                required
-                                value={form.username}
-                                onChange={(e) => setForm({...form, username: e.target.value})}
-                                placeholder="e.g. tourist"
-                                className="w-full bg-transparent border-b-2 border-border text-white text-base py-2 focus:border-primary outline-none transition-colors rounded-none placeholder:text-surface"
-                            />
-                        </div>
-                    </div>
-
-                    {form.platform === 'SMARTINTERVIEWS' && (
-                        <div className="flex flex-col gap-2 max-w-md">
-                            <label className="text-xs font-bold text-text-secondary uppercase tracking-widest">Authentication Token</label>
-                            <input 
-                                type="text"
-                                value={form.token}
-                                onChange={(e) => setForm({...form, token: e.target.value})}
-                                placeholder="Required for SmartInterviews API"
-                                className="w-full bg-transparent border-b-2 border-border text-white text-base py-2 focus:border-primary outline-none transition-colors rounded-none placeholder:text-surface"
-                            />
-                        </div>
-                    )}
-
-                    <div className="flex gap-4 pt-4">
-                        <button 
-                            type="submit"
-                            disabled={loading}
-                            className="px-6 py-2 text-sm font-bold bg-primary text-[#0B0E14] border border-primary hover:bg-transparent hover:text-primary transition-all btn-interactive disabled:opacity-50"
-                        >
-                            {loading ? 'Connecting...' : 'Connect Account'}
-                        </button>
-                        <button 
-                            type="button"
-                            onClick={() => setIsAdding(false)}
-                            className="px-6 py-2 text-sm font-bold text-text-secondary hover:text-white transition-colors btn-interactive"
-                        >
-                            Cancel
-                        </button>
-                    </div>
-                </form>
+                    </form>
+                </div>
             )}
 
-            <div className="divide-y divide-border border-t border-border mt-4">
+            <div className="divide-y divide-border">
                 {profiles.map((p) => (
-                    <div key={p.id} className="py-4 flex justify-between items-center group">
-                        <div className="flex items-baseline gap-4">
-                            <span className="font-bold text-white text-base w-32">{p.platform}</span>
-                            <span className="font-mono text-sm text-text-secondary group-hover:text-primary transition-colors">{p.username}</span>
-                        </div>
-                        <button
-                            onClick={() => handleDelete(p.id)}
-                            disabled={deletingId === p.id}
-                            className="text-text-secondary opacity-0 group-hover:opacity-100 hover:text-danger transition-all btn-interactive focus:opacity-100 disabled:opacity-50"
-                            aria-label={`Disconnect ${p.platform}`}
-                        >
-                            <Trash2 className="w-5 h-5" />
-                        </button>
+                    <div key={p.id} className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-surface/30 transition-colors">
+                        {editingId === p.id ? (
+                            <form onSubmit={(e) => handleUpdate(e, p.id)} className="flex-1 w-full flex flex-col sm:flex-row gap-3">
+                                <div className="w-full sm:w-48 flex items-center">
+                                    <span className="font-semibold text-white">{p.platform}</span>
+                                </div>
+                                <input 
+                                    type="text"
+                                    required
+                                    value={editForm.username}
+                                    onChange={(e) => setEditForm({...editForm, username: e.target.value})}
+                                    className="w-full sm:flex-1 bg-background border border-border text-white text-sm rounded-md px-3 py-1.5 focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+                                />
+                                {p.platform === 'SMARTINTERVIEWS' && (
+                                    <input 
+                                        type="text"
+                                        value={editForm.token}
+                                        onChange={(e) => setEditForm({...editForm, token: e.target.value})}
+                                        placeholder="Update Token (Optional)"
+                                        className="w-full sm:flex-1 bg-background border border-border text-white text-sm rounded-md px-3 py-1.5 focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+                                    />
+                                )}
+                                <div className="flex gap-2">
+                                    <button
+                                        type="submit"
+                                        disabled={actionId === p.id}
+                                        className="p-1.5 text-white bg-success hover:bg-success/80 rounded-md transition-colors disabled:opacity-50"
+                                    >
+                                        <Check className="w-4 h-4" />
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setEditingId(null)}
+                                        className="p-1.5 text-text-secondary bg-surface border border-border hover:text-white rounded-md transition-colors"
+                                    >
+                                        <X className="w-4 h-4" />
+                                    </button>
+                                </div>
+                            </form>
+                        ) : (
+                            <>
+                                <div className="flex items-center gap-4 min-w-0">
+                                    <div className="w-10 h-10 rounded-lg bg-surface border border-border flex items-center justify-center shrink-0">
+                                        <ExternalLink className="w-4 h-4 text-text-secondary" />
+                                    </div>
+                                    <div className="min-w-0">
+                                        <h3 className="text-sm font-semibold text-white truncate">{p.platform}</h3>
+                                        <p className="text-sm text-text-secondary truncate mt-0.5">{p.username}</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <button
+                                        onClick={() => startEditing(p)}
+                                        disabled={actionId === p.id}
+                                        className="px-3 py-1.5 text-sm font-medium text-text-secondary bg-surface border border-border rounded-md hover:text-white transition-colors disabled:opacity-50"
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        onClick={() => handleDelete(p.id)}
+                                        disabled={actionId === p.id}
+                                        className="px-3 py-1.5 text-sm font-medium text-danger bg-danger/10 border border-danger/20 rounded-md hover:bg-danger hover:text-white transition-colors disabled:opacity-50"
+                                    >
+                                        Disconnect
+                                    </button>
+                                </div>
+                            </>
+                        )}
                     </div>
                 ))}
 
                 {profiles.length === 0 && !isAdding && (
-                    <div className="py-12 text-center">
-                        <p className="text-text-secondary font-mono text-sm">No platforms connected.</p>
+                    <div className="p-12 text-center flex flex-col items-center justify-center">
+                        <div className="w-12 h-12 rounded-full bg-surface border border-border flex items-center justify-center mb-4">
+                            <LinkIcon className="w-5 h-5 text-text-secondary" />
+                        </div>
+                        <h3 className="text-sm font-medium text-white mb-1">No platforms connected</h3>
+                        <p className="text-sm text-text-secondary max-w-sm mx-auto">Get started by connecting your coding accounts to track your progress globally.</p>
+                        <button 
+                            onClick={() => setIsAdding(true)}
+                            className="mt-6 inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-[#0B0E14] bg-white rounded-md hover:bg-gray-200 transition-colors shadow-sm"
+                        >
+                            <Plus className="w-4 h-4 mr-2" /> Add Account
+                        </button>
                     </div>
                 )}
             </div>

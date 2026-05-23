@@ -70,3 +70,39 @@ export async function DELETE(req: Request) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }
+
+export async function PUT(req: Request) {
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    try {
+        const body = await req.json();
+        const { id, username, token } = body;
+
+        if (!id || !username) {
+            return NextResponse.json({ error: 'Profile ID and username are required' }, { status: 400 });
+        }
+
+        const profile = await prisma.userProfile.findUnique({
+            where: { id }
+        });
+
+        if (!profile || profile.discordUserId !== session.user.id) {
+            return NextResponse.json({ error: 'Profile not found or unauthorized' }, { status: 404 });
+        }
+
+        const updated = await prisma.userProfile.update({
+            where: { id },
+            data: {
+                username: username.trim(),
+                token: token ? token.trim() : null
+            }
+        });
+
+        return NextResponse.json(updated, { status: 200 });
+    } catch (error: any) {
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    }
+}

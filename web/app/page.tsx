@@ -1,111 +1,160 @@
 import Link from 'next/link';
-import { Terminal, Globe, Code2, Zap } from 'lucide-react';
+import { Terminal, Globe, Code2, Zap, ArrowRight, Activity, Users, Shield, Bot } from 'lucide-react';
+import Image from 'next/image';
 
 export default function Home() {
     return (
         <main className="min-h-screen flex flex-col bg-background text-foreground overflow-hidden">
             {/* Hero Section */}
-            <div className="flex-1 flex flex-col items-center justify-center p-6 text-center max-w-5xl mx-auto pt-20 pb-16 relative">
+            <div className="flex-1 flex flex-col lg:flex-row items-center justify-between p-6 max-w-7xl mx-auto pt-20 pb-24 relative gap-12 lg:gap-8">
                 
                 {/* Background glow effects */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary opacity-5 blur-[120px] rounded-full pointer-events-none" />
+                <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary opacity-5 blur-[120px] rounded-full pointer-events-none" />
                 <div className="absolute top-1/4 right-1/4 w-[400px] h-[400px] bg-secondary opacity-5 blur-[100px] rounded-full pointer-events-none" />
 
-                <div className="space-y-8 relative z-10">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-surface text-xs font-mono text-primary mb-4 shadow-[0_0_10px_rgba(0,240,255,0.1)] animate-reveal stagger-1">
+                <div className="space-y-8 relative z-10 lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-surface text-xs font-mono text-primary mb-2 shadow-[0_0_10px_rgba(0,240,255,0.1)] animate-reveal stagger-1">
                         <span className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
-                        CodeSync v4.0 Online
+                        CodeSync Official
                     </div>
                     
-                    <h1 className="text-6xl md:text-8xl font-black tracking-tighter animate-reveal stagger-2">
-                        <span className="text-white">Track Your </span>
-                        <span className="text-gradient-cyber">Grind.</span>
+                    <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[1.1] animate-reveal stagger-2">
+                        <span className="text-white block">Automate Your</span>
+                        <span className="text-gradient-cyber block mt-2">Coding Grind.</span>
                     </h1>
                     
-                    <p className="text-xl md:text-2xl text-text-secondary max-w-2xl mx-auto font-medium animate-reveal stagger-3">
-                        The ultimate centralized dashboard for your coding progress. Sync LeetCode, Codeforces, CodeChef, and HackerRank instantly.
+                    <p className="text-lg md:text-xl text-text-secondary max-w-xl font-medium animate-reveal stagger-3">
+                        The ultimate Discord bot to track, sync, and rank your coding progress across multiple platforms without lifting a finger.
                     </p>
                     
-                    <div className="pt-8 flex flex-col sm:flex-row items-center justify-center gap-6 animate-reveal stagger-4">
+                    <div className="pt-4 flex flex-col sm:flex-row items-center gap-4 animate-reveal stagger-4 w-full sm:w-auto">
                         <Link 
                             href="/api/auth/signin" 
-                            className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-[#0B0E14] bg-primary rounded hover:bg-transparent hover:text-primary border-2 border-primary btn-interactive shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:shadow-[0_0_30px_rgba(0,240,255,0.6)]"
+                            className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-base font-bold text-[#0B0E14] bg-primary rounded hover:bg-transparent hover:text-primary border-2 border-primary btn-interactive shadow-[0_0_20px_rgba(0,240,255,0.3)] transition-all"
                         >
-                            <svg className="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/>
-                            </svg>
-                            Connect with Discord
+                            <Bot className="w-5 h-5 mr-2" />
+                            Add to Discord
                         </Link>
                         <Link 
                             href="/leaderboard" 
-                            className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-text-primary bg-surface rounded hover:bg-border border-2 border-border btn-interactive"
+                            className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white bg-surface rounded hover:bg-border border-2 border-border btn-interactive transition-all"
                         >
-                            View Leaderboard
+                            View Global Ranks
                         </Link>
                     </div>
                 </div>
-            </div>
 
-            {/* Terminal Mockup */}
-            <div className="max-w-4xl mx-auto w-full px-4 relative z-10 -mt-8 mb-24 animate-reveal stagger-5">
-                <div className="rounded-xl border border-border bg-[#05070A] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-                    <div className="flex items-center px-4 py-3 border-b border-border bg-surface">
-                        <div className="flex space-x-2">
-                            <div className="w-3 h-3 rounded-full bg-danger"></div>
-                            <div className="w-3 h-3 rounded-full bg-warning"></div>
-                            <div className="w-3 h-3 rounded-full bg-secondary"></div>
-                        </div>
-                        <div className="mx-auto text-xs font-mono text-text-secondary">~/codesync/tracker</div>
-                    </div>
-                    <div className="p-6 font-mono text-sm leading-relaxed">
-                        <div className="text-secondary">$ codesync fetch --all</div>
-                        <div className="text-text-secondary mt-1">Fetching latest submissions from connected platforms...</div>
-                        <div className="text-primary mt-2">✓ LeetCode: 3 new problems solved</div>
-                        <div className="text-primary">✓ Codeforces: 1 new problem solved</div>
-                        <div className="text-primary">✓ SmartInterviews: 2 new problems solved</div>
-                        <div className="text-secondary mt-4">$ codesync rank --update</div>
-                        <div className="text-text-primary mt-1">Global Leaderboard updated! You moved up 2 spots to Rank #4! 🏆</div>
-                        <div className="mt-4 flex items-center gap-2 text-text-secondary">
-                            <span className="w-2 h-5 bg-primary animate-pulse inline-block"></span>
+                {/* Hero Asset Placeholder */}
+                <div className="lg:w-1/2 relative w-full aspect-video lg:aspect-square flex items-center justify-center animate-reveal stagger-5">
+                    {/* Placeholder for the bot showcase screenshot the user will upload */}
+                    <div className="relative w-full max-w-lg aspect-[4/3] rounded-2xl overflow-hidden border border-border shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#05070A] group">
+                        <div className="absolute inset-0 flex items-center justify-center flex-col gap-4">
+                            <Bot className="w-16 h-16 text-primary opacity-20" />
+                            <p className="font-mono text-sm text-text-secondary uppercase tracking-widest">[ Bot Showcase Image ]</p>
+                            <p className="text-xs text-text-secondary px-8 text-center">Replace this placeholder with `/public/bot-showcase.png`</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Features Grid */}
-            <div className="bg-surface border-t border-border py-24">
+            {/* Social Proof Strip */}
+            <div className="border-y border-border bg-[#05070A] py-8 relative z-10">
+                <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-center gap-8 md:gap-24">
+                    <div className="flex flex-col items-center gap-2">
+                        <span className="text-3xl font-black text-white">5+</span>
+                        <span className="text-xs font-mono text-text-secondary uppercase tracking-widest">Platforms Synced</span>
+                    </div>
+                    <div className="hidden md:block w-px h-12 bg-border"></div>
+                    <div className="flex flex-col items-center gap-2">
+                        <span className="text-3xl font-black text-white">100%</span>
+                        <span className="text-xs font-mono text-text-secondary uppercase tracking-widest">Automated Tracking</span>
+                    </div>
+                    <div className="hidden md:block w-px h-12 bg-border"></div>
+                    <div className="flex flex-col items-center gap-2">
+                        <span className="text-3xl font-black text-white">24/7</span>
+                        <span className="text-xs font-mono text-text-secondary uppercase tracking-widest">Real-time Updates</span>
+                    </div>
+                </div>
+            </div>
+
+            {/* Core Features Grid */}
+            <div className="py-32 relative z-10">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-16 animate-reveal stagger-2">
-                        <h2 className="text-3xl font-black text-white">Built for the Grind</h2>
-                        <p className="mt-4 text-text-secondary">Everything you need to track your competitive programming journey.</p>
+                    <div className="text-center mb-20 animate-reveal stagger-2">
+                        <h2 className="text-4xl md:text-5xl font-black text-white">Built for the Community</h2>
+                        <p className="mt-4 text-text-secondary text-lg max-w-2xl mx-auto">Everything a computer science club, bootcamp, or friend group needs to keep each other motivated.</p>
                     </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div className="classic-card p-8 hover:border-primary transition-colors animate-reveal stagger-3">
-                            <Globe className="w-10 h-10 text-primary mb-6" />
-                            <h3 className="text-xl font-bold text-white mb-3">Global Leaderboards</h3>
-                            <p className="text-text-secondary">Compete with your peers across the entire server. Ranks are calculated instantly based on your rolling 7-day performance.</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div className="bg-surface border border-border p-8 hover:border-primary transition-colors group animate-reveal stagger-3 flex flex-col items-start text-left">
+                            <div className="p-3 bg-[#0B0E14] border border-border rounded mb-6 group-hover:border-primary transition-colors">
+                                <Activity className="w-6 h-6 text-primary" />
+                            </div>
+                            <h3 className="text-xl font-bold text-white mb-3 tracking-tight">Zero-Friction Tracking</h3>
+                            <p className="text-text-secondary leading-relaxed">
+                                Link your accounts once and you're done. CodeSync runs silently in the background, automatically fetching your solved problems every single day.
+                            </p>
                         </div>
                         
-                        <div className="classic-card p-8 hover:border-secondary transition-colors animate-reveal stagger-4">
-                            <Zap className="w-10 h-10 text-secondary mb-6" />
-                            <h3 className="text-xl font-bold text-white mb-3">100% Automated</h3>
-                            <p className="text-text-secondary">Powered by dynamic scrapers and external crons. Your stats are tracked seamlessly in the background while you focus on coding.</p>
+                        <div className="bg-surface border border-border p-8 hover:border-secondary transition-colors group animate-reveal stagger-4 flex flex-col items-start text-left">
+                            <div className="p-3 bg-[#0B0E14] border border-border rounded mb-6 group-hover:border-secondary transition-colors">
+                                <Users className="w-6 h-6 text-secondary" />
+                            </div>
+                            <h3 className="text-xl font-bold text-white mb-3 tracking-tight">Server Leaderboards</h3>
+                            <p className="text-text-secondary leading-relaxed">
+                                Turn coding into a healthy competition. The leaderboard ranks members in your Discord server based on how many problems they solved in the last 7 days.
+                            </p>
                         </div>
                         
-                        <div className="classic-card p-8 hover:border-primary transition-colors animate-reveal stagger-5">
-                            <Code2 className="w-10 h-10 text-primary mb-6" />
-                            <h3 className="text-xl font-bold text-white mb-3">Multi-Platform</h3>
-                            <p className="text-text-secondary">Connect LeetCode, Codeforces, HackerRank, CodeChef, and SmartInterviews. One unified dashboard for all your profiles.</p>
+                        <div className="bg-surface border border-border p-8 hover:border-primary transition-colors group animate-reveal stagger-5 flex flex-col items-start text-left">
+                            <div className="p-3 bg-[#0B0E14] border border-border rounded mb-6 group-hover:border-primary transition-colors">
+                                <Globe className="w-6 h-6 text-primary" />
+                            </div>
+                            <h3 className="text-xl font-bold text-white mb-3 tracking-tight">Multi-Platform Sync</h3>
+                            <p className="text-text-secondary leading-relaxed">
+                                Why choose one platform? We natively support LeetCode, Codeforces, HackerRank, CodeChef, and SmartInterviews, aggregating them into a single profile.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* FAQ Section */}
+            <div className="bg-surface border-t border-border py-32">
+                <div className="max-w-4xl mx-auto px-4">
+                    <div className="text-center mb-16 animate-reveal stagger-2">
+                        <h2 className="text-3xl md:text-4xl font-black text-white">Frequently Asked Questions</h2>
+                    </div>
+                    <div className="divide-y divide-border border-y border-border animate-reveal stagger-3">
+                        <div className="py-6 flex flex-col gap-2">
+                            <h3 className="text-lg font-bold text-white">Do I need to manually update my stats?</h3>
+                            <p className="text-text-secondary">No. Once your accounts are linked via the dashboard or bot commands, CodeSync automatically scrapes your progress multiple times a day.</p>
+                        </div>
+                        <div className="py-6 flex flex-col gap-2">
+                            <h3 className="text-lg font-bold text-white">Is it free to use?</h3>
+                            <p className="text-text-secondary">Absolutely. CodeSync is built to support developer communities without any paywalls or hidden limits.</p>
+                        </div>
+                        <div className="py-6 flex flex-col gap-2">
+                            <h3 className="text-lg font-bold text-white">How do I add it to my server?</h3>
+                            <p className="text-text-secondary">Simply click the "Add to Discord" button at the top, select your server, and authorize the bot. You can then use the `/set-channel` command to specify where daily leaderboards should be posted.</p>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <footer className="border-t border-border bg-[#05070A] py-12 text-center text-text-secondary font-mono text-sm">
-                <p>Designed for developers. Synchronized seamlessly with Discord.</p>
-                <p className="mt-2 text-primary">CodeSync v4.0</p>
-            </footer>
+            {/* CTA Section */}
+            <div className="py-32 relative z-10 bg-[#05070A] border-t border-border text-center">
+                <div className="max-w-3xl mx-auto px-4 flex flex-col items-center animate-reveal stagger-2">
+                    <h2 className="text-4xl md:text-5xl font-black text-white mb-6">Ready to start tracking?</h2>
+                    <p className="text-lg text-text-secondary mb-10">Join the competitive programming revolution and keep your server motivated.</p>
+                    <Link 
+                        href="/api/auth/signin" 
+                        className="inline-flex items-center justify-center px-10 py-5 text-lg font-bold text-[#0B0E14] bg-primary rounded hover:bg-transparent hover:text-primary border-2 border-primary btn-interactive shadow-[0_0_30px_rgba(0,240,255,0.2)] transition-all"
+                    >
+                        Get Started Now <ArrowRight className="ml-2 w-5 h-5" />
+                    </Link>
+                </div>
+            </div>
         </main>
     );
 }

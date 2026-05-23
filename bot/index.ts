@@ -12,6 +12,8 @@ import { handleListProfiles } from './commands/list-profiles';
 import { handleCheck, handleRecheckButton, handleCopyLinksButton } from './commands/check';
 import { handleHelp } from './commands/help';
 import { handleSetup } from './commands/setup';
+import { handleLeaderboard } from './commands/leaderboard';
+import { handleExportReport } from './commands/export-report';
 import { RateLimiter } from '../lib/rate-limiter';
 import express from 'express';
 
@@ -55,6 +57,8 @@ client.on('interactionCreate', async (interaction: Interaction) => {
                     break;
                 case 'setup': await handleSetup(interaction); break;
                 case 'help': await handleHelp(interaction); break;
+                case 'leaderboard': await handleLeaderboard(interaction); break;
+                case 'export-report': await handleExportReport(interaction); break;
             }
         } else if (interaction.isButton()) {
             if (interaction.customId.startsWith('recheck:')) {

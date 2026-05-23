@@ -71,6 +71,14 @@ const commands = [
             .setName('welcome-channel').setDescription('Where to post onboarding info').setRequired(false)),
 
     new SlashCommandBuilder()
+        .setName('leaderboard')
+        .setDescription('See the top 10 grinders in this server (Last 7 Days)'),
+
+    new SlashCommandBuilder()
+        .setName('export-report')
+        .setDescription('ADMIN: Download a CSV report of all students in this server'),
+
+    new SlashCommandBuilder()
         .setName('help')
         .setDescription('How to use CodeSync'),
 ].map(c => c.toJSON());

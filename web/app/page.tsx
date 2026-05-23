@@ -6,7 +6,7 @@ export default function Home() {
     return (
         <main className="min-h-screen flex flex-col bg-background text-foreground overflow-hidden">
             {/* Hero Section */}
-            <div className="flex-1 flex flex-col lg:flex-row items-center justify-between p-6 max-w-7xl mx-auto pt-20 pb-24 relative gap-12 lg:gap-8">
+            <div className="flex-1 flex flex-col lg:flex-row items-center justify-between px-4 sm:px-6 lg:px-8 max-w-7xl w-full mx-auto pt-20 pb-24 relative gap-12 lg:gap-8">
                 
                 {/* Background glow effects */}
                 <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary opacity-5 blur-[120px] rounded-full pointer-events-none" />
@@ -18,9 +18,10 @@ export default function Home() {
                         CodeSync Official
                     </div>
                     
-                    <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[1.1] animate-reveal stagger-2">
-                        <span className="text-white block">Automate Your</span>
-                        <span className="text-gradient-cyber block mt-2">Coding Grind.</span>
+                    <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] animate-reveal stagger-2">
+                        <span className="text-white">Automate your </span>
+                        <br className="hidden lg:block" />
+                        <span className="text-gradient-cyber">coding grind.</span>
                     </h1>
                     
                     <p className="text-lg md:text-xl text-text-secondary max-w-xl font-medium animate-reveal stagger-3">

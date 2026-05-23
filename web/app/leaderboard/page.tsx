@@ -48,12 +48,12 @@ export default async function LeaderboardPage() {
 
     return (
         <main className="max-w-5xl mx-auto px-4 py-16">
-            <div className="mb-12 border-b border-border pb-6 text-center">
+            <div className="mb-12 border-b border-border pb-6 text-center animate-reveal stagger-1">
                 <h1 className="text-5xl font-black text-white uppercase tracking-tight">Global Leaderboard</h1>
                 <p className="text-primary mt-4 font-mono text-sm tracking-widest uppercase">Last 7 Days // Live Ranking</p>
             </div>
 
-            <div className="bg-[#05070A] border border-border rounded-xl overflow-hidden">
+            <div className="bg-[#05070A] border border-border rounded-xl overflow-hidden animate-reveal stagger-2">
                 <table className="w-full text-left border-collapse">
                     <thead>
                         <tr className="bg-surface border-b-2 border-border text-text-secondary text-xs uppercase tracking-wider font-bold">
@@ -64,7 +64,7 @@ export default async function LeaderboardPage() {
                     </thead>
                     <tbody className="divide-y divide-border">
                         {enrichedData.map((user: any) => (
-                            <tr key={user.id} className="hover:bg-surface transition-colors group">
+                            <tr key={user.id} className="hover:bg-surface transition-colors group leaderboard-row">
                                 <td className="p-5 text-center">
                                     <span className={`inline-flex items-center justify-center w-10 h-10 rounded-full font-black text-lg ${
                                         user.rank === 1 ? 'bg-warning text-[#0B0E14] shadow-[0_0_15px_rgba(255,215,0,0.5)]' :

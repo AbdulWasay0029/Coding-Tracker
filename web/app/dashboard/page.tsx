@@ -24,7 +24,7 @@ export default async function DashboardPage() {
 
     return (
         <main className="max-w-6xl mx-auto px-4 py-12">
-            <div className="flex items-center gap-6 mb-12 border-b border-border pb-8">
+            <div className="flex items-center gap-6 mb-12 border-b border-border pb-8 animate-reveal stagger-1">
                 {session.user.image ? (
                     <Image src={session.user.image} alt="Avatar" width={80} height={80} className="rounded-full bg-surface border border-border" />
                 ) : (
@@ -40,7 +40,7 @@ export default async function DashboardPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div className="md:col-span-1 space-y-6">
-                    <div className="bg-surface border border-border p-6 rounded-lg shadow-sm">
+                    <div className="bg-surface border border-border p-6 rounded-lg shadow-sm animate-reveal stagger-2">
                         <h2 className="text-lg font-bold border-b border-border pb-3 mb-4 text-text-primary">Linked Accounts</h2>
                         {profiles.length > 0 ? (
                             <ul className="space-y-3">
@@ -56,7 +56,7 @@ export default async function DashboardPage() {
                         )}
                     </div>
 
-                    <div className="bg-surface border border-border p-6 rounded-lg shadow-sm">
+                    <div className="bg-surface border border-border p-6 rounded-lg shadow-sm animate-reveal stagger-3">
                         <h2 className="text-lg font-bold border-b border-border pb-3 mb-4 text-text-primary">Total Stats</h2>
                         <div className="text-4xl font-extrabold text-success">
                             {history.length} <span className="text-base font-normal text-text-secondary">problems</span>
@@ -65,12 +65,12 @@ export default async function DashboardPage() {
                 </div>
 
                 <div className="md:col-span-2 space-y-6">
-                    <div className="bg-surface border border-border p-6 rounded-lg shadow-sm">
+                    <div className="bg-surface border border-border p-6 rounded-lg shadow-sm animate-reveal stagger-4">
                         <h2 className="text-lg font-bold border-b border-border pb-3 mb-4 text-text-primary">Recent Solves</h2>
                         {history.length > 0 ? (
                             <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
                                 {history.map((problem: any) => (
-                                    <div key={problem.id} className="flex items-center justify-between bg-[#0d1117] p-4 rounded border border-border hover:border-primary transition-colors">
+                                    <div key={problem.id} className="flex items-center justify-between bg-[#0d1117] p-4 rounded border border-border hover:border-primary transition-colors leaderboard-row">
                                         <div>
                                             <h3 className="font-medium text-text-primary">{problem.title}</h3>
                                             <p className="text-xs text-text-secondary mt-1">{problem.platform} • {new Date(problem.solvedAt).toLocaleDateString()}</p>

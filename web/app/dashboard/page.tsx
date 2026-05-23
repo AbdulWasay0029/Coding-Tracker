@@ -44,7 +44,7 @@ export default async function DashboardPage() {
                         <h2 className="text-lg font-bold border-b border-border pb-3 mb-4 text-text-primary">Linked Accounts</h2>
                         {profiles.length > 0 ? (
                             <ul className="space-y-3">
-                                {profiles.map(p => (
+                                {profiles.map((p: any) => (
                                     <li key={p.id} className="flex justify-between items-center bg-[#0d1117] p-3 rounded border border-border">
                                         <span className="font-semibold text-text-secondary">{p.platform}</span>
                                         <span className="font-mono text-sm text-primary">{p.username}</span>
@@ -69,7 +69,7 @@ export default async function DashboardPage() {
                         <h2 className="text-lg font-bold border-b border-border pb-3 mb-4 text-text-primary">Recent Solves</h2>
                         {history.length > 0 ? (
                             <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
-                                {history.map(problem => (
+                                {history.map((problem: any) => (
                                     <div key={problem.id} className="flex items-center justify-between bg-[#0d1117] p-4 rounded border border-border hover:border-primary transition-colors">
                                         <div>
                                             <h3 className="font-medium text-text-primary">{problem.title}</h3>

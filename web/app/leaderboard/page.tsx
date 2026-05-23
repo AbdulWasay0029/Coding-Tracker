@@ -35,7 +35,7 @@ export default async function LeaderboardPage() {
     });
 
     const enrichedData = await Promise.all(
-        leaderboardData.map(async (user, idx) => {
+        leaderboardData.map(async (user: any, idx: number) => {
             const discordUser = await getDiscordUser(user.discordUserId);
             return {
                 rank: idx + 1,
@@ -63,7 +63,7 @@ export default async function LeaderboardPage() {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-border">
-                        {enrichedData.map((user) => (
+                        {enrichedData.map((user: any) => (
                             <tr key={user.id} className="hover:bg-surface transition-colors group">
                                 <td className="p-5 text-center">
                                     <span className={`inline-flex items-center justify-center w-10 h-10 rounded-full font-black text-lg ${

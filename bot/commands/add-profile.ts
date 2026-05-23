@@ -31,7 +31,7 @@ export async function handleAddProfile(interaction: ChatInputCommandInteraction)
         return;
     }
 
-    await interaction.deferReply();
+    await interaction.deferReply({ ephemeral: true });
 
     try {
         await prisma.userProfile.upsert({
@@ -42,7 +42,7 @@ export async function handleAddProfile(interaction: ChatInputCommandInteraction)
                     username,
                 },
             },
-            update: { token },
+            update: { token: token ? encrypt(token) : undefined },
             create: {
                 discordUserId: interaction.user.id,
                 platform,

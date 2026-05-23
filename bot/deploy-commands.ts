@@ -31,6 +31,17 @@ const commands = [
             .setName('token').setDescription('JWT — SmartInterviews only (ey...)').setRequired(false)),
 
     new SlashCommandBuilder()
+        .setName('update-profile')
+        .setDescription('Update your platform username or token')
+        .addStringOption(o => o
+            .setName('platform').setDescription('Which platform?').setRequired(true)
+            .addChoices(...PLATFORM_CHOICES))
+        .addStringOption(o => o
+            .setName('new_username').setDescription('Your new handle/username').setRequired(true))
+        .addStringOption(o => o
+            .setName('token').setDescription('JWT — SmartInterviews only (ey...)').setRequired(false)),
+
+    new SlashCommandBuilder()
         .setName('remove-profile')
         .setDescription('Untrack a platform')
         .addStringOption(o => o

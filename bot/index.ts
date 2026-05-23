@@ -6,6 +6,7 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 import { prisma } from '../lib/prisma';
 import { handleAddProfile } from './commands/add-profile';
+import { handleUpdateProfile } from './commands/update-profile';
 import { handleRemoveProfile } from './commands/remove-profile';
 import { handleListProfiles } from './commands/list-profiles';
 import { handleCheck, handleRecheckButton, handleCopyLinksButton } from './commands/check';
@@ -41,6 +42,7 @@ client.on('interactionCreate', async (interaction: Interaction) => {
         if (interaction.isChatInputCommand()) {
             switch (interaction.commandName) {
                 case 'add-profile': await handleAddProfile(interaction); break;
+                case 'update-profile': await handleUpdateProfile(interaction); break;
                 case 'remove-profile': await handleRemoveProfile(interaction); break;
                 case 'list-profiles': await handleListProfiles(interaction); break;
                 case 'check': 

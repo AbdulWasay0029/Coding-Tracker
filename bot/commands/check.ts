@@ -83,7 +83,8 @@ async function runAndReply(
     const row = buildActionRow(userId, startTimestamp, endTimestamp, hasLinks);
 
     if (!hasLinks) {
-        let emptyContent = `📅 **${dateStr}** — No problems solved yet today. Keep grinding!`;
+        const isToday = dateStr === new Date(Date.now() + 5.5 * 3600000).toISOString().split('T')[0];
+        let emptyContent = `📅 **${dateStr}** — No problems solved ${isToday ? 'yet today' : 'on this date'}. Keep grinding!`;
         if (result.errors && result.errors.length > 0) {
             emptyContent += `\n\n-# ⚠️ Errors: ${result.errors.map((e: string) => e).join(', ')} (Tokens expire! Run /add-profile to refresh)`;
         }
@@ -128,8 +129,8 @@ export async function handleCheck(interaction: ChatInputCommandInteraction) {
     const dateVal = interaction.options.getString('date') || 'today';
     const { startTimestamp, endTimestamp, dateStr, warning } = getTimestampsForDate(dateVal);
 
-    // Show a warning if the user gave an invalid date format
     if (warning) {
+        // Send warning ephemerally before the main reply.
         await interaction.followUp({ content: warning, ephemeral: true });
     }
 

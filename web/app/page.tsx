@@ -49,15 +49,17 @@ export default function Home() {
                 <div className="lg:w-1/2 relative w-full aspect-video lg:aspect-square flex items-center justify-center animate-reveal stagger-5" style={{ perspective: '1200px' }}>
                     {/* Placeholder for the bot showcase screenshot the user will upload */}
                     <div 
-                        className="relative w-full max-w-2xl aspect-[16/9] rounded-xl overflow-hidden border border-border shadow-[-30px_20px_60px_rgba(0,0,0,0.6)] bg-[#05070A] transition-all duration-700 hover:scale-[1.02]"
+                        className="relative w-full max-w-3xl rounded-xl overflow-hidden border border-border shadow-[-30px_20px_60px_rgba(0,0,0,0.6)] bg-[#05070A] transition-all duration-700 hover:scale-[1.02]"
                         style={{ transform: 'rotateY(-20deg) rotateX(5deg) rotateZ(-1deg)' }}
                     >
                         <Image 
                             src="/bot-showcase.png"
                             alt="CodeSync Bot Showcase"
-                            fill
-                            className="object-cover"
+                            width={1920}
+                            height={1080}
+                            className="w-full h-auto block"
                             priority
+                            unoptimized
                         />
                     </div>
                 </div>

@@ -5,8 +5,11 @@ import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 
 export const metadata: Metadata = {
-    title: 'CodeSync',
-    description: 'Track your competitive programming progress seamlessly.',
+    title: 'CodeSync | Competitive Programming Tracker',
+    description: 'Track your competitive programming progress seamlessly across LeetCode, Codeforces, and more.',
+    icons: {
+        icon: '/logo.png',
+    },
 };
 
 export default function RootLayout({

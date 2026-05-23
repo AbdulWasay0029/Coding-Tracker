@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     title: 'CodeSync | Competitive Programming Tracker',
     description: 'Track your competitive programming progress seamlessly across LeetCode, Codeforces, and more.',
     icons: {
-        icon: '/logo.png',
+        icon: '/favicon.svg',
     },
 };
 

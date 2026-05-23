@@ -200,7 +200,7 @@ export function ProfileManager({ initialProfiles }: { initialProfiles: Profile[]
                                     required
                                     value={editForm.username}
                                     onChange={(e) => setEditForm({...editForm, username: e.target.value})}
-                                    className="w-full sm:flex-1 bg-background border border-border text-white text-sm rounded-md px-3 py-1.5 focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+                                    className="w-full sm:flex-1 bg-surface border border-border text-white text-sm rounded-md px-3 py-1.5 focus:border-primary focus:ring-1 focus:ring-primary outline-none placeholder:text-text-secondary/50"
                                 />
                                 {p.platform === 'SMARTINTERVIEWS' && (
                                     <input 
@@ -208,7 +208,7 @@ export function ProfileManager({ initialProfiles }: { initialProfiles: Profile[]
                                         value={editForm.token}
                                         onChange={(e) => setEditForm({...editForm, token: e.target.value})}
                                         placeholder="Update Token (Optional)"
-                                        className="w-full sm:flex-1 bg-background border border-border text-white text-sm rounded-md px-3 py-1.5 focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+                                        className="w-full sm:flex-1 bg-surface border border-border text-white text-sm rounded-md px-3 py-1.5 focus:border-primary focus:ring-1 focus:ring-primary outline-none placeholder:text-text-secondary/50"
                                     />
                                 )}
                                 <div className="flex gap-2">
@@ -231,12 +231,9 @@ export function ProfileManager({ initialProfiles }: { initialProfiles: Profile[]
                         ) : (
                             <>
                                 <div className="flex items-center gap-4 min-w-0">
-                                    <div className="w-10 h-10 rounded-lg bg-surface border border-border flex items-center justify-center shrink-0">
-                                        <ExternalLink className="w-4 h-4 text-text-secondary" />
-                                    </div>
                                     <div className="min-w-0">
-                                        <h3 className="text-sm font-semibold text-white truncate">{p.platform}</h3>
-                                        <p className="text-sm text-text-secondary truncate mt-0.5">{p.username}</p>
+                                        <h3 className="text-base font-bold text-white truncate">{p.platform}</h3>
+                                        <p className="text-sm font-mono text-text-secondary truncate mt-0.5">{p.username}</p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">

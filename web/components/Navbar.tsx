@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import { Bot, Menu, X } from 'lucide-react';
@@ -57,9 +58,18 @@ export function Navbar() {
                     <div className="hidden md:flex items-center space-x-6">
                         {session ? (
                             <>
-                                <span className="text-sm font-mono text-text-secondary">
-                                    {session.user?.name}
-                                </span>
+                                <div className="flex items-center gap-2">
+                                    {session.user?.image ? (
+                                        <Image src={session.user.image} alt="Avatar" width={28} height={28} className="rounded-full bg-surface border border-border" />
+                                    ) : (
+                                        <div className="w-7 h-7 rounded-full bg-surface border border-border flex items-center justify-center text-xs font-bold text-white">
+                                            {session.user?.name?.charAt(0)}
+                                        </div>
+                                    )}
+                                    <span className="text-sm font-bold text-white">
+                                        {session.user?.name}
+                                    </span>
+                                </div>
                                 <button
                                     onClick={() => signOut()}
                                     className="px-4 py-2 text-sm font-bold text-text-secondary border border-transparent rounded hover:border-danger hover:text-danger hover:bg-danger/10 transition-colors btn-interactive"

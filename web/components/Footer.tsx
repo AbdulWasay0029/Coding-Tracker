@@ -3,37 +3,56 @@ import { Bot, Code2, Globe } from 'lucide-react';
 
 export function Footer() {
     return (
-        <footer className="border-t border-border bg-[#0B0E14] py-12 mt-auto">
+        <footer className="border-t border-border bg-[#05070A] py-16 mt-auto">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-                    <div className="flex items-center gap-3">
-                        <div className="p-1.5 rounded border border-border shadow-[0_0_10px_rgba(0,240,255,0.05)]">
-                            <Bot className="w-5 h-5 text-primary" />
-                        </div>
-                        <span className="font-bold text-white text-lg tracking-tight">CodeSync</span>
-                    </div>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8">
                     
-                    <div className="flex items-center gap-6 text-sm font-medium text-text-secondary">
-                        <Link href="/docs" className="hover:text-white transition-colors">Documentation</Link>
-                        <Link href="/leaderboard" className="hover:text-white transition-colors">Leaderboard</Link>
-                        <Link href="/api/auth/signin" className="hover:text-white transition-colors">Dashboard</Link>
+                    <div className="md:col-span-2 space-y-4">
+                        <div className="flex items-center gap-3">
+                            <div className="p-1.5 rounded bg-surface border border-border shadow-[0_0_10px_rgba(0,240,255,0.05)]">
+                                <Bot className="w-6 h-6 text-primary" />
+                            </div>
+                            <span className="font-bold text-white text-xl tracking-tight">CodeSync</span>
+                        </div>
+                        <p className="text-text-secondary max-w-sm text-sm leading-relaxed">
+                            The ultimate Discord bot and platform to track, sync, and rank your coding progress across multiple competitive programming platforms.
+                        </p>
                     </div>
 
-                    <div className="flex items-center gap-4">
-                        <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-text-secondary hover:text-white transition-colors">
-                            <Code2 className="w-5 h-5" />
-                            <span className="sr-only">GitHub</span>
-                        </a>
-                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-text-secondary hover:text-primary transition-colors">
-                            <Globe className="w-5 h-5" />
-                            <span className="sr-only">Twitter</span>
-                        </a>
+                    <div>
+                        <h3 className="font-bold text-white mb-4">Platform</h3>
+                        <ul className="space-y-3 text-sm text-text-secondary">
+                            <li><Link href="/api/auth/signin" className="hover:text-primary transition-colors">Dashboard</Link></li>
+                            <li><Link href="/leaderboard" className="hover:text-primary transition-colors">Global Leaderboard</Link></li>
+                            <li><Link href="/docs" className="hover:text-primary transition-colors">Documentation</Link></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h3 className="font-bold text-white mb-4">Community</h3>
+                        <ul className="space-y-3 text-sm text-text-secondary">
+                            <li>
+                                <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white transition-colors">
+                                    <Code2 className="w-4 h-4" /> Source Code
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://discord.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-[#5865F2] transition-colors">
+                                    <Bot className="w-4 h-4" /> Invite Bot
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors">
+                                    <Globe className="w-4 h-4" /> Updates
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 
-                <div className="mt-8 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-text-secondary">
-                    <p>© {new Date().getFullYear()} CodeSync. All rights reserved.</p>
-                    <p>Designed for competitive programming communities.</p>
+                <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-text-secondary">
+                    <p>© {new Date().getFullYear()} CodeSync. Built for competitive programmers.</p>
+                    <p>Designed with <span className="text-primary">Next.js</span> and <span className="text-secondary">Neon PostgreSQL</span></p>
                 </div>
             </div>
         </footer>

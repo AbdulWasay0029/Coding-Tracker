@@ -1,5 +1,4 @@
-import Link from 'next/link';
-import { Terminal, Code2, Users, Trophy, Bell, Settings } from 'lucide-react';
+import { Terminal, Code2, Users, Settings } from 'lucide-react';
 
 export default function DocsPage() {
     return (
@@ -16,27 +15,40 @@ export default function DocsPage() {
                     </h2>
                     <div className="space-y-6">
                         <div className="bg-surface border border-border p-6 rounded-xl">
-                            <h3 className="text-lg font-bold text-primary font-mono mb-2">/profile</h3>
-                            <p className="text-text-secondary mb-4">View your total solved problems across all connected platforms.</p>
-                            <div className="bg-[#0B0E14] border border-border p-3 rounded-md text-sm font-mono text-text-secondary">
-                                Usage: <span className="text-white">/profile [user]</span>
-                            </div>
-                        </div>
-
-                        <div className="bg-surface border border-border p-6 rounded-xl">
                             <h3 className="text-lg font-bold text-primary font-mono mb-2">/check</h3>
-                            <p className="text-text-secondary mb-4">Manually trigger a sync of your linked accounts to instantly pull the latest solved problems.</p>
-                            <div className="bg-[#0B0E14] border border-border p-3 rounded-md text-sm font-mono text-text-secondary">
-                                Usage: <span className="text-white">/check</span>
-                            </div>
+                            <p className="text-text-secondary mb-4">Trigger an instant background sync of your linked accounts to pull the latest solved problems.</p>
                         </div>
 
                         <div className="bg-surface border border-border p-6 rounded-xl">
                             <h3 className="text-lg font-bold text-primary font-mono mb-2">/leaderboard</h3>
                             <p className="text-text-secondary mb-4">Display the top 10 developers in the current Discord server based on problems solved in the last 7 days.</p>
-                            <div className="bg-[#0B0E14] border border-border p-3 rounded-md text-sm font-mono text-text-secondary">
-                                Usage: <span className="text-white">/leaderboard</span>
-                            </div>
+                        </div>
+
+                        <div className="bg-surface border border-border p-6 rounded-xl">
+                            <h3 className="text-lg font-bold text-primary font-mono mb-2">/list-profiles</h3>
+                            <p className="text-text-secondary mb-4">View all your currently connected coding platforms.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+                        <Users className="w-6 h-6 text-warning" /> Profile Management
+                    </h2>
+                    <div className="space-y-6">
+                        <div className="bg-surface border border-border p-6 rounded-xl">
+                            <h3 className="text-lg font-bold text-warning font-mono mb-2">/add-profile</h3>
+                            <p className="text-text-secondary mb-4">Link a new platform to your CodeSync account directly through Discord.</p>
+                        </div>
+
+                        <div className="bg-surface border border-border p-6 rounded-xl">
+                            <h3 className="text-lg font-bold text-warning font-mono mb-2">/update-profile</h3>
+                            <p className="text-text-secondary mb-4">Update the username or token for an existing connected platform.</p>
+                        </div>
+
+                        <div className="bg-surface border border-border p-6 rounded-xl">
+                            <h3 className="text-lg font-bold text-warning font-mono mb-2">/remove-profile</h3>
+                            <p className="text-text-secondary mb-4">Disconnect a coding platform from your account.</p>
                         </div>
                     </div>
                 </section>
@@ -47,19 +59,13 @@ export default function DocsPage() {
                     </h2>
                     <div className="space-y-6">
                         <div className="bg-surface border border-border p-6 rounded-xl">
-                            <h3 className="text-lg font-bold text-secondary font-mono mb-2">/set-channel</h3>
-                            <p className="text-text-secondary mb-4">Set the current channel as the designated daily leaderboard announcement channel.</p>
-                            <div className="bg-[#0B0E14] border border-border p-3 rounded-md text-sm font-mono text-text-secondary">
-                                Usage: <span className="text-white">/set-channel</span> (Requires Administrator permission)
-                            </div>
+                            <h3 className="text-lg font-bold text-secondary font-mono mb-2">/setup</h3>
+                            <p className="text-text-secondary mb-4">Initialize the server configuration. Allows you to set the daily announcement channel.</p>
                         </div>
 
                         <div className="bg-surface border border-border p-6 rounded-xl">
                             <h3 className="text-lg font-bold text-secondary font-mono mb-2">/export-report</h3>
                             <p className="text-text-secondary mb-4">Generate and download a CSV report containing problem-solving statistics for all users in the server over the last 7 days.</p>
-                            <div className="bg-[#0B0E14] border border-border p-3 rounded-md text-sm font-mono text-text-secondary">
-                                Usage: <span className="text-white">/export-report</span> (Requires Administrator permission)
-                            </div>
                         </div>
                     </div>
                 </section>

@@ -14,81 +14,7 @@ dotenv.config();
 
 import axios from 'axios';
 import { PrismaClient } from '@prisma/client';
-import { decrypt } from '../lib/encryption';
-
-import { fetchLeetCodeSubmissions } from '../lib/platforms/leetcode';
-import { fetchCodeforcesSubmissions } from '../lib/platforms/codeforces';
-import { fetchCodeChefSubmissions } from '../lib/platforms/codechef';
-import { fetchSmartInterviewsSubmissions } from '../lib/platforms/smartinterviews';
-import { fetchHackerRankSubmissions } from '../lib/platforms/hackerrank';
-
-const prisma = new PrismaClient();
-
-// ─── Platform config ─────────────────────────────────────────────────────────
-
-const PLATFORM_EMOJI: Record<string, string> = {
-    LEETCODE: '🟡',
-    CODEFORCES: '🔵',
-    CODECHEF: '🟤',
-    HACKERRANK: '🟢',
-    SMARTINTERVIEWS: '🟣',
-};
-
-const PLATFORM_NAMES: Record<string, string> = {
-    LEETCODE: 'LeetCode',
-    CODEFORCES: 'Codeforces',
-    CODECHEF: 'CodeChef',
-    HACKERRANK: 'HackerRank',
-    SMARTINTERVIEWS: 'SmartInterviews',
-};
-
-// ─── Date window (today in IST) ───────────────────────────────────────────────
-
-function getTodayWindow(): { start: number; end: number; label: string } {
-    const IST = 5.5 * 60 * 60 * 1000;
-    const nowIST = Date.now() + IST;
-    const today = new Date(nowIST);
-    today.setUTCHours(0, 0, 0, 0);
-    const start = Math.floor((today.getTime() - IST) / 1000);
-    const label = today.toISOString().split('T')[0];
-    return { start, end: start + 86400, label };
-}
-
-// ─── Fetch for one platform ───────────────────────────────────────────────────
-
-async function fetchLinks(
-    platform: string,
-    username: string,
-    token: string | null,
-    start: number,
-    end: number
-): Promise<string[]> {
-    let submissions: any[] = [];
-
-    if (platform === 'LEETCODE') {
-        submissions = await fetchLeetCodeSubmissions(username, start);
-    } else if (platform === 'CODEFORCES') {
-        submissions = await fetchCodeforcesSubmissions(username, start);
-    } else if (platform === 'CODECHEF') {
-        submissions = await fetchCodeChefSubmissions(username, start);
-    } else if (platform === 'SMARTINTERVIEWS') {
-        submissions = await fetchSmartInterviewsSubmissions(username, token ? decrypt(token) : undefined, start);
-    } else if (platform === 'HACKERRANK') {
-        submissions = await fetchHackerRankSubmissions(username, start);
-    }
-
-    const seen = new Set<string>();
-    const links: string[] = [];
-
-    for (const sub of submissions) {
-        if (sub.timestamp < start || sub.timestamp >= end) continue;
-        if (seen.has(sub.titleSlug)) continue;
-        seen.add(sub.titleSlug);
-        links.push(sub.url);
-    }
-
-    return links;
-}
+import { runTrackerForUser, getTimestampsForDate } from '../bot/tracker';
 
 // ─── Post to Discord (chunked to respect 2000 char limit) ────────────────────
 
@@ -121,28 +47,22 @@ async function main() {
         process.exit(1);
     }
 
-    const { start, end, label } = getTodayWindow();
+    const { startTimestamp, endTimestamp, dateStr: label } = getTimestampsForDate('today');
     console.log(`📅 Running tracker for: ${label}`);
 
     // Get all unique Discord users who have profiles
-    const allProfiles = await prisma.userProfile.findMany({
-        orderBy: { discordUserId: 'asc' },
+    const uniqueUsers = await prisma.userProfile.findMany({
+        select: { discordUserId: true },
+        distinct: ['discordUserId']
     });
 
-    if (allProfiles.length === 0) {
+    if (uniqueUsers.length === 0) {
         console.log('ℹ️  No profiles in database. Nothing to post.');
         await prisma.$disconnect();
         return;
     }
 
-    // Group by Discord user
-    const byUser = new Map<string, typeof allProfiles>();
-    for (const p of allProfiles) {
-        if (!byUser.has(p.discordUserId)) byUser.set(p.discordUserId, []);
-        byUser.get(p.discordUserId)!.push(p);
-    }
-
-    console.log(`👥 Found ${byUser.size} student(s)`);
+    console.log(`👥 Found ${uniqueUsers.length} student(s) to track...`);
 
     const lines: string[] = [];
     lines.push(`📅 **Daily Links — ${label}**\n`);
@@ -150,34 +70,36 @@ async function main() {
     let totalLinks = 0;
     let studentsWithLinks = 0;
 
-    for (const [discordUserId, profiles] of byUser) {
-        const userLines: string[] = [];
+    for (const { discordUserId } of uniqueUsers) {
+        // This is the key fix: running the core tracker logic so the DB is updated for leaderboards
+        const result = await runTrackerForUser(discordUserId, startTimestamp, endTimestamp);
 
-        for (const profile of profiles) {
-            try {
-                const links = await fetchLinks(
-                    profile.platform,
-                    profile.username,
-                    profile.token ? decrypt(profile.token) : null,
-                    start,
-                    end
-                );
+        if (result.links.length > 0) {
+            const userLines: string[] = [];
+            
+            for (const [platform, urls] of Object.entries(result.groupedLinks)) {
+                // Determine emoji and friendly name based on platform key
+                const emoji = platform === 'LEETCODE' ? '🟡' :
+                              platform === 'CODEFORCES' ? '🔵' :
+                              platform === 'CODECHEF' ? '🟤' :
+                              platform === 'HACKERRANK' ? '🟢' : '🟣';
+                
+                const name = platform === 'SMARTINTERVIEWS' ? 'SmartInterviews' :
+                             platform.charAt(0) + platform.slice(1).toLowerCase();
 
-                if (links.length > 0) {
-                    const emoji = PLATFORM_EMOJI[profile.platform] || '⚪';
-                    const name = PLATFORM_NAMES[profile.platform] || profile.platform;
-                    userLines.push(`  ${emoji} **${name}**:\n    ${links.map(l => `<${l}>`).join('\n    ')}`);
-                    totalLinks += links.length;
-                }
-            } catch (err: any) {
-                console.log(`  ⚠️  ${profile.platform} for ${profile.username}: ${err.message}`);
+                userLines.push(`  ${emoji} **${name}**:\n    ${urls.map(l => `<${l}>`).join('\n    ')}`);
             }
-        }
 
-        if (userLines.length > 0) {
             lines.push(`👤 <@${discordUserId}>`);
             lines.push(...userLines);
+            
+            if (result.errors && result.errors.length > 0) {
+                lines.push(`  -# ⚠️ Errors: ${result.errors.join(', ')}`);
+            }
+            
             lines.push('');
+            
+            totalLinks += result.links.length;
             studentsWithLinks++;
         }
 

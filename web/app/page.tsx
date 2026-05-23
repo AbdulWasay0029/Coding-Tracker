@@ -6,7 +6,7 @@ export default function Home() {
     return (
         <main className="min-h-screen flex flex-col bg-background text-foreground overflow-hidden">
             {/* Hero Section */}
-            <div className="flex-1 flex flex-col lg:flex-row items-center justify-between px-4 sm:px-6 lg:px-8 max-w-7xl w-full mx-auto pt-20 pb-24 relative gap-12 lg:gap-8">
+            <div className="flex-1 flex flex-col lg:flex-row items-center justify-between px-4 sm:px-6 lg:px-8 max-w-7xl w-full mx-auto pt-8 md:pt-12 pb-16 relative gap-12 lg:gap-8">
                 
                 {/* Background glow effects */}
                 <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary opacity-5 blur-[120px] rounded-full pointer-events-none" />

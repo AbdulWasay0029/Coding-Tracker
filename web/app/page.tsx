@@ -46,9 +46,12 @@ export default function Home() {
                 </div>
 
                 {/* Hero Asset Placeholder */}
-                <div className="lg:w-1/2 relative w-full aspect-video lg:aspect-square flex items-center justify-center animate-reveal stagger-5">
+                <div className="lg:w-1/2 relative w-full aspect-video lg:aspect-square flex items-center justify-center animate-reveal stagger-5" style={{ perspective: '1200px' }}>
                     {/* Placeholder for the bot showcase screenshot the user will upload */}
-                    <div className="relative w-full max-w-lg aspect-[4/3] rounded-2xl overflow-hidden border border-border shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#05070A] group">
+                    <div 
+                        className="relative w-full max-w-2xl aspect-[16/9] rounded-xl overflow-hidden border border-border shadow-[-30px_20px_60px_rgba(0,0,0,0.6)] bg-[#05070A] transition-all duration-700 hover:scale-[1.02]"
+                        style={{ transform: 'rotateY(-20deg) rotateX(5deg) rotateZ(-1deg)' }}
+                    >
                         <div className="absolute inset-0 flex items-center justify-center flex-col gap-4">
                             <Bot className="w-16 h-16 text-primary opacity-20" />
                             <p className="font-mono text-sm text-text-secondary uppercase tracking-widest">[ Bot Showcase Image ]</p>

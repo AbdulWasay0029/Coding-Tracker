@@ -32,17 +32,17 @@ export function Footer() {
                         <h3 className="font-bold text-white mb-4">Community</h3>
                         <ul className="space-y-3 text-sm text-text-secondary">
                             <li>
-                                <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white transition-colors">
+                                <a href="https://github.com/AbdulWasay0029/Coding-Tracker" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white transition-colors">
                                     <Code2 className="w-4 h-4" /> Source Code
                                 </a>
                             </li>
                             <li>
-                                <a href="https://discord.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-[#5865F2] transition-colors">
+                                <a href="https://discord.com/oauth2/authorize?client_id=1478104744391344359&permissions=8&integration_type=0&scope=bot+applications.commands" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-[#5865F2] transition-colors">
                                     <Bot className="w-4 h-4" /> Invite Bot
                                 </a>
                             </li>
                             <li>
-                                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors">
+                                <a href="https://discord.gg/qfhKfnJCau" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-[#5865F2] transition-colors">
                                     <Globe className="w-4 h-4" /> Updates
                                 </a>
                             </li>

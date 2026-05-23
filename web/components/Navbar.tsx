@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
-import Image from 'next/image';
+import { Bot } from 'lucide-react';
 
 export function Navbar() {
     const { data: session } = useSession();
@@ -17,7 +17,7 @@ export function Navbar() {
                         <Link href="/" className="flex flex-shrink-0 items-center gap-3 btn-interactive">
                             {/* Glowing Neon Bot Logo */}
                             <div className="p-1.5 rounded bg-surface border border-border shadow-[0_0_10px_rgba(0,240,255,0.2)]">
-                                <Image src="/logo.png" alt="CodeSync Logo" width={24} height={24} className="w-6 h-6" />
+                                <Bot className="w-6 h-6 text-primary" />
                             </div>
                             <span className="font-extrabold text-xl tracking-tight text-white">
                                 Code<span className="text-primary">Sync</span>

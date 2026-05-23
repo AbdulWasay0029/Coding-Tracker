@@ -42,6 +42,13 @@ export async function handleHelp(interaction: ChatInputCommandInteraction) {
                 ].join('\n'),
             },
             {
+                name: '🌐 Web Dashboard',
+                value: [
+                    'Visit **[codesync-hub.vercel.app](https://codesync-hub.vercel.app/)**',
+                    'Log in with Discord to manage your profiles and view the Global Leaderboard!',
+                ].join('\n'),
+            },
+            {
                 name: '💡 Tips',
                 value: [
                     '• Times are in **IST** (India Standard Time)',

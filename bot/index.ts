@@ -92,11 +92,12 @@ client.on('guildMemberAdd', async (member) => {
 
         const welcomeEmbed = new EmbedBuilder()
             .setTitle(`Welcome to the server, ${member.user.username}! 🚀`)
-            .setDescription(`I'm **CodeSync**, here to help you track your coding progress and share your solved problem links with the batch.`)
+            .setDescription(`I'm **CodeSync**, here to track your competitive programming progress globally.`)
             .addFields(
-                { name: '1. Add your profiles', value: 'Use **/add-profile** to register your accounts (LeetCode, Codeforces, etc.).' },
-                { name: '2. Check your daily links', value: 'Use **/check** to fetch everything you\'ve solved today correctly grouped and labeled!' },
-                { name: '3. Learn more', value: 'Type **/help** for a full guide on getting tokens/usernames.' }
+                { name: '1. Access the Dashboard', value: 'Login to our [Web Dashboard](https://codesync-hub.vercel.app/) using your Discord account to easily manage your profiles.' },
+                { name: '2. Check your daily stats', value: 'Use **/check** in this server to fetch everything you\'ve solved today, correctly grouped and labeled!' },
+                { name: '3. Climb the Leaderboard', value: 'Use **/leaderboard** or visit the website to see the Top 10 developers grinding this week.' },
+                { name: '4. Learn more', value: 'Type **/help** for a full guide on bot commands and setup.' }
             )
             .setColor(0x5865F2)
             .setThumbnail(member.user.displayAvatarURL());

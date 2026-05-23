@@ -7,7 +7,7 @@ type Profile = {
     id: string;
     platform: string;
     username: string;
-    token?: string;
+    token?: string | null;
 };
 
 export function ProfileManager({ initialProfiles }: { initialProfiles: Profile[] }) {

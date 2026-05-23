@@ -1,0 +1,72 @@
+import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../auth/[...nextauth]/route';
+import { prisma } from '../../../lib/prisma';
+
+export async function POST(req: Request) {
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    try {
+        const body = await req.json();
+        const { platform, username, token } = body;
+
+        if (!platform || !username) {
+            return NextResponse.json({ error: 'Platform and username are required' }, { status: 400 });
+        }
+
+        const formattedPlatform = platform.toUpperCase().trim();
+        const formattedUsername = username.trim();
+
+        const profile = await prisma.userProfile.create({
+            data: {
+                discordUserId: session.user.id,
+                platform: formattedPlatform,
+                username: formattedUsername,
+                token: token ? token.trim() : null
+            }
+        });
+
+        return NextResponse.json(profile, { status: 201 });
+    } catch (error: any) {
+        if (error.code === 'P2002') {
+            return NextResponse.json({ error: 'Profile already exists for this platform and username.' }, { status: 400 });
+        }
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    }
+}
+
+export async function DELETE(req: Request) {
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    try {
+        const { searchParams } = new URL(req.url);
+        const id = searchParams.get('id');
+
+        if (!id) {
+            return NextResponse.json({ error: 'Profile ID is required' }, { status: 400 });
+        }
+
+        // Verify the profile belongs to the user before deleting
+        const profile = await prisma.userProfile.findUnique({
+            where: { id }
+        });
+
+        if (!profile || profile.discordUserId !== session.user.id) {
+            return NextResponse.json({ error: 'Profile not found or unauthorized' }, { status: 404 });
+        }
+
+        await prisma.userProfile.delete({
+            where: { id }
+        });
+
+        return NextResponse.json({ message: 'Profile deleted successfully' });
+    } catch (error: any) {
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    }
+}

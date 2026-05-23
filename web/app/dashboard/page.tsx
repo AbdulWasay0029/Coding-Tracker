@@ -3,6 +3,7 @@ import { authOptions } from '../api/auth/[...nextauth]/route';
 import { redirect } from 'next/navigation';
 import { prisma } from '../../lib/prisma';
 import Image from 'next/image';
+import { ProfileManager } from './ProfileManager';
 
 export default async function DashboardPage() {
     const session = await getServerSession(authOptions);
@@ -40,20 +41,8 @@ export default async function DashboardPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div className="md:col-span-1 space-y-6">
-                    <div className="bg-surface border border-border p-6 rounded-lg shadow-sm animate-reveal stagger-2">
-                        <h2 className="text-lg font-bold border-b border-border pb-3 mb-4 text-text-primary">Linked Accounts</h2>
-                        {profiles.length > 0 ? (
-                            <ul className="space-y-3">
-                                {profiles.map((p: any) => (
-                                    <li key={p.id} className="flex justify-between items-center bg-[#0d1117] p-3 rounded border border-border">
-                                        <span className="font-semibold text-text-secondary">{p.platform}</span>
-                                        <span className="font-mono text-sm text-primary">{p.username}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        ) : (
-                            <p className="text-sm text-text-secondary">No linked accounts found. Use `/add-profile` in Discord to connect platforms!</p>
-                        )}
+                    <div className="bg-surface border border-border p-6 rounded-lg shadow-sm">
+                        <ProfileManager initialProfiles={profiles} />
                     </div>
 
                     <div className="bg-surface border border-border p-6 rounded-lg shadow-sm animate-reveal stagger-3">

@@ -14,16 +14,10 @@ export async function handleExportReport(interaction: ChatInputCommandInteractio
     await interaction.deferReply({ ephemeral: true });
 
     try {
-        // Fetch all members to scope the report to this server
-        const members = await interaction.guild.members.fetch();
-        const memberIds = Array.from(members.keys());
-
-        // Get aggregate data for all time for server members
+        // Get aggregate data for all time for all tracked users
+        // This avoids Discord API rate limits by querying our own DB instead of fetching 1000+ guild members
         const aggregateData = await prisma.solvedProblem.groupBy({
             by: ['discordUserId'],
-            where: {
-                discordUserId: { in: memberIds }
-            },
             _count: {
                 problemId: true
             },
@@ -35,17 +29,19 @@ export async function handleExportReport(interaction: ChatInputCommandInteractio
         });
 
         if (aggregateData.length === 0) {
-            return interaction.editReply('No tracking data found for any members in this server.');
+            return interaction.editReply('No tracking data found for any members.');
         }
 
+        // Fetch user profiles to get human-readable platform usernames for the CSV
+        const allProfiles = await prisma.userProfile.findMany();
+
         // Build CSV content
-        let csvContent = 'Discord_ID,Username,Problems_Solved_All_Time\n';
+        let csvContent = 'Discord_ID,Platform_Usernames,Problems_Solved_All_Time\n';
         
         for (const data of aggregateData) {
-            const member = members.get(data.discordUserId);
-            // Fallback to ID if username is not resolvable for some reason
-            const username = member ? member.user.tag : 'UnknownUser';
-            csvContent += `"${data.discordUserId}","${username}",${data._count.problemId}\n`;
+            const userProfiles = allProfiles.filter(p => p.discordUserId === data.discordUserId);
+            const usernames = userProfiles.map(p => p.username).join(' | ');
+            csvContent += `"${data.discordUserId}","${usernames}",${data._count.problemId}\n`;
         }
 
         const buffer = Buffer.from(csvContent, 'utf-8');

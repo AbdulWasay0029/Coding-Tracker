@@ -9,18 +9,14 @@ export async function handleLeaderboard(interaction: ChatInputCommandInteraction
     await interaction.deferReply();
 
     try {
-        // Fetch all members in the current server to ensure the leaderboard is server-scoped
-        const members = await interaction.guild.members.fetch();
-        const memberIds = Array.from(members.keys());
-
         // Default to "This Week" (last 7 days)
         const lastWeek = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
-        // Perform an aggregate query to get the top 10 solvers in the last 7 days
+        // Perform a global aggregate query to get the top 10 solvers in the last 7 days.
+        // This naturally captures everyone tracked by the bot and avoids Discord Gateway rate limits.
         const leaderboardData = await prisma.solvedProblem.groupBy({
             by: ['discordUserId'],
             where: {
-                discordUserId: { in: memberIds },
                 solvedAt: { gte: lastWeek }
             },
             _count: {

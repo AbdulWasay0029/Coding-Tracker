@@ -3,25 +3,34 @@
 import Link from 'next/link';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
+import { Bot } from 'lucide-react'; // Using lucide-react as a placeholder for the robot logo
 
 export function Navbar() {
     const { data: session } = useSession();
     const pathname = usePathname();
 
     return (
-        <nav className="border-b border-border bg-surface sticky top-0 z-50">
+        <nav className="border-b-2 border-border bg-background sticky top-0 z-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
                     <div className="flex items-center">
-                        <Link href="/" className="flex-shrink-0 font-bold text-xl text-primary tracking-tight">
-                            CodeSync
+                        <Link href="/" className="flex flex-shrink-0 items-center gap-3">
+                            {/* Glowing Neon Bot Logo */}
+                            <div className="p-1.5 rounded bg-surface border border-border shadow-[0_0_10px_rgba(0,240,255,0.2)]">
+                                <Bot className="w-6 h-6 text-primary" />
+                            </div>
+                            <span className="font-extrabold text-xl tracking-tight text-white">
+                                Code<span className="text-primary">Sync</span>
+                            </span>
                         </Link>
                         <div className="hidden md:block ml-10">
-                            <div className="flex items-baseline space-x-4">
+                            <div className="flex items-baseline space-x-6">
                                 <Link
                                     href="/leaderboard"
-                                    className={`px-3 py-2 rounded-md text-sm font-medium ${
-                                        pathname === '/leaderboard' ? 'bg-border text-white' : 'text-text-secondary hover:bg-border hover:text-white'
+                                    className={`px-1 py-5 text-sm font-bold border-b-2 transition-colors ${
+                                        pathname === '/leaderboard' 
+                                            ? 'border-primary text-primary' 
+                                            : 'border-transparent text-text-secondary hover:text-white hover:border-border'
                                     }`}
                                 >
                                     Leaderboard
@@ -29,8 +38,10 @@ export function Navbar() {
                                 {session && (
                                     <Link
                                         href="/dashboard"
-                                        className={`px-3 py-2 rounded-md text-sm font-medium ${
-                                            pathname === '/dashboard' ? 'bg-border text-white' : 'text-text-secondary hover:bg-border hover:text-white'
+                                        className={`px-1 py-5 text-sm font-bold border-b-2 transition-colors ${
+                                            pathname === '/dashboard' 
+                                                ? 'border-secondary text-secondary' 
+                                                : 'border-transparent text-text-secondary hover:text-white hover:border-border'
                                         }`}
                                     >
                                         Dashboard
@@ -41,13 +52,13 @@ export function Navbar() {
                     </div>
                     <div>
                         {session ? (
-                            <div className="flex items-center space-x-4">
-                                <span className="text-sm text-text-secondary hidden sm:block">
+                            <div className="flex items-center space-x-6">
+                                <span className="text-sm font-mono text-text-secondary hidden sm:block">
                                     {session.user?.name}
                                 </span>
                                 <button
                                     onClick={() => signOut()}
-                                    className="px-4 py-2 text-sm font-medium text-white bg-border rounded-md hover:bg-gray-700 transition-colors"
+                                    className="px-4 py-2 text-sm font-bold text-white bg-surface border border-border rounded hover:border-danger hover:text-danger transition-colors"
                                 >
                                     Log Out
                                 </button>
@@ -55,9 +66,9 @@ export function Navbar() {
                         ) : (
                             <button
                                 onClick={() => signIn('discord', { callbackUrl: '/dashboard' })}
-                                className="px-4 py-2 text-sm font-medium text-white bg-[#5865F2] rounded-md hover:bg-[#4752C4] transition-colors"
+                                className="px-5 py-2 text-sm font-bold text-[#0B0E14] bg-primary border border-primary rounded hover:bg-transparent hover:text-primary transition-colors shadow-[0_0_10px_rgba(0,240,255,0.3)]"
                             >
-                                Login with Discord
+                                Login
                             </button>
                         )}
                     </div>

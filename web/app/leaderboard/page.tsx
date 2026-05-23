@@ -47,53 +47,67 @@ export default async function LeaderboardPage() {
     );
 
     return (
-        <main className="max-w-5xl mx-auto px-4 py-12">
-            <div className="mb-8 border-b border-border pb-4">
-                <h1 className="text-3xl font-bold text-primary">Global Leaderboard</h1>
-                <p className="text-text-secondary mt-2">Ranking based on total problems solved in the last 7 days.</p>
+        <main className="max-w-5xl mx-auto px-4 py-16">
+            <div className="mb-12 border-b border-border pb-6 text-center">
+                <h1 className="text-5xl font-black text-white uppercase tracking-tight">Global Leaderboard</h1>
+                <p className="text-primary mt-4 font-mono text-sm tracking-widest uppercase">Last 7 Days // Live Ranking</p>
             </div>
 
-            <div className="bg-surface border border-border rounded-lg overflow-hidden shadow-sm">
+            <div className="bg-[#05070A] border border-border rounded-xl overflow-hidden">
                 <table className="w-full text-left border-collapse">
                     <thead>
-                        <tr className="bg-[#1c2128] border-b border-border text-text-secondary text-sm">
-                            <th className="p-4 font-semibold w-24">Rank</th>
-                            <th className="p-4 font-semibold">Student</th>
-                            <th className="p-4 font-semibold text-right">Problems Solved</th>
+                        <tr className="bg-surface border-b-2 border-border text-text-secondary text-xs uppercase tracking-wider font-bold">
+                            <th className="p-5 w-24 text-center">Rank</th>
+                            <th className="p-5">Student</th>
+                            <th className="p-5 text-right">Problems Solved</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-border">
                         {enrichedData.map((user) => (
-                            <tr key={user.id} className="hover:bg-[#1c2128] transition-colors">
-                                <td className="p-4">
-                                    <span className={`inline-flex items-center justify-center w-8 h-8 rounded-full font-bold ${
-                                        user.rank === 1 ? 'bg-yellow-500/10 text-yellow-500' :
-                                        user.rank === 2 ? 'bg-gray-400/10 text-gray-400' :
-                                        user.rank === 3 ? 'bg-amber-600/10 text-amber-600' :
-                                        'text-text-secondary'
+                            <tr key={user.id} className="hover:bg-surface transition-colors group">
+                                <td className="p-5 text-center">
+                                    <span className={`inline-flex items-center justify-center w-10 h-10 rounded-full font-black text-lg ${
+                                        user.rank === 1 ? 'bg-warning text-[#0B0E14] shadow-[0_0_15px_rgba(255,215,0,0.5)]' :
+                                        user.rank === 2 ? 'bg-[#C0C0C0] text-[#0B0E14] shadow-[0_0_15px_rgba(192,192,192,0.5)]' :
+                                        user.rank === 3 ? 'bg-[#CD7F32] text-[#0B0E14] shadow-[0_0_15px_rgba(205,127,50,0.5)]' :
+                                        'bg-border text-text-secondary'
                                     }`}>
                                         #{user.rank}
                                     </span>
                                 </td>
-                                <td className="p-4 flex items-center gap-3">
+                                <td className="p-5 flex items-center gap-4">
                                     {user.avatar ? (
-                                        <Image src={user.avatar} alt="Avatar" width={32} height={32} className="rounded-full bg-border" />
+                                        <div className={`rounded-full p-0.5 ${
+                                            user.rank === 1 ? 'bg-warning' :
+                                            user.rank === 2 ? 'bg-[#C0C0C0]' :
+                                            user.rank === 3 ? 'bg-[#CD7F32]' :
+                                            'bg-transparent'
+                                        }`}>
+                                            <Image src={user.avatar} alt="Avatar" width={44} height={44} className="rounded-full bg-surface" />
+                                        </div>
                                     ) : (
-                                        <div className="w-8 h-8 rounded-full bg-border flex items-center justify-center text-xs">
+                                        <div className="w-11 h-11 rounded-full bg-surface border border-border flex items-center justify-center font-bold text-lg text-text-secondary">
                                             {user.username.charAt(0)}
                                         </div>
                                     )}
-                                    <span className="font-medium text-text-primary">{user.username}</span>
+                                    <span className={`font-bold text-lg ${
+                                        user.rank === 1 ? 'text-warning' :
+                                        user.rank === 2 ? 'text-[#C0C0C0]' :
+                                        user.rank === 3 ? 'text-[#CD7F32]' :
+                                        'text-white'
+                                    }`}>
+                                        {user.username}
+                                    </span>
                                 </td>
-                                <td className="p-4 text-right font-bold text-success">
+                                <td className="p-5 text-right font-black text-2xl text-secondary group-hover:text-primary transition-colors">
                                     {user.problems}
                                 </td>
                             </tr>
                         ))}
                         {enrichedData.length === 0 && (
                             <tr>
-                                <td colSpan={3} className="p-8 text-center text-text-secondary">
-                                    No problems solved this week yet. Be the first!
+                                <td colSpan={3} className="p-12 text-center text-text-secondary font-mono">
+                                    > No problems solved this week yet. Initialize the grind.
                                 </td>
                             </tr>
                         )}

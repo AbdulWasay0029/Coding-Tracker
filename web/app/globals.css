@@ -1,45 +1,66 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #0d1117;
-  --color-surface: #161b22;
-  --color-border: #30363d;
-  --color-primary: #58a6ff;
-  --color-success: #238636;
-  --color-warning: #d29922;
-  --color-danger: #f85149;
+  --color-background: #0B0E14; /* Deep Space Black */
+  --color-surface: #111620; /* Slightly lighter for cards */
+  --color-border: #1E2532; /* Flat border color */
+  --color-primary: #00F0FF; /* Neon Cyan */
+  --color-secondary: #39FF14; /* Toxic Green */
+  --color-success: #39FF14;
+  --color-warning: #FFD700;
+  --color-danger: #FF3366;
   
-  --color-text-primary: #c9d1d9;
-  --color-text-secondary: #8b949e;
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #8B949E;
+  
+  /* Glowing effects for hover states */
+  --color-glow-cyan: rgba(0, 240, 255, 0.5);
+  --color-glow-green: rgba(57, 255, 20, 0.5);
 }
 
 @layer base {
   :root {
-    --background: #0d1117;
-    --foreground: #c9d1d9;
+    --background: #0B0E14;
+    --foreground: #FFFFFF;
   }
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom scrollbar for classic feel */
+/* Custom scrollbar for classic cyber feel */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #0d1117;
+  background: #0B0E14;
 }
 ::-webkit-scrollbar-thumb {
-  background: #30363d;
+  background: #1E2532;
   border-radius: 5px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #484f58;
+  background: #00F0FF;
+}
+
+/* Typography utilities */
+.text-gradient-cyber {
+  background: linear-gradient(90deg, #00F0FF 0%, #39FF14 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Base utility classes for flat, classic UI */
+.classic-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  /* NO box-shadows/glassmorphism */
 }

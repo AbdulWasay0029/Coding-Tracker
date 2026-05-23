@@ -52,11 +52,13 @@ export default function Home() {
                         className="relative w-full max-w-2xl aspect-[16/9] rounded-xl overflow-hidden border border-border shadow-[-30px_20px_60px_rgba(0,0,0,0.6)] bg-[#05070A] transition-all duration-700 hover:scale-[1.02]"
                         style={{ transform: 'rotateY(-20deg) rotateX(5deg) rotateZ(-1deg)' }}
                     >
-                        <div className="absolute inset-0 flex items-center justify-center flex-col gap-4">
-                            <Bot className="w-16 h-16 text-primary opacity-20" />
-                            <p className="font-mono text-sm text-text-secondary uppercase tracking-widest">[ Bot Showcase Image ]</p>
-                            <p className="text-xs text-text-secondary px-8 text-center">Replace this placeholder with `/public/bot-showcase.png`</p>
-                        </div>
+                        <Image 
+                            src="/bot-showcase.png"
+                            alt="CodeSync Bot Showcase"
+                            fill
+                            className="object-cover"
+                            priority
+                        />
                     </div>
                 </div>
             </div>

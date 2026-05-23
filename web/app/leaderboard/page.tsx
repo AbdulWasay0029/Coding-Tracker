@@ -107,7 +107,7 @@ export default async function LeaderboardPage() {
                         {enrichedData.length === 0 && (
                             <tr>
                                 <td colSpan={3} className="p-12 text-center text-text-secondary font-mono">
-                                    > No problems solved this week yet. Initialize the grind.
+                                    &gt; No problems solved this week yet. Initialize the grind.
                                 </td>
                             </tr>
                         )}

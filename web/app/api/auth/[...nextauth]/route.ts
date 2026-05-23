@@ -18,7 +18,7 @@ export const authOptions: NextAuthOptions = {
             return token;
         },
         async session({ session, token }) {
-            session.accessToken = token.accessToken;
+            session.accessToken = token.accessToken as string | undefined;
             if (session.user) {
                 // Ensure the user id is stored in the session
                 session.user.id = token.sub as string;

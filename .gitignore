@@ -7,3 +7,5 @@ Zip/
 package-lock.json
 *.log
 .DS_Store
+web/impeccable-main
+web/taste-skill-main

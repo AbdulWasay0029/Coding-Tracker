@@ -191,41 +191,44 @@ export function ProfileManager({ initialProfiles }: { initialProfiles: Profile[]
                 {profiles.map((p) => (
                     <div key={p.id} className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-surface/30 transition-colors">
                         {editingId === p.id ? (
-                            <form onSubmit={(e) => handleUpdate(e, p.id)} className="flex-1 w-full flex flex-col sm:flex-row gap-3">
-                                <div className="w-full sm:w-48 flex items-center">
-                                    <span className="font-semibold text-white">{p.platform}</span>
+                            <form onSubmit={(e) => handleUpdate(e, p.id)} className="flex-1 w-full flex flex-col gap-3">
+                                <div className="flex items-center justify-between">
+                                    <span className="font-bold text-white uppercase tracking-wider">{p.platform}</span>
+                                    <div className="flex shrink-0 gap-2">
+                                        <button
+                                            type="submit"
+                                            disabled={actionId === p.id}
+                                            className="px-3 py-1 text-xs font-medium text-white bg-success hover:bg-success/80 rounded-md transition-colors disabled:opacity-50 flex items-center gap-1"
+                                        >
+                                            <Check className="w-3 h-3" /> Save
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => setEditingId(null)}
+                                            className="px-3 py-1 text-xs font-medium text-text-secondary bg-surface border border-border hover:text-white rounded-md transition-colors flex items-center gap-1"
+                                        >
+                                            <X className="w-3 h-3" /> Cancel
+                                        </button>
+                                    </div>
                                 </div>
-                                <input 
-                                    type="text"
-                                    required
-                                    value={editForm.username}
-                                    onChange={(e) => setEditForm({...editForm, username: e.target.value})}
-                                    className="w-full sm:flex-1 bg-surface border border-border text-white text-sm rounded-md px-3 py-1.5 focus:border-primary focus:ring-1 focus:ring-primary outline-none placeholder:text-text-secondary/50"
-                                />
-                                {p.platform === 'SMARTINTERVIEWS' && (
+                                <div className="flex flex-col gap-3 mt-1">
                                     <input 
                                         type="text"
-                                        value={editForm.token}
-                                        onChange={(e) => setEditForm({...editForm, token: e.target.value})}
-                                        placeholder="Update Token (Optional)"
-                                        className="w-full sm:flex-1 bg-surface border border-border text-white text-sm rounded-md px-3 py-1.5 focus:border-primary focus:ring-1 focus:ring-primary outline-none placeholder:text-text-secondary/50"
+                                        required
+                                        value={editForm.username}
+                                        onChange={(e) => setEditForm({...editForm, username: e.target.value})}
+                                        placeholder="Username"
+                                        className="w-full bg-[#05070A] border border-border text-white text-sm rounded-md px-3 py-2 focus:border-primary focus:ring-1 focus:ring-primary outline-none placeholder:text-text-secondary/50"
                                     />
-                                )}
-                                <div className="flex gap-2">
-                                    <button
-                                        type="submit"
-                                        disabled={actionId === p.id}
-                                        className="p-1.5 text-white bg-success hover:bg-success/80 rounded-md transition-colors disabled:opacity-50"
-                                    >
-                                        <Check className="w-4 h-4" />
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => setEditingId(null)}
-                                        className="p-1.5 text-text-secondary bg-surface border border-border hover:text-white rounded-md transition-colors"
-                                    >
-                                        <X className="w-4 h-4" />
-                                    </button>
+                                    {p.platform === 'SMARTINTERVIEWS' && (
+                                        <input 
+                                            type="text"
+                                            value={editForm.token}
+                                            onChange={(e) => setEditForm({...editForm, token: e.target.value})}
+                                            placeholder="SmartInterviews Token (Optional)"
+                                            className="w-full bg-[#05070A] border border-border text-white text-sm rounded-md px-3 py-2 focus:border-primary focus:ring-1 focus:ring-primary outline-none placeholder:text-text-secondary/50"
+                                        />
+                                    )}
                                 </div>
                             </form>
                         ) : (

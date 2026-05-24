@@ -96,10 +96,10 @@ const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_BOT_TOKEN!
         );
 
         if (guildId) {
-            console.log(`Also registering slash commands for TEST GUILD ${guildId} (Instant)...`);
+            console.log(`Clearing old duplicate slash commands from TEST GUILD ${guildId}...`);
             await rest.put(
                 Routes.applicationGuildCommands(process.env.DISCORD_CLIENT_ID!, guildId),
-                { body: commands }
+                { body: [] }
             );
         }
         console.log('✅ Done!');

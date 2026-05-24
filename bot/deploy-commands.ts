@@ -61,10 +61,6 @@ const commands = [
             .setRequired(false)),
 
     new SlashCommandBuilder()
-        .setName('refresh')
-        .setDescription('Force-sync all your tracked profiles immediately'),
-
-    new SlashCommandBuilder()
         .setName('setup')
         .setDescription('ADMIN: Configure server settings (welcome/reminders)')
         .addChannelOption(o => o

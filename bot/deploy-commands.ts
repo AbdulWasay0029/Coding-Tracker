@@ -89,16 +89,16 @@ const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_BOT_TOKEN!
     try {
         const guildId = process.env.DISCORD_GUILD_ID;
 
+        console.log('Registering slash commands GLOBALLY (so they work in all servers)...');
+        await rest.put(
+            Routes.applicationCommands(process.env.DISCORD_CLIENT_ID!),
+            { body: commands }
+        );
+
         if (guildId) {
-            console.log(`Registering slash commands for GUILD ${guildId} (Instant)...`);
+            console.log(`Also registering slash commands for TEST GUILD ${guildId} (Instant)...`);
             await rest.put(
                 Routes.applicationGuildCommands(process.env.DISCORD_CLIENT_ID!, guildId),
-                { body: commands }
-            );
-        } else {
-            console.log('Registering slash commands GLOBALLY (Takes up to 1 hour)...');
-            await rest.put(
-                Routes.applicationCommands(process.env.DISCORD_CLIENT_ID!),
                 { body: commands }
             );
         }

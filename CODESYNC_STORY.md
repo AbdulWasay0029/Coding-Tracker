@@ -70,4 +70,12 @@ The professor citations, the independent rebuild, the LinkedIn traction, the col
 
 The bot now supports LeetCode, Codeforces, CodeChef, HackerRank, and SmartInterviews (including a custom-engineered integration with SmartInterviews' internal API). It runs 24/7 on cloud infrastructure with automated daily tracking, AES-256 encryption for sensitive tokens, and parallel database writes for performance at scale.
 
-But the .bat file is still where it started.
+## The Next Chapter
+
+Eventually, relying purely on Discord slash commands to manage complex credentials became a bottleneck. The project had outgrown its "bot only" phase. 
+
+I needed a place where users could visualize their data, manage their privacy, and see global leaderboards without being tied to a specific Discord server. So the project came full circle. I built a brand new, premium Next.js Web Dashboard. It featured secure server-side API routes, sleek 3D isometric UI elements, and a seamless Discord OAuth login flow that instantly linked a user's Discord identity to their web session. 
+
+Simultaneously, the bot's architecture was upgraded to deploy its commands globally. It wasn't just my classroom's bot anymore. Anyone could now visit the website, click "Add to Discord", and drop CodeSync into their own community to instantly build automated competitive programming leaderboards.
+
+But the .bat file is still where it started. And the core mission never changed. It's still just about automating the grind.

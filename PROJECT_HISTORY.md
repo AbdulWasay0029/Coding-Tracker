@@ -53,3 +53,10 @@ Entering late March, the project reached its "V3" milestone, focusing heavily on
 As the bot continued to scale, the hardcoded pagination limits in platform scrapers (like CodeChef) were replaced with dynamic date-based loops. Scrapers now intelligently crawl backwards and stop early exactly when they hit submissions older than the target window (up to a strict max limit of 30 days), drastically reducing unnecessary network calls. 
 
 Additionally, the automated nightly trigger was completely migrated away from GitHub Actions' internal cron scheduling—which often suffered from severe queueing delays—to an external, highly reliable trigger via **cron-job.org**, ensuring the daily tracker runs precisely on time.
+
+### Phase 6: The Web Dashboard Rebirth & Global Scale (Late May 2026)
+*Coming full circle to a premium web interface and opening the bot to the public.*
+
+As the bot scaled, managing complex platform tokens via Discord slash commands became a UX bottleneck. The project came full circle with the launch of a premium Next.js Web Dashboard. Built with a sleek, dark-mode "Neon UI" aesthetic, it featured smooth 3D CSS isometric tilts, custom scalable SVG favicons, and seamless Discord OAuth integration. 
+
+Users could now securely manage their platform profiles via server-side API routes on the web, which instantly synced with the Discord bot's clustered PostgreSQL database. To support this massive expansion, the Discord bot's architecture was updated to deploy its slash commands globally. Instead of being locked to a single test server, anyone could now visit the website, click "Add to Discord", and instantly bring automated competitive programming leaderboards to their own community.

@@ -122,7 +122,7 @@ export async function runTrackerForUser(
 }
 
 /** Converts a date param ("yesterday", "YYYY-MM-DD", or null/today) into IST-aligned Unix timestamps */
-export function getTimestampsForDate(dateParam?: string | null): {
+export function getTimestampsForDate(dateParam?: string | null, discordUserId?: string): {
     startTimestamp: number;
     endTimestamp: number;
     dateStr: string;
@@ -164,7 +164,7 @@ export function getTimestampsForDate(dateParam?: string | null): {
         const target = new Date(dateParam + 'T00:00:00Z'); // Parse as UTC midnight
         if (!isNaN(target.getTime())) {
             // Check if older than 30 days
-            if (Date.now() - target.getTime() > 30 * 86400000) {
+            if (Date.now() - target.getTime() > 30 * 86400000 && discordUserId !== '481554233817300993') {
                 const today = todayWindow();
                 return {
                     ...today,

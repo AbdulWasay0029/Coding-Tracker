@@ -127,7 +127,7 @@ export async function handleCheck(interaction: ChatInputCommandInteraction) {
     await interaction.deferReply();
 
     const dateVal = interaction.options.getString('date') || 'today';
-    const { startTimestamp, endTimestamp, dateStr, warning } = getTimestampsForDate(dateVal);
+    const { startTimestamp, endTimestamp, dateStr, warning } = getTimestampsForDate(dateVal, interaction.user.id);
 
     if (warning) {
         // Send warning ephemerally before the main reply.

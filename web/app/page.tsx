@@ -1,8 +1,12 @@
+'use client';
+
 import Link from 'next/link';
 import { Terminal, Globe, Code2, Zap, ArrowRight, Activity, Users, Shield, Bot } from 'lucide-react';
 import Image from 'next/image';
+import { useSession } from 'next-auth/react';
 
 export default function Home() {
+    const { data: session } = useSession();
     return (
         <main className="min-h-screen flex flex-col bg-background text-foreground overflow-hidden">
             {/* Hero Section */}
@@ -29,13 +33,15 @@ export default function Home() {
                     </p>
                     
                     <div className="pt-4 flex flex-col sm:flex-row items-center gap-4 animate-reveal stagger-4 w-full sm:w-auto">
-                        <Link 
-                            href="/api/auth/signin" 
+                        <a 
+                            href="https://discord.com/oauth2/authorize?client_id=1478104744391344359&permissions=8&integration_type=0&scope=bot+applications.commands" 
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-base font-bold text-[#0B0E14] bg-primary rounded hover:bg-transparent hover:text-primary border-2 border-primary btn-interactive shadow-[0_0_20px_rgba(0,240,255,0.3)] transition-all"
                         >
                             <Bot className="w-5 h-5 mr-2" />
                             Add to Discord
-                        </Link>
+                        </a>
                         <Link 
                             href="/leaderboard" 
                             className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white bg-surface rounded hover:bg-border border-2 border-border btn-interactive transition-all"
@@ -156,10 +162,10 @@ export default function Home() {
                     <h2 className="text-4xl md:text-5xl font-black text-white mb-6">Ready to start tracking?</h2>
                     <p className="text-lg text-text-secondary mb-10">Join the competitive programming revolution and keep your server motivated.</p>
                     <Link 
-                        href="/api/auth/signin" 
+                        href={session ? "/dashboard" : "/api/auth/signin"} 
                         className="inline-flex items-center justify-center px-10 py-5 text-lg font-bold text-[#0B0E14] bg-primary rounded hover:bg-transparent hover:text-primary border-2 border-primary btn-interactive shadow-[0_0_30px_rgba(0,240,255,0.2)] transition-all"
                     >
-                        Get Started Now <ArrowRight className="ml-2 w-5 h-5" />
+                        {session ? "Go to Dashboard" : "Get Started Now"} <ArrowRight className="ml-2 w-5 h-5" />
                     </Link>
                 </div>
             </div>

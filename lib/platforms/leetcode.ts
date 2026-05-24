@@ -11,7 +11,7 @@ export interface Submission {
 const LEETCODE_API = 'https://leetcode.com/graphql';
 
 export async function fetchLeetCodeSubmissions(username: string, stopBeforeTimestamp?: number): Promise<Submission[]> {
-    const limit = stopBeforeTimestamp ? 100 : 20;
+    const limit = stopBeforeTimestamp ? 1000 : 20;
     const query = `
     query getRecentSubmissions($username: String!, $limit: Int) {
       recentAcSubmissionList(username: $username, limit: $limit) {
@@ -50,7 +50,7 @@ export async function fetchLeetCodeSubmissions(username: string, stopBeforeTimes
         for (const item of data) {
             const timestamp = parseInt(item.timestamp);
             if (stopBeforeTimestamp && timestamp < stopBeforeTimestamp) {
-                break; // Found older submissions, safe to stop
+                // DON'T BREAK! Let tracker.ts filter it.
             }
             submissions.push({
                 id: item.id,

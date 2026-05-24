@@ -46,8 +46,8 @@ export async function fetchSmartInterviewsSubmissions(username: string, tokenOve
         for (const contestSlug of contests) {
             let page = 0;
             let hitOlderDate = false;
-            // Fetch at most 10 pages if we have a target date to avoid infinite loops
-            const MAX_PAGES = stopBeforeTimestamp ? 10 : 1; 
+            // Fetch at most 200 pages if we have a target date to avoid infinite loops, enabling deep historical scraping
+            const MAX_PAGES = stopBeforeTimestamp ? 200 : 1; 
 
             while (page < MAX_PAGES) {
                 if (hitOlderDate) break;

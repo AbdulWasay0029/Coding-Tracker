@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="web/public/logo.png" alt="CodeSync Logo" width="300" />
+  <img src="assets/banner.png" alt="CodeSync Banner" width="100%" />
   
   <h1>CodeSync</h1>
   
@@ -48,7 +48,9 @@ The `web/` directory houses a Next.js (v16) application that provides a sleek, f
 - **NextAuth Integration**: Secure login and session management.
 
 <div align="center">
-  <img src="web/public/bot-showcase.png" alt="CodeSync Dashboard Showcase" width="100%" />
+  <img src="assets/web_landing.png" alt="CodeSync Web Landing" width="100%" />
+  <br/><br/>
+  <img src="assets/web_dashboard.png" alt="CodeSync Dashboard" width="100%" />
 </div>
 
 ### 🤖 The Discord Bot
@@ -60,7 +62,7 @@ A high-performance, 24/7 autonomous bot powered by `discord.js`.
 
 <div align="center">
   <br />
-  <img src="assets/check.gif" alt="CodeSync Bot Check Command" width="600" />
+  <img src="assets/check_new.gif" alt="CodeSync Bot Check Command" width="600" />
 </div>
 
 ---

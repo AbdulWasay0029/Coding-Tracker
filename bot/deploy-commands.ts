@@ -68,7 +68,7 @@ const commands = [
 
     new SlashCommandBuilder()
         .setName('leaderboard')
-        .setDescription('See the top 10 grinders in this server (Last 7 Days)'),
+        .setDescription('See the top 10 grinders in this server (This Week)'),
 
     new SlashCommandBuilder()
         .setName('export-report')

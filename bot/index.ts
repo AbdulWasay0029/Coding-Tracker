@@ -14,6 +14,7 @@ import { handleHelp } from './commands/help';
 import { handleSetup } from './commands/setup';
 import { handleLeaderboard } from './commands/leaderboard';
 import { handleExportReport } from './commands/export-report';
+import { handleRefresh } from './commands/refresh';
 import { RateLimiter } from '../lib/rate-limiter';
 import express from 'express';
 
@@ -65,6 +66,7 @@ client.on('interactionCreate', async (interaction: Interaction) => {
                 case 'help': await handleHelp(interaction); break;
                 case 'leaderboard': await handleLeaderboard(interaction); break;
                 case 'export-report': await handleExportReport(interaction); break;
+                case 'refresh': await handleRefresh(interaction); break;
             }
         } else if (interaction.isButton()) {
             if (interaction.customId.startsWith('recheck:')) {

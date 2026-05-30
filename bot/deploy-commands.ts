@@ -75,6 +75,10 @@ const commands = [
         .setDescription('ADMIN: Download a CSV report of all students in this server'),
 
     new SlashCommandBuilder()
+        .setName('refresh')
+        .setDescription('ADMIN: Force refresh today\'s leaderboard data for all users'),
+
+    new SlashCommandBuilder()
         .setName('help')
         .setDescription('How to use CodeSync'),
 ].map(c => c.toJSON());

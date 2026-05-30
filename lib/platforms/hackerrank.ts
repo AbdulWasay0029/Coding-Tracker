@@ -32,7 +32,6 @@ export async function fetchHackerRankSubmissions(username: string, stopBeforeTim
                 const timestamp = Math.floor(new Date(challenge.created_at).getTime() / 1000);
                 if (stopBeforeTimestamp && timestamp < stopBeforeTimestamp) {
                     hitOlderDate = true;
-                    break; 
                 }
 
                 const slug: string = challenge.ch_slug || challenge.url?.split('/').pop() || '';

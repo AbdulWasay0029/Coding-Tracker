@@ -58,7 +58,7 @@ A high-performance, 24/7 autonomous bot powered by `discord.js`.
 - **Military-Grade Security**: Uses native `crypto` AES-256 to encrypt sensitive platform tokens (like SmartInterviews JWTs) at rest.
 - **Zero-Latency Caching**: In-memory caching layer prevents platform IP-bans and serves identical requests in 0ms.
 - **Parallel Database Clustering**: `Promise.allSettled` clusters are used to decouple DB writes, ensuring lightning-fast UI responses within Discord.
-- **Scheduled Tracking**: A highly reliable `cron-job.org` trigger automatically generates a comprehensive daily report of all students at 9:00 PM IST and pushes it via Webhook.
+- **Scheduled Tracking**: A highly reliable `cron-job.org` trigger automatically generates a comprehensive daily report of all students at 11:00 PM IST and pushes it via Webhook.
 
 <div align="center">
   <br />
@@ -73,9 +73,13 @@ A high-performance, 24/7 autonomous bot powered by `discord.js`.
 | --- | --- |
 | `/setup` | Server administrators configure tracking and announcement channels. |
 | `/add-profile` | Map your Discord account to your coding platform usernames. |
+| `/update-profile` | Edit your mapped username or token. |
 | `/remove-profile` | Unlink an incorrect platform mapping. |
 | `/list-profiles` | Confirm which platforms are currently mapped to your account. |
 | `/check [date]` | Generate a personal progress report for today (or a past date). |
+| `/leaderboard` | View the top 10 solvers for this week. |
+| `/export-report` | Download a CSV of student data for this server. |
+| `/refresh` | Force refresh today's scrape globally. |
 | `/help` | Display the command list and usage. |
 
 ---

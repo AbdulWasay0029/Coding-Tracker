@@ -23,12 +23,22 @@ async function getDiscordUser(userId: string) {
 }
 
 export default async function LeaderboardPage() {
-    const lastWeek = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    // Calculate the start of the current week (Monday) at 00:00:00 IST
+    const istOffset = 5.5 * 60 * 60 * 1000;
+    const nowIST = new Date(Date.now() + istOffset);
+    const dayOfWeek = nowIST.getUTCDay();
+    const diffToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+    
+    const startOfWeekIST = new Date(nowIST.getTime());
+    startOfWeekIST.setUTCDate(startOfWeekIST.getUTCDate() - diffToMonday);
+    startOfWeekIST.setUTCHours(0, 0, 0, 0);
+    
+    const startOfWeekUTC = new Date(startOfWeekIST.getTime() - istOffset);
     
     // Global aggregate query
     const leaderboardData = await prisma.solvedProblem.groupBy({
         by: ['discordUserId'],
-        where: { solvedAt: { gte: lastWeek } },
+        where: { solvedAt: { gte: startOfWeekUTC } },
         _count: { problemId: true },
         orderBy: { _count: { problemId: 'desc' } },
         take: 50,
@@ -51,7 +61,7 @@ export default async function LeaderboardPage() {
             <div className="mb-8 border-b border-border pb-6 animate-reveal stagger-1 flex flex-col md:flex-row items-center justify-between gap-4">
                 <div>
                     <h1 className="text-3xl font-bold text-white tracking-tight">Global Leaderboard</h1>
-                    <p className="text-text-secondary mt-2 text-sm">Real-time ranking of top developers based on problems solved in the last 7 days.</p>
+                    <p className="text-text-secondary mt-2 text-sm">Real-time ranking of top developers based on problems solved this week.</p>
                 </div>
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-medium text-primary">
                     <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />

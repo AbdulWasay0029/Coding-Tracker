@@ -4,7 +4,7 @@ import { Submission } from './leetcode';
 const CF_API = 'https://codeforces.com/api/user.status';
 
 export async function fetchCodeforcesSubmissions(username: string, stopBeforeTimestamp?: number): Promise<Submission[]> {
-    const count = stopBeforeTimestamp ? 200 : 20;
+    const count = stopBeforeTimestamp ? 2000 : 50;
     try {
         const response = await axios.get(CF_API, {
             params: {
@@ -25,7 +25,7 @@ export async function fetchCodeforcesSubmissions(username: string, stopBeforeTim
         for (const sub of rawSubmissions) {
             const timestamp = sub.creationTimeSeconds;
             if (stopBeforeTimestamp && timestamp < stopBeforeTimestamp) {
-                break; // Found older submissions, safe to stop
+                // DON'T BREAK! Let tracker.ts filter it, so we don't miss out of order elements on the boundary
             }
             if (sub.verdict === 'OK') {
                 processedSubmissions.push({

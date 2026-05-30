@@ -71,7 +71,6 @@ export async function fetchSmartInterviewsSubmissions(username: string, tokenOve
 
                             if (stopBeforeTimestamp && timestamp < stopBeforeTimestamp) {
                                 hitOlderDate = true;
-                                break; 
                             }
 
                             const isAccepted = sub.verdict === 'Accepted';

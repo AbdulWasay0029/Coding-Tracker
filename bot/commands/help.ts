@@ -10,6 +10,7 @@ export async function handleHelp(interaction: ChatInputCommandInteraction) {
                 name: '👤 Profile Setup',
                 value: [
                     '`/add-profile` — Add your accounts (LeetCode, etc.)',
+                    '`/update-profile` — Edit username or token',
                     '`/remove-profile` — Untrack a platform',
                     '`/list-profiles` — Show your accounts',
                 ].join('\n'),
@@ -26,9 +27,17 @@ export async function handleHelp(interaction: ChatInputCommandInteraction) {
                 ].join('\n'),
             },
             {
+                name: '🏆 Leaderboard',
+                value: [
+                    '`/leaderboard` — View the top 10 solvers for this week',
+                ].join('\n'),
+            },
+            {
                 name: '⚙️ Server Admin',
                 value: [
                     '`/setup` — Configure welcome channel & daily reminders',
+                    '`/export-report` — Download a CSV of student data',
+                    '`/refresh` — Force refresh today\'s scrape',
                 ].join('\n'),
             },
             {

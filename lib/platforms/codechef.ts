@@ -106,7 +106,6 @@ export async function fetchCodeChefSubmissions(username: string, stopBeforeTimes
 
                 if (stopBeforeTimestamp && timestamp < stopBeforeTimestamp) {
                     hitOlderDate = true;
-                    return; // break out of jQuery each
                 }
 
                 if (problemCode) {

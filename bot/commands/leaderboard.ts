@@ -9,15 +9,25 @@ export async function handleLeaderboard(interaction: ChatInputCommandInteraction
     await interaction.deferReply();
 
     try {
-        // Default to "This Week" (last 7 days)
-        const lastWeek = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+        // Calculate the start of the current week (Monday) at 00:00:00 IST
+        const istOffset = 5.5 * 60 * 60 * 1000;
+        const nowIST = new Date(Date.now() + istOffset);
 
-        // Perform a global aggregate query to get the top 10 solvers in the last 7 days.
+        const dayOfWeek = nowIST.getUTCDay(); // 0 = Sunday, 1 = Monday, etc.
+        const diffToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+
+        const startOfWeekIST = new Date(nowIST.getTime());
+        startOfWeekIST.setUTCDate(startOfWeekIST.getUTCDate() - diffToMonday);
+        startOfWeekIST.setUTCHours(0, 0, 0, 0);
+
+        const startOfWeekUTC = new Date(startOfWeekIST.getTime() - istOffset);
+
+        // Perform a global aggregate query to get the top 10 solvers this week.
         // This naturally captures everyone tracked by the bot and avoids Discord Gateway rate limits.
         const leaderboardData = await prisma.solvedProblem.groupBy({
             by: ['discordUserId'],
             where: {
-                solvedAt: { gte: lastWeek }
+                solvedAt: { gte: startOfWeekUTC }
             },
             _count: {
                 problemId: true
@@ -31,7 +41,7 @@ export async function handleLeaderboard(interaction: ChatInputCommandInteraction
         });
 
         if (leaderboardData.length === 0) {
-            return interaction.editReply('📉 No problems have been solved by anyone in this server in the last 7 days. Time to start grinding!');
+            return interaction.editReply('📉 No problems have been solved by anyone in this server this week. Time to start grinding!');
         }
 
         let description = '';
@@ -43,7 +53,7 @@ export async function handleLeaderboard(interaction: ChatInputCommandInteraction
         });
 
         const embed = new EmbedBuilder()
-            .setTitle(`🏆 Server Leaderboard (Last 7 Days)`)
+            .setTitle(`🏆 Server Leaderboard (This Week)`)
             .setDescription(description)
             .setColor(0xFFD700)
             .setFooter({ text: 'Keep grinding to climb the ranks! 💻🔥' });

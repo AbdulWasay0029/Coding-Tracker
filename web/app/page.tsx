@@ -116,7 +116,7 @@ export default function Home() {
                             </div>
                             <h3 className="text-xl font-bold text-white mb-3 tracking-tight">Server Leaderboards</h3>
                             <p className="text-text-secondary leading-relaxed">
-                                Turn coding into a healthy competition. The leaderboard ranks members in your Discord server based on how many problems they solved in the last 7 days.
+                                Turn coding into a healthy competition. The leaderboard ranks members in your Discord server based on how many problems they solved this week.
                             </p>
                         </div>
                         

@@ -233,26 +233,28 @@ export function ProfileManager({ initialProfiles }: { initialProfiles: Profile[]
                             </form>
                         ) : (
                             <>
-                                <div className="flex items-center gap-4 min-w-0">
+                                <div className="flex items-center gap-4 flex-1 min-w-0">
                                     <div className="min-w-0">
                                         <h3 className="text-base font-bold text-white truncate">{p.platform}</h3>
                                         <p className="text-sm font-mono text-text-secondary truncate mt-0.5">{p.username}</p>
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-2 shrink-0">
                                     <button
                                         onClick={() => startEditing(p)}
                                         disabled={actionId === p.id}
-                                        className="px-3 py-1.5 text-sm font-medium text-text-secondary bg-surface border border-border rounded-md hover:text-white transition-colors disabled:opacity-50"
+                                        title="Edit"
+                                        className="p-2 text-text-secondary bg-surface border border-border rounded-md hover:text-white transition-colors disabled:opacity-50"
                                     >
-                                        Edit
+                                        <Edit2 className="w-4 h-4" />
                                     </button>
                                     <button
                                         onClick={() => handleDelete(p.id)}
                                         disabled={actionId === p.id}
-                                        className="px-3 py-1.5 text-sm font-medium text-danger bg-danger/10 border border-danger/20 rounded-md hover:bg-danger hover:text-white transition-colors disabled:opacity-50"
+                                        title="Disconnect"
+                                        className="p-2 text-danger bg-danger/10 border border-danger/20 rounded-md hover:bg-danger hover:text-white transition-colors disabled:opacity-50"
                                     >
-                                        Disconnect
+                                        <Trash2 className="w-4 h-4" />
                                     </button>
                                 </div>
                             </>

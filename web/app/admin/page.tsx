@@ -33,7 +33,8 @@ export default async function AdminPage() {
     const adminGuilds = allGuilds.filter((guild: any) => {
         try {
             const perms = BigInt(guild.permissions);
-            return (perms & 8n) === 8n;
+            const adminFlag = BigInt(8);
+            return (perms & adminFlag) === adminFlag;
         } catch {
             return false;
         }

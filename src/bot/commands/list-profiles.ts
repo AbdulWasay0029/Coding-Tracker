@@ -1,5 +1,5 @@
 import { ChatInputCommandInteraction } from 'discord.js';
-import { prisma } from '../../lib/prisma';
+import { prisma } from '../../core/prisma';
 
 const PLATFORM_EMOJI: Record<string, string> = {
     LEETCODE: '🟡',

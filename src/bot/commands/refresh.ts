@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction } from 'discord.js';
-import { prisma } from '../../lib/prisma';
-import { runTrackerForUser, getTimestampsForDate } from '../tracker';
+import { prisma } from '../../core/prisma';
+import { runTrackerForUser, getTimestampsForDate } from '../../jobs/tracker';
 
 export async function handleRefresh(interaction: ChatInputCommandInteraction) {
     if (interaction.user.id !== '481554233817300993') {

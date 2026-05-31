@@ -5,14 +5,14 @@
  *
  * The existing lib/tracker-logic.ts is left completely untouched.
  */
-import { prisma } from '../lib/prisma';
-import { fetchLeetCodeSubmissions } from '../lib/platforms/leetcode';
-import { fetchCodeforcesSubmissions } from '../lib/platforms/codeforces';
-import { fetchCodeChefSubmissions } from '../lib/platforms/codechef';
-import { fetchHackerRankSubmissions } from '../lib/platforms/hackerrank';
-import { fetchSmartInterviewsSubmissions } from '../lib/platforms/smartinterviews';
-import { decrypt } from '../lib/encryption';
-import { withCache } from '../lib/cache';
+import { prisma } from '../core/prisma';
+import { fetchLeetCodeSubmissions } from '../core/platforms/leetcode';
+import { fetchCodeforcesSubmissions } from '../core/platforms/codeforces';
+import { fetchCodeChefSubmissions } from '../core/platforms/codechef';
+import { fetchHackerRankSubmissions } from '../core/platforms/hackerrank';
+import { fetchSmartInterviewsSubmissions } from '../core/platforms/smartinterviews';
+import { decrypt } from '../core/encryption';
+import { withCache } from '../core/cache';
 
 export interface TrackerResult {
     links: string[]; // Flat list for general logic

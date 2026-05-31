@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
-import { prisma } from '../lib/prisma';
+import { prisma } from '../core/prisma';
 
 async function main() {
     console.log("Fetching Leaderboard data...");

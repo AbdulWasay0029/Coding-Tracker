@@ -12,6 +12,6 @@
     "resolveJsonModule": true,
     "allowJs": true
   },
-  "include": ["bot/**/*", "lib/**/*", "scripts/**/*", "prisma/**/*"],
+  "include": ["src/**/*", "prisma/**/*"],
   "exclude": ["node_modules", ".next", "dist"]
 }

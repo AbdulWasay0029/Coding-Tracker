@@ -1,9 +1,9 @@
 import { ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
-import { prisma } from '../../lib/prisma';
+import { prisma } from '../../core/prisma';
 
 export async function handleLeaderboard(interaction: ChatInputCommandInteraction) {
     if (!interaction.guild) {
-        return interaction.reply({ content: '❌ This command can only be used in a server.', ephemeral: true });
+        return interaction.reply({ content: '❌ The CodeSync bot must be officially invited to this server to run this command.', ephemeral: true });
     }
 
     await interaction.deferReply();

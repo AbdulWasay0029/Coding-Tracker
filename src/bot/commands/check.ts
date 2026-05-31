@@ -6,8 +6,8 @@ import {
     ButtonStyle,
     EmbedBuilder,
 } from 'discord.js';
-import { runTrackerForUser, getTimestampsForDate } from '../tracker';
-import { prisma } from '../../lib/prisma';
+import { runTrackerForUser, getTimestampsForDate } from '../../jobs/tracker';
+import { prisma } from '../../core/prisma';
 
 // ─── Constants for labeling ──────────────────────────────────────────────────
 

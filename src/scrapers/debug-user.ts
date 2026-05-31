@@ -1,9 +1,9 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { prisma } from '../lib/prisma';
-import { fetchLeetCodeSubmissions } from '../lib/platforms/leetcode';
-import { runTrackerForUser } from '../bot/tracker';
+import { prisma } from '../core/prisma';
+import { fetchLeetCodeSubmissions } from '../core/platforms/leetcode';
+import { runTrackerForUser } from '../jobs/tracker';
 
 async function main() {
     const discordUserId = '1399747956730757211';

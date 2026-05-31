@@ -6,12 +6,12 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "dev": "tsx bot/index.ts",
+    "dev": "tsx src/bot/index.ts",
     "build": "tsc",
-    "start": "node dist/bot/index.js",
+    "start": "node dist/src/bot/index.js",
     "lint": "eslint",
     "postinstall": "prisma generate",
-    "bot:deploy": "tsx bot/deploy-commands.ts"
+    "bot:deploy": "tsx src/bot/deploy-commands.ts"
   },
   "dependencies": {
     "@prisma/client": "5.19.1",
@@ -20,11 +20,13 @@
     "date-fns": "^4.1.0",
     "discord.js": "^14.25.1",
     "dotenv": "^17.2.3",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "node-cron": "^4.2.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/node": "^20",
+    "@types/node-cron": "^3.0.11",
     "eslint": "^9",
     "prisma": "5.19.1",
     "tsx": "^4.21.0",

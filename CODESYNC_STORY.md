@@ -56,6 +56,12 @@ After class, a few classmates came up asking how to set it up. I shared the Code
 
 The post traction, the professor's words, the 2am message from Harshith — all of it happened within a short window. Shortly after, a senior student named Akshay — national hackathon winner, GDG lead, working at an AI startup — reached out. He'd seen the project and the response it generated. He said he wanted to build something together.
 
+With the Next.js dashboard live, I faced a new challenge: Technical Debt. The bot had grown organically from a local script into a massive distributed system. So, I took a step back and acted like a true CTO. I completely tore down the monolithic architecture and rebuilt it into a pristine, modular enterprise codebase. 
+
+I also leaned into Discord's newest capabilities—transforming CodeSync into a "User Installable App." Now, students could install the bot to their personal accounts and check their LeetCode stats anywhere they went, even in private group chats. I added a sleek, GitHub-style Contribution Graph to the web dashboard and built a Server Admin Portal so community leaders could configure the bot visually without ever typing a slash command.
+
+But something was still missing. The product worked flawlessly under the hood, but the user experience still felt like an MVP. It was time for a sweeping, system-wide UX overhaul to make CodeSync feel like a classic, sleek, and premium enterprise product.
+
 That was the moment CodeSync stopped being just a bot and became proof of something larger: that building for a real problem, even a small one, compounds in ways you don't predict.
 
 ---
@@ -77,5 +83,7 @@ Eventually, relying purely on Discord slash commands to manage complex credentia
 I needed a place where users could visualize their data, manage their privacy, and see global leaderboards without being tied to a specific Discord server. So the project came full circle. I built a brand new, premium Next.js Web Dashboard. It featured secure server-side API routes, sleek 3D isometric UI elements, and a seamless Discord OAuth login flow that instantly linked a user's Discord identity to their web session. 
 
 Simultaneously, the bot's architecture was upgraded to deploy its commands globally. It wasn't just my classroom's bot anymore. Anyone could now visit the website, click "Add to Discord", and drop CodeSync into their own community to instantly build automated competitive programming leaderboards.
+
+With the infrastructure stable, CodeSync started looking forward instead of just backward. A feature to ping students before upcoming LeetCode, Codeforces, and CodeChef contests was introduced. By combining mathematical recurrence formulas and direct API polling, the bot could drop beautiful timezone-aware countdowns right into community channels exactly 60 and 10 minutes before the global grind began.
 
 But the .bat file is still where it started. And the core mission never changed. It's still just about automating the grind.

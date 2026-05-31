@@ -2,8 +2,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import { PrismaClient } from '@prisma/client';
-import { runTrackerForUser, getTimestampsForDate } from '../bot/tracker';
-import { prisma } from '../lib/prisma';
+import { runTrackerForUser, getTimestampsForDate } from '../jobs/tracker';
+import { prisma } from '../core/prisma';
 
 async function main() {
     console.log('🚀 Starting 7-Day Backfill for all registered users...');

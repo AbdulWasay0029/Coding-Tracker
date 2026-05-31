@@ -64,7 +64,11 @@ const commands = [
         .setName('setup')
         .setDescription('ADMIN: Configure server settings (welcome/reminders)')
         .addChannelOption(o => o
-            .setName('welcome-channel').setDescription('Where to post onboarding info').setRequired(false)),
+            .setName('welcome-channel').setDescription('Where to post onboarding info').setRequired(false))
+        .addChannelOption(o => o
+            .setName('contest-channel').setDescription('Where to post upcoming coding contest alerts').setRequired(false))
+        .addRoleOption(o => o
+            .setName('contest-role').setDescription('Role to ping for contest alerts').setRequired(false)),
 
     new SlashCommandBuilder()
         .setName('leaderboard')

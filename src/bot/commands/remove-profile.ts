@@ -1,5 +1,5 @@
 import { ChatInputCommandInteraction } from 'discord.js';
-import { prisma } from '../../lib/prisma';
+import { prisma } from '../../core/prisma';
 
 export async function handleRemoveProfile(interaction: ChatInputCommandInteraction) {
     const platform = interaction.options.getString('platform', true);

@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { prisma } from '../../lib/prisma';
 import Image from 'next/image';
 import { ProfileManager } from './ProfileManager';
+import { ContributionGraph } from '../../components/ContributionGraph';
 
 export default async function DashboardPage() {
     const session = await getServerSession(authOptions);
@@ -12,11 +13,16 @@ export default async function DashboardPage() {
         redirect('/');
     }
 
-    // Fetch user's problem solving history
+    // Fetch user's problem solving history for the last 365 days
+    const oneYearAgo = new Date();
+    oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+
     const history = await prisma.solvedProblem.findMany({
-        where: { discordUserId: session.user.id },
-        orderBy: { solvedAt: 'desc' },
-        take: 100
+        where: { 
+            discordUserId: session.user.id,
+            solvedAt: { gte: oneYearAgo }
+        },
+        orderBy: { solvedAt: 'desc' }
     });
 
     const profiles = await prisma.userProfile.findMany({
@@ -50,8 +56,15 @@ export default async function DashboardPage() {
                 </div>
             </div>
 
+            <div className="mb-12 bg-surface border border-border p-6 rounded-xl shadow-sm animate-reveal stagger-2">
+                <h2 className="text-lg font-bold border-b border-border pb-3 mb-6 text-text-primary flex items-center gap-2">
+                    🔥 Your Coding Activity
+                </h2>
+                <ContributionGraph history={history} />
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div className="md:col-span-1 space-y-6">
+                <div className="md:col-span-1 space-y-6 animate-reveal stagger-3">
                     <ProfileManager initialProfiles={profiles} />
                 </div>
 
@@ -60,7 +73,7 @@ export default async function DashboardPage() {
                         <h2 className="text-lg font-bold border-b border-border pb-3 mb-4 text-text-primary">Recent Solves</h2>
                         {history.length > 0 ? (
                             <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
-                                {history.map((problem: any) => (
+                                {history.slice(0, 100).map((problem: any) => (
                                     <div key={problem.id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 rounded-lg border border-border bg-background hover:bg-surface/50 transition-colors leaderboard-row gap-2">
                                         <div>
                                             <h3 className="font-medium text-text-primary">{problem.title}</h3>

@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction } from 'discord.js';
-import { prisma } from '../../lib/prisma';
-import { encrypt } from '../../lib/encryption';
+import { prisma } from '../../core/prisma';
+import { encrypt } from '../../core/encryption';
 
 export async function handleUpdateProfile(interaction: ChatInputCommandInteraction) {
     const platform = interaction.options.getString('platform', true).toUpperCase();

@@ -60,3 +60,11 @@ Additionally, the automated nightly trigger was completely migrated away from Gi
 As the bot scaled, managing complex platform tokens via Discord slash commands became a UX bottleneck. The project came full circle with the launch of a premium Next.js Web Dashboard. Built with a sleek, dark-mode "Neon UI" aesthetic, it featured smooth 3D CSS isometric tilts, custom scalable SVG favicons, and seamless Discord OAuth integration. 
 
 Users could now securely manage their platform profiles via server-side API routes on the web, which instantly synced with the Discord bot's clustered PostgreSQL database. To support this massive expansion, the Discord bot's architecture was updated to deploy its slash commands globally. Instead of being locked to a single test server, anyone could now visit the website, click "Add to Discord", and instantly bring automated competitive programming leaderboards to their own community.
+
+### Phase 7: The Competitive Hub (Late May 2026)
+*Integrating live contest scheduling to keep developers informed.*
+
+CodeSync evolved beyond just tracking past performances; it began anticipating the future. A completely autonomous contest reminder system was introduced. Instead of relying on unreliable 3rd-party aggregators, the bot was engineered to mathematically predict LeetCode and CodeChef schedules statically, while dynamically polling the official Codeforces API via a lightweight, internal `node-cron` process. This allowed server admins to configure specific channels and roles to receive premium, timezone-aware Discord countdowns for global contests.
+
+### Phase 8: Enterprise Architecture & User Apps (CodeSync v4)
+As CodeSync transitioned from a successful MVP to a scalable product, the backend was completely restructured into an enterprise-grade modular architecture. Discord's new "User Installable Apps" feature was fully embraced, allowing users to install CodeSync directly to their personal accounts and take their slash commands anywhere. The onboarding flow was rewritten to feature zero-friction Direct Messaging, and a fully gamified Contribution Graph was deployed to the Web Dashboard alongside a powerful Server Admin Portal.

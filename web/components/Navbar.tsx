@@ -20,7 +20,10 @@ export function Navbar() {
     ];
 
     if (session) {
-        navLinks.push({ name: 'Dashboard', href: '/dashboard', activeColor: 'secondary' });
+        navLinks.push(
+            { name: 'Dashboard', href: '/dashboard', activeColor: 'secondary' },
+            { name: 'Admin', href: '/admin', activeColor: 'primary' }
+        );
     }
 
     return (

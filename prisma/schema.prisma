@@ -40,6 +40,8 @@ model GuildConfig {
   welcomeChannelId  String?  // Where to post onboarding info
   reminderChannelId String?  // Where to post daily check reminders
   reminderTime      String   @default("22:00") // HH:mm in IST
+  contestChannelId  String?  // Where to post contest alerts
+  contestRoleId     String?  // Role to ping for contests
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 }

@@ -1,4 +1,4 @@
-import { prisma } from '../lib/prisma';
+import { prisma } from '../src/core/prisma';
 
 // Replace with your real Discord User ID if you want to seed local testing
 const MY_DISCORD_ID = "1478104744391344359";

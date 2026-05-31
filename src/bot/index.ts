@@ -4,7 +4,7 @@ import path from 'path';
 
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
-import { prisma } from '../lib/prisma';
+import { prisma } from '../core/prisma';
 import { handleAddProfile } from './commands/add-profile';
 import { handleUpdateProfile } from './commands/update-profile';
 import { handleRemoveProfile } from './commands/remove-profile';
@@ -15,7 +15,8 @@ import { handleSetup } from './commands/setup';
 import { handleLeaderboard } from './commands/leaderboard';
 import { handleExportReport } from './commands/export-report';
 import { handleRefresh } from './commands/refresh';
-import { RateLimiter } from '../lib/rate-limiter';
+import { initContestScheduler } from '../jobs/contests';
+import { RateLimiter } from '../core/rate-limiter';
 import express from 'express';
 
 // Initialize a 30-second cooldown specifically for hitting the scraping APIs
@@ -44,6 +45,9 @@ client.once('ready', () => {
         activities: [{ name: '/help | Tracking your grind', type: ActivityType.Playing }],
         status: 'online',
     });
+    
+    // Start background contest scheduler
+    initContestScheduler(client);
 });
 
 client.on('interactionCreate', async (interaction: Interaction) => {
@@ -86,6 +90,7 @@ client.on('interactionCreate', async (interaction: Interaction) => {
 });
 
 // ─── Onboarding Event ────────────────────────────────────────────────────────
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 
 client.on('guildMemberAdd', async (member) => {
     try {
@@ -99,21 +104,37 @@ client.on('guildMemberAdd', async (member) => {
         if (!channel) return;
 
         const welcomeEmbed = new EmbedBuilder()
-            .setTitle(`Welcome to the server, ${member.user.username}! 🚀`)
-            .setDescription(`I'm **CodeSync**, here to track your competitive programming progress globally.`)
+            .setTitle(`Welcome to ${member.guild.name}, ${member.user.username}! 🚀`)
+            .setDescription(`I'm **CodeSync**, here to track your competitive programming progress globally.\n\nClick the button below to link your LeetCode, Codeforces, CodeChef, and HackerRank accounts in 30 seconds.`)
             .addFields(
-                { name: '1. Access the Dashboard', value: 'Login to our [Web Dashboard](https://codesync-hub.vercel.app/) using your Discord account to easily manage your profiles.' },
-                { name: '2. Check your daily stats', value: 'Use **/check** in this server to fetch everything you\'ve solved today, correctly grouped and labeled!' },
-                { name: '3. Climb the Leaderboard', value: 'Use **/leaderboard** or visit the website to see the Top 10 developers grinding this week.' },
-                { name: '4. Learn more', value: 'Type **/help** for a full guide on bot commands and setup.' }
+                { name: '📊 Climb the Leaderboard', value: 'Compete against your server-mates automatically.' },
+                { name: '🔥 Build your Streak', value: 'Track your daily solves and earn roles.' }
             )
             .setColor(0x5865F2)
-            .setThumbnail(member.user.displayAvatarURL());
+            .setThumbnail(member.guild.iconURL() || member.user.displayAvatarURL());
 
-        await channel.send({ 
-            content: `Hey <@${member.id}>! Check this out to get started:`,
-            embeds: [welcomeEmbed] 
-        });
+        const row = new ActionRowBuilder<ButtonBuilder>()
+            .addComponents(
+                new ButtonBuilder()
+                    .setLabel('🚀 Setup My Profile')
+                    .setStyle(ButtonStyle.Link)
+                    .setURL('https://codesync-hub.vercel.app/')
+            );
+
+        try {
+            // Attempt zero-friction DM onboarding
+            await member.user.send({
+                embeds: [welcomeEmbed],
+                components: [row]
+            });
+        } catch (dmError) {
+            // Fallback: If DMs are closed, send in the welcome channel with a soft ping
+            await channel.send({ 
+                content: `Hey <@${member.id}>! I tried to DM you but your DMs are closed. Check this out to get started:`,
+                embeds: [welcomeEmbed],
+                components: [row]
+            });
+        }
     } catch (err) {
         console.error('[Onboarding] Error:', err);
     }

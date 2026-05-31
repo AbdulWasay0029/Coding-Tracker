@@ -79,7 +79,7 @@ export default async function DashboardPage() {
                                             <span className="text-xs text-text-tertiary mt-0.5">{problem.platform}</span>
                                         </div>
                                         <div className="flex items-center gap-3">
-                                            <span className="text-xs text-text-secondary font-mono">{new Date(problem.solvedAt).toLocaleDateString()}</span>
+                                            <span className="text-xs text-text-secondary font-mono">{new Date(problem.solvedAt).toISOString().split('T')[0]}</span>
                                             <span className="w-1.5 h-1.5 rounded-full bg-success"></span>
                                         </div>
                                     </div>

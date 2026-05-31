@@ -1,7 +1,7 @@
 import { prisma } from '../../lib/prisma';
 import Image from 'next/image';
 
-export const revalidate = 60; // Cache for 60 seconds
+export const dynamic = 'force-dynamic';
 
 async function getDiscordUser(userId: string) {
     try {

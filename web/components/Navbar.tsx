@@ -91,10 +91,12 @@ export function Navbar() {
                     {/* Mobile Menu Button */}
                     <div className="md:hidden flex items-center">
                         <button 
-                            onClick={toggleMenu} 
-                            className="text-text-secondary hover:text-text-primary p-2 focus:outline-none btn-interactive"
+                            type="button"
+                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleMenu(); }} 
+                            onTouchEnd={(e) => { e.preventDefault(); e.stopPropagation(); toggleMenu(); }}
+                            className="relative z-50 text-text-secondary hover:text-text-primary p-2 focus:outline-none btn-interactive cursor-pointer bg-surface border border-border rounded-md"
                         >
-                            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                            {mobileMenuOpen ? <X className="w-6 h-6 pointer-events-none" /> : <Menu className="w-6 h-6 pointer-events-none" />}
                         </button>
                     </div>
                 </div>

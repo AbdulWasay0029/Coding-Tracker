@@ -109,6 +109,7 @@ export function ProfileManager({ initialProfiles }: { initialProfiles: Profile[]
                 {!isAdding && (
                     <button 
                         onClick={() => setIsAdding(true)}
+                        onTouchEnd={(e) => { e.preventDefault(); setIsAdding(true); }}
                         className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-[#0B0E14] bg-white rounded-md hover:bg-gray-200 transition-colors shadow-sm"
                     >
                         <Plus className="w-4 h-4 mr-2" /> Add Account
@@ -239,22 +240,26 @@ export function ProfileManager({ initialProfiles }: { initialProfiles: Profile[]
                                         <p className="text-sm font-mono text-text-secondary truncate mt-0.5">{p.username}</p>
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-2 shrink-0">
+                                <div className="flex items-center gap-3 shrink-0">
                                     <button
+                                        type="button"
                                         onClick={() => startEditing(p)}
+                                        onTouchEnd={(e) => { e.preventDefault(); startEditing(p); }}
                                         disabled={actionId === p.id}
                                         title="Edit"
-                                        className="p-2 text-text-secondary bg-surface border border-border rounded-md hover:text-white transition-colors disabled:opacity-50"
+                                        className="p-3 text-text-secondary bg-surface border border-border rounded-md hover:text-white transition-colors disabled:opacity-50 btn-interactive"
                                     >
-                                        <Edit2 className="w-4 h-4" />
+                                        <Edit2 className="w-5 h-5 pointer-events-none" />
                                     </button>
                                     <button
+                                        type="button"
                                         onClick={() => handleDelete(p.id)}
+                                        onTouchEnd={(e) => { e.preventDefault(); handleDelete(p.id); }}
                                         disabled={actionId === p.id}
                                         title="Disconnect"
-                                        className="p-2 text-danger bg-danger/10 border border-danger/20 rounded-md hover:bg-danger hover:text-white transition-colors disabled:opacity-50"
+                                        className="p-3 text-danger bg-danger/10 border border-danger/20 rounded-md hover:bg-danger hover:text-white transition-colors disabled:opacity-50 btn-interactive"
                                     >
-                                        <Trash2 className="w-4 h-4" />
+                                        <Trash2 className="w-5 h-5 pointer-events-none" />
                                     </button>
                                 </div>
                             </>

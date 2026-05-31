@@ -60,9 +60,8 @@ body {
 
 .btn-interactive {
   transition: all 100ms ease;
-}
-.btn-interactive:active {
-  transform: scale(0.98);
+  touch-action: manipulation;
+  cursor: pointer;
 }
 
 .leaderboard-row {

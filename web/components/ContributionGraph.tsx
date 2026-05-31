@@ -6,21 +6,19 @@ interface SolvedProblem {
 }
 
 export function ContributionGraph({ history }: { history: SolvedProblem[] }) {
-    // 1. Group solves by YYYY-MM-DD string using local time
+    // 1. Group solves by YYYY-MM-DD string using UTC time
     const solvesByDate = history.reduce((acc, curr) => {
         const date = new Date(curr.solvedAt);
-        const dateStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+        const dateStr = `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}-${String(date.getUTCDate()).padStart(2, '0')}`;
         acc[dateStr] = (acc[dateStr] || 0) + 1;
         return acc;
     }, {} as Record<string, number>);
 
-    // 2. Generate the last 365 days
+    // 2. Generate the last 365 days using UTC
     const today = new Date();
     const last365Days = [];
-    // Go back exactly 364 days so total is 365 (including today)
     for (let i = 364; i >= 0; i--) {
-        const d = new Date();
-        d.setDate(today.getDate() - i);
+        const d = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate() - i));
         last365Days.push(d);
     }
 
@@ -31,16 +29,16 @@ export function ContributionGraph({ history }: { history: SolvedProblem[] }) {
     let currentGroup: any = null;
 
     for (const d of last365Days) {
-        if (d.getMonth() !== currentMonth) {
+        if (d.getUTCMonth() !== currentMonth) {
             if (currentGroup) monthGroups.push(currentGroup);
-            currentMonth = d.getMonth();
+            currentMonth = d.getUTCMonth();
             currentGroup = {
                 name: months[currentMonth],
                 days: []
             };
         }
-        const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-        currentGroup.days.push({ dateStr, date: d, dayOfWeek: d.getDay() }); // 0 = Sun, 6 = Sat
+        const dateStr = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}-${String(d.getUTCDate()).padStart(2, '0')}`;
+        currentGroup.days.push({ dateStr, date: d, dayOfWeek: d.getUTCDay() }); // 0 = Sun, 6 = Sat
     }
     if (currentGroup) monthGroups.push(currentGroup);
 

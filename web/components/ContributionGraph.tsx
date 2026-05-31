@@ -14,44 +14,40 @@ export function ContributionGraph({ history }: { history: SolvedProblem[] }) {
         return acc;
     }, {} as Record<string, number>);
 
-    // 2. Generate exactly 52 weeks (364 days) ending today
-    const weeks: { dateStr: string, date: Date }[][] = [];
+    // 2. Generate the last 365 days
     const today = new Date();
-    
-    // Shift the starting date so the final day in the grid aligns perfectly with today's day of week.
-    // GitHub ends on the current day in the rightmost column.
-    for (let i = 0; i < 52; i++) {
-        const week = [];
-        for (let j = 0; j < 7; j++) {
-            const daysAgo = (51 - i) * 7 + (6 - j);
-            const d = new Date();
-            d.setDate(today.getDate() - daysAgo);
-            const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-            week.push({ dateStr, date: d });
-        }
-        weeks.push(week);
+    const last365Days = [];
+    // Go back exactly 364 days so total is 365 (including today)
+    for (let i = 364; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(today.getDate() - i);
+        last365Days.push(d);
     }
 
-    // 3. Generate Month Labels
-    const monthLabels = [];
+    // 3. Group the days by Month
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    let lastMonth = -1;
-    
-    for (let i = 0; i < weeks.length; i++) {
-        const weekStartMonth = weeks[i][0].date.getMonth();
-        if (i === 0) {
-            monthLabels.push({ name: months[weekStartMonth], index: i });
-            lastMonth = weekStartMonth;
-        } else if (weekStartMonth !== lastMonth) {
-            monthLabels.push({ name: months[weekStartMonth], index: i });
-            lastMonth = weekStartMonth;
-        }
-    }
+    const monthGroups: { name: string, days: { dateStr: string, date: Date, dayOfWeek: number }[] }[] = [];
+    let currentMonth = -1;
+    let currentGroup: any = null;
 
-    // 4. Render Linear-style Grid
+    for (const d of last365Days) {
+        if (d.getMonth() !== currentMonth) {
+            if (currentGroup) monthGroups.push(currentGroup);
+            currentMonth = d.getMonth();
+            currentGroup = {
+                name: months[currentMonth],
+                days: []
+            };
+        }
+        const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        currentGroup.days.push({ dateStr, date: d, dayOfWeek: d.getDay() }); // 0 = Sun, 6 = Sat
+    }
+    if (currentGroup) monthGroups.push(currentGroup);
+
+    // 4. Render the LeetCode-style blocked grid
     return (
         <div className="w-full bg-[#0d1117] border border-[#30363d] rounded-xl p-6 shadow-sm overflow-hidden flex flex-col items-center">
-            <div className="w-full max-w-[850px] mb-4 flex justify-between items-end">
+            <div className="w-full max-w-[900px] mb-4 flex justify-between items-end">
                 <div>
                     <h3 className="text-lg font-semibold text-gray-200">Contribution Activity</h3>
                     <p className="text-xs text-gray-400 mt-1">{history.length} problems solved in the last year</p>
@@ -67,44 +63,44 @@ export function ContributionGraph({ history }: { history: SolvedProblem[] }) {
                 </div>
             </div>
 
-            <div className="w-full max-w-[850px] overflow-x-auto custom-scrollbar pb-2 flex justify-center">
-                <div className="min-w-max flex flex-col">
-                    {/* Month Labels */}
-                    <div className="relative h-5 w-full text-xs text-gray-400 mb-1">
-                        {monthLabels.map((label, idx) => (
-                            <span 
-                                key={idx} 
-                                className="absolute bottom-0"
-                                style={{ left: `${label.index * 16}px` }} // w-3 (12px) + gap-1 (4px) = 16px
-                            >
-                                {label.name}
-                            </span>
-                        ))}
-                    </div>
+            <div className="w-full max-w-[900px] overflow-x-auto custom-scrollbar pb-4 flex justify-center">
+                <div className="min-w-max flex gap-3">
+                    {monthGroups.map((group, gIdx) => {
+                        // Find how many padding cells we need at the start of this month block
+                        // dayOfWeek goes from 0 (Sun) to 6 (Sat)
+                        const firstDayOfWeek = group.days[0].dayOfWeek;
+                        const paddingCells = Array(firstDayOfWeek).fill(null);
 
-                    {/* Heatmap Grid */}
-                    <div className="flex gap-1">
-                        {weeks.map((week, weekIdx) => (
-                            <div key={weekIdx} className="flex flex-col gap-1">
-                                {week.map((dayObj, dayIdx) => {
-                                    const count = solvesByDate[dayObj.dateStr] || 0;
-                                    let bgClass = "bg-[#161b22]"; // Empty cell
-                                    if (count > 0 && count <= 2) bgClass = "bg-[#0e4429]";
-                                    else if (count > 2 && count <= 5) bgClass = "bg-[#006d32]";
-                                    else if (count > 5 && count <= 8) bgClass = "bg-[#26a641]";
-                                    else if (count > 8) bgClass = "bg-[#39d353]";
+                        return (
+                            <div key={gIdx} className="flex flex-col">
+                                <span className="text-xs text-gray-400 mb-2 font-medium">{group.name}</span>
+                                <div className="grid grid-rows-7 grid-flow-col gap-1">
+                                    {/* Invisible padding cells so the first day starts on the correct row */}
+                                    {paddingCells.map((_, i) => (
+                                        <div key={`pad-${i}`} className="w-3 h-3 bg-transparent" />
+                                    ))}
+                                    
+                                    {/* Actual days of the month */}
+                                    {group.days.map((dayObj, dIdx) => {
+                                        const count = solvesByDate[dayObj.dateStr] || 0;
+                                        let bgClass = "bg-[#161b22]"; // Empty cell
+                                        if (count > 0 && count <= 2) bgClass = "bg-[#0e4429]";
+                                        else if (count > 2 && count <= 5) bgClass = "bg-[#006d32]";
+                                        else if (count > 5 && count <= 8) bgClass = "bg-[#26a641]";
+                                        else if (count > 8) bgClass = "bg-[#39d353]";
 
-                                    return (
-                                        <div 
-                                            key={dayIdx}
-                                            title={`${count} problems solved on ${dayObj.dateStr}`}
-                                            className={`w-3 h-3 rounded-[2px] ${bgClass} transition-all hover:ring-1 hover:ring-white/50 cursor-pointer`}
-                                        />
-                                    );
-                                })}
+                                        return (
+                                            <div 
+                                                key={dIdx}
+                                                title={`${count} problems solved on ${dayObj.dateStr}`}
+                                                className={`w-3 h-3 rounded-[2px] ${bgClass} transition-all hover:ring-1 hover:ring-white/50 cursor-pointer`}
+                                            />
+                                        );
+                                    })}
+                                </div>
                             </div>
-                        ))}
-                    </div>
+                        );
+                    })}
                 </div>
             </div>
         </div>

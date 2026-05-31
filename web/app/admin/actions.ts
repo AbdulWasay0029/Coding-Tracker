@@ -36,7 +36,7 @@ export async function getGuildConfig(guildId: string) {
     });
 }
 
-export async function updateGuildConfig(guildId: string, data: { welcomeChannelId?: string, contestChannelId?: string, contestRoleId?: string }) {
+export async function updateGuildConfig(guildId: string, data: { welcomeChannelId?: string | null, contestChannelId?: string | null, contestRoleId?: string | null }) {
     const session = await getServerSession(authOptions);
     if (!session) throw new Error('Unauthorized');
 

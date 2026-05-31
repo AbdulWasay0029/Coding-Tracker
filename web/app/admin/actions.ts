@@ -27,6 +27,28 @@ export async function getGuildChannels(guildId: string) {
     }));
 }
 
+export async function getGuildRoles(guildId: string) {
+    const session = await getServerSession(authOptions);
+    if (!session || !session.accessToken) throw new Error('Unauthorized');
+
+    const res = await fetch(`https://discord.com/api/v10/guilds/${guildId}/roles`, {
+        headers: {
+            Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}`
+        }
+    });
+
+    if (!res.ok) {
+        throw new Error('Failed to fetch roles. Is the bot invited to this server?');
+    }
+
+    const roles = await res.json();
+    // Filter out the @everyone role and sort
+    return roles.filter((r: any) => r.name !== '@everyone').map((r: any) => ({
+        id: r.id,
+        name: r.name
+    }));
+}
+
 export async function getGuildConfig(guildId: string) {
     const session = await getServerSession(authOptions);
     if (!session) throw new Error('Unauthorized');

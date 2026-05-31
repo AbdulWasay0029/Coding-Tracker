@@ -1,13 +1,14 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { getGuildChannels, getGuildConfig, updateGuildConfig } from './actions';
+import { getGuildChannels, getGuildRoles, getGuildConfig, updateGuildConfig } from './actions';
 import { Settings, Save, AlertTriangle, ShieldCheck } from 'lucide-react';
 
 export function AdminClient({ guilds }: { guilds: any[] }) {
     const [selectedGuild, setSelectedGuild] = useState<string | null>(null);
     const [channels, setChannels] = useState<{id: string, name: string}[]>([]);
-    const [config, setConfig] = useState<{welcomeChannelId: string | null, contestChannelId: string | null}>({ welcomeChannelId: null, contestChannelId: null });
+    const [roles, setRoles] = useState<{id: string, name: string}[]>([]);
+    const [config, setConfig] = useState<{welcomeChannelId: string | null, contestChannelId: string | null, contestRoleId: string | null}>({ welcomeChannelId: null, contestChannelId: null, contestRoleId: null });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
@@ -18,22 +19,26 @@ export function AdminClient({ guilds }: { guilds: any[] }) {
         setError(null);
         setSuccess(false);
         setChannels([]);
+        setRoles([]);
 
         Promise.all([
             getGuildChannels(selectedGuild).catch(err => {
                 setError(err.message);
                 return [];
             }),
+            getGuildRoles(selectedGuild).catch(() => []),
             getGuildConfig(selectedGuild).catch(() => null)
-        ]).then(([fetchedChannels, fetchedConfig]) => {
+        ]).then(([fetchedChannels, fetchedRoles, fetchedConfig]) => {
             setChannels(fetchedChannels);
+            setRoles(fetchedRoles);
             if (fetchedConfig) {
                 setConfig({
                     welcomeChannelId: fetchedConfig.welcomeChannelId,
-                    contestChannelId: fetchedConfig.contestChannelId
+                    contestChannelId: fetchedConfig.contestChannelId,
+                    contestRoleId: fetchedConfig.contestRoleId
                 });
             } else {
-                setConfig({ welcomeChannelId: '', contestChannelId: '' });
+                setConfig({ welcomeChannelId: '', contestChannelId: '', contestRoleId: '' });
             }
             setLoading(false);
         });
@@ -133,6 +138,24 @@ export function AdminClient({ guilds }: { guilds: any[] }) {
                                         <option value="">-- None (Disable Alerts) --</option>
                                         {channels.map(c => (
                                             <option key={c.id} value={c.id}># {c.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-bold text-text-secondary mb-2 uppercase tracking-wider mt-6">
+                                        Contest Alerts Role (Ping)
+                                    </label>
+                                    <p className="text-sm text-text-secondary mb-3">The Discord role to ping when a contest alert is sent.</p>
+                                    <select 
+                                        className="w-full bg-background border border-border p-3 rounded-lg text-text-primary focus:ring-2 focus:ring-primary outline-none transition-all"
+                                        value={config.contestRoleId || ''}
+                                        onChange={e => setConfig(prev => ({ ...prev, contestRoleId: e.target.value }))}
+                                        disabled={loading}
+                                    >
+                                        <option value="">-- None (No Ping) --</option>
+                                        {roles.map(r => (
+                                            <option key={r.id} value={r.id}>@ {r.name}</option>
                                         ))}
                                     </select>
                                 </div>

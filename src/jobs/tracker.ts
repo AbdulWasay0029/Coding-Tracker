@@ -83,6 +83,14 @@ export async function runTrackerForUser(
             if (seen.has(sub.titleSlug)) continue;
             seen.add(sub.titleSlug);
 
+            // Create a deterministic unique ID for this problem on this specific day (IST)
+            // This prevents duplicates from multiple check commands or multiple submissions on the same day,
+            // while allowing the user to solve the same problem again on a different day!
+            const istOffset = 5.5 * 60 * 60 * 1000;
+            const istDate = new Date(sub.timestamp * 1000 + istOffset);
+            const dateStr = istDate.toISOString().split('T')[0];
+            const uniqueProblemId = `${sub.titleSlug}-${dateStr}`;
+
             // Cluster all DB writes into a single global array
             globalUpsertPromises.push(
                 prisma.solvedProblem.upsert({
@@ -90,14 +98,14 @@ export async function runTrackerForUser(
                         discordUserId_platform_problemId: {
                             discordUserId,
                             platform: profile.platform,
-                            problemId: sub.id,
+                            problemId: uniqueProblemId,
                         },
                     },
                     update: {},
                     create: {
                         discordUserId,
                         platform: profile.platform,
-                        problemId: sub.id,
+                        problemId: uniqueProblemId,
                         title: sub.title,
                         solvedAt: new Date(sub.timestamp * 1000),
                     },

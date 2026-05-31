@@ -102,7 +102,7 @@ export function Navbar() {
 
             {/* Mobile Navigation Dropdown */}
             {mobileMenuOpen && (
-                <div className="md:hidden border-t border-border bg-background">
+                <div className="md:hidden absolute top-14 left-0 w-full border-b border-border bg-background/95 backdrop-blur-md shadow-xl">
                     <div className="px-4 py-4 space-y-1">
                         {navLinks.map((link) => (
                             <Link

@@ -1,29 +1,19 @@
-import { ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
+import { ChatInputCommandInteraction, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 
 export async function handleHelp(interaction: ChatInputCommandInteraction) {
     const embed = new EmbedBuilder()
-        .setTitle('🚀 CodeSync — Help Guide')
-        .setDescription('Track your coding progress across LeetCode, Codeforces, CodeChef, HackerRank & SmartInterviews.')
-        .setColor(0x5865F2)
+        .setTitle('🚀 CodeSync Platform Engine')
+        .setDescription('Track your coding progress instantly across LeetCode, Codeforces, CodeChef, HackerRank & SmartInterviews.')
+        .setColor(0x00F0FF) // CodeSync Cyan
         .addFields(
-            {
-                name: '👤 Profile Setup',
-                value: [
-                    '`/add-profile` — Add your accounts (LeetCode, etc.)',
-                    '`/update-profile` — Edit username or token',
-                    '`/remove-profile` — Untrack a platform',
-                    '`/list-profiles` — Show your accounts',
-                ].join('\n'),
-            },
             {
                 name: '🔍 Check Progress',
                 value: [
                     '`/check` — Todays solved problems',
                     '`/check date:yesterday` — Yesterday\'s problems',
                     '`/check date:2026-03-25` — Specific date (YYYY-MM-DD)',
-                    '• **Grouped output** — links labeled by platform',
                     '• **📋 Copy Links** — text block for your batch',
-                    '• **🔁 Re-check** — refresh the result',
+                    '• **🔁 Re-check** — force fetch latest data',
                 ].join('\n'),
             },
             {
@@ -33,41 +23,26 @@ export async function handleHelp(interaction: ChatInputCommandInteraction) {
                 ].join('\n'),
             },
             {
-                name: '⚙️ Server Admin',
+                name: '⚙️ Server Admin (Mentors)',
                 value: [
-                    '`/setup` — Configure welcome channel & daily reminders',
                     '`/export-report` — Download a CSV of student data',
                     '`/refresh` — Force refresh today\'s scrape',
                 ].join('\n'),
             },
             {
-                name: '🟣 SmartInterviews Token',
-                value: [
-                    '**1.** Login to SmartInterviews hive',
-                    '**2.** Press **F12** → **Network** tab',
-                    '**3.** Refresh (**F5**) → search "**populateProfile**"',
-                    '**4.** Copy value of "**authorization**" (starts with `ey...`)',
-                    '**5.** Run `/add-profile` and paste it!',
-                ].join('\n'),
-            },
-            {
-                name: '🌐 Web Dashboard',
-                value: [
-                    'Visit **[codesync-hub.vercel.app](https://codesync-hub.vercel.app/)**',
-                    'Log in with Discord to manage your profiles and view the Global Leaderboard!',
-                ].join('\n'),
-            },
-            {
-                name: '💡 Tips',
-                value: [
-                    '• Times are in **IST** (India Standard Time)',
-                    '• Setup is linked to your Discord ID — use it in any server!',
-                    '• Links are wrapped in `<>` to keep the chat clean (no embeds)',
-                ].join('\n'),
-            },
+                name: '💡 How to Setup & Configure',
+                value: 'All profile management (Adding accounts, updating tokens) and Admin Server Configuration has moved to the **Web Dashboard** for enhanced security and usability.'
+            }
         )
-        .setFooter({ text: 'CodeSync • Industrial Standard Tracker' })
+        .setFooter({ text: 'CodeSync • High Performance Tracking' })
         .setTimestamp();
 
-    await interaction.reply({ embeds: [embed] });
+    const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
+        new ButtonBuilder()
+            .setLabel('Go to Dashboard')
+            .setStyle(ButtonStyle.Link)
+            .setURL('https://codesync-hub.vercel.app/dashboard')
+    );
+
+    await interaction.reply({ embeds: [embed], components: [row] });
 }

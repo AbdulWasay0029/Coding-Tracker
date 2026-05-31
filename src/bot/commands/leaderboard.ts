@@ -53,10 +53,10 @@ export async function handleLeaderboard(interaction: ChatInputCommandInteraction
         });
 
         const embed = new EmbedBuilder()
-            .setTitle(`🏆 Server Leaderboard (This Week)`)
+            .setTitle(`🏆 Global Leaderboard (This Week)`)
             .setDescription(description)
-            .setColor(0xFFD700)
-            .setFooter({ text: 'Keep grinding to climb the ranks! 💻🔥' });
+            .setColor(0x39FF14) // CodeSync Toxic Green
+            .setFooter({ text: 'CodeSync • View full ranks on the Web Dashboard' });
 
         await interaction.editReply({ embeds: [embed] });
 

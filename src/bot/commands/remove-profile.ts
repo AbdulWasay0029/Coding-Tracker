@@ -1,25 +1,17 @@
-import { ChatInputCommandInteraction } from 'discord.js';
-import { prisma } from '../../core/prisma';
+import { ChatInputCommandInteraction, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 
 export async function handleRemoveProfile(interaction: ChatInputCommandInteraction) {
-    const platform = interaction.options.getString('platform', true);
+    const embed = new EmbedBuilder()
+        .setTitle('🔗 Profile Management Moved')
+        .setDescription('We have completely upgraded the CodeSync Platform! You can now securely manage your coding profiles directly from your Web Dashboard.')
+        .setColor(0x00F0FF);
 
-    const deleted = await prisma.userProfile.deleteMany({
-        where: {
-            discordUserId: interaction.user.id,
-            platform,
-        },
-    });
+    const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
+        new ButtonBuilder()
+            .setLabel('Go to Dashboard')
+            .setStyle(ButtonStyle.Link)
+            .setURL('https://codesync-hub.vercel.app/dashboard')
+    );
 
-    if (deleted.count === 0) {
-        await interaction.reply({
-            content: `❌ No profile found for **${platform}**`,
-            ephemeral: true,
-        });
-    } else {
-        await interaction.reply({
-            content: `🗑️ Removed all **${platform}** profiles for you.`,
-            ephemeral: true,
-        });
-    }
+    await interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
 }

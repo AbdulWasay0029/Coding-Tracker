@@ -68,12 +68,11 @@ async function runAndReply(
     if (result.errors.includes('no_profiles')) {
         const welcomeEmbed = new EmbedBuilder()
             .setTitle('👋 Welcome to CodeSync!')
-            .setDescription('I checked for your solved problems, but it looks like you haven\'t added any coding profiles yet.')
+            .setDescription('I checked for your solved problems, but it looks like you haven\'t connected any coding profiles yet.')
             .addFields(
-                { name: 'How to start', value: 'Use **/add-profile** to register your accounts (LeetCode, Codeforces, etc.).' },
-                { name: 'Need help?', value: 'Use **/help** for a full guide on getting your tokens/usernames.' }
+                { name: 'How to start', value: 'Please log into the [CodeSync Dashboard](https://codesync-hub.vercel.app/dashboard) to securely link your accounts.' }
             )
-            .setColor(0x5865F2);
+            .setColor(0x00F0FF);
 
         await reply({ embeds: [welcomeEmbed], components: [] });
         return;
@@ -84,41 +83,43 @@ async function runAndReply(
 
     if (!hasLinks) {
         const isToday = dateStr === new Date(Date.now() + 5.5 * 3600000).toISOString().split('T')[0];
-        let emptyContent = `📅 **${dateStr}** — No problems solved ${isToday ? 'yet today' : 'on this date'}. Keep grinding!`;
+        
+        const emptyEmbed = new EmbedBuilder()
+            .setTitle(`📅 ${dateStr} Report`)
+            .setDescription(`No problems solved ${isToday ? 'yet today' : 'on this date'}. Keep grinding!`)
+            .setColor(0x00F0FF); // CodeSync Cyan
+
         if (result.errors && result.errors.length > 0) {
-            emptyContent += `\n\n-# ⚠️ Errors: ${result.errors.map((e: string) => e).join(', ')} (Tokens expire! Run /add-profile to refresh)`;
+            emptyEmbed.addFields({ name: '⚠️ Sync Warnings', value: `${result.errors.join(', ')}\n*Tokens may have expired. Reconnect on the web dashboard.*` });
         }
-        await reply({
-            content: emptyContent,
-            components: [row],
-        });
+
+        await reply({ embeds: [emptyEmbed], components: [row] });
         return;
     }
 
-    // Format grouped links
-    let content = `📅 **${dateStr}** — ${result.links.length} problem(s) solved:\n\n`;
+    // Format grouped links for Embed
+    const embed = new EmbedBuilder()
+        .setTitle(`📅 ${dateStr} Report`)
+        .setDescription(`**${result.links.length}** problem(s) solved!`)
+        .setColor(0x39FF14); // CodeSync Toxic Green
 
     for (const [platform, urls] of Object.entries(result.groupedLinks)) {
         const name = PLATFORM_NAMES[platform] || platform;
         const emoji = PLATFORM_EMOJI[platform] || '⚪';
-        content += `${emoji} **${name}** (${urls.length})\n`;
-        for (const url of urls) {
-            content += `<${url}>\n`; // Angle brackets suppress embeds
-        }
-        content += '\n';
+        
+        const linkList = (urls as string[]).map(url => `• [View Problem](${url})`).join('\n');
+        
+        embed.addFields({
+            name: `${emoji} ${name} (${(urls as string[]).length})`,
+            value: linkList
+        });
     }
 
     if (result.errors && result.errors.length > 0) {
-        content += `\n-# ⚠️ Errors: ${result.errors.map(e => e).join(', ')} (Tokens expire! Run /add-profile to refresh)\n`;
+        embed.addFields({ name: '⚠️ Sync Warnings', value: `${result.errors.join(', ')}\n*Tokens may have expired. Reconnect on the web dashboard.*` });
     }
 
-    // Handle Discord's 2000 char limit
-    if (content.length <= 2000) {
-        await reply({ content, components: [row] });
-    } else {
-        // Simple fallback if it expires char limit (unlikely with just links but possible)
-        await reply({ content: `📅 **${dateStr}** — ${result.links.length} links (too many to show in one message, use "Get Copyable List")`, components: [row] });
-    }
+    await reply({ embeds: [embed], components: [row] });
 }
 
 // ─── /check command ───────────────────────────────────────────────────────────
@@ -163,20 +164,26 @@ export async function handleCopyLinksButton(interaction: ButtonInteraction) {
 
     await interaction.deferReply({ ephemeral: true });
 
-    // Extract links straight from the embed/message to avoid re-scraping -> O(1) Local Cache Trick
-    const messageContent = interaction.message.content;
-    const regex = /<(https?:\/\/[^\s>]+)>/g;
+    // Since we now use Embeds, we need to extract from embed fields
+    const embeds = interaction.message.embeds;
+    if (!embeds || embeds.length === 0) {
+        return interaction.editReply('No links found in the original message to copy.');
+    }
+
     const links: string[] = [];
-    let match;
-    while ((match = regex.exec(messageContent)) !== null) {
-        links.push(match[1]);
+    const regex = /\]\((https?:\/\/[^\s\)]+)\)/g; // Extract URL from markdown link `[View Problem](URL)`
+    
+    for (const field of embeds[0].fields) {
+        let match;
+        while ((match = regex.exec(field.value)) !== null) {
+            links.push(match[1]);
+        }
     }
 
     if (links.length === 0) {
         return interaction.editReply('No links found in the original message to copy.');
     }
 
-    // Provide links in a clean block format
     const block = links.join('\n');
     await interaction.editReply({
         content: `Here are your links for today. Copy-paste them into your batch channel:\n\n\`\`\`\n${block}\n\`\`\``

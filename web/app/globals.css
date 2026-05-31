@@ -1,119 +1,73 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #0B0E14; /* Deep Space Black */
-  --color-surface: #111620; /* Slightly lighter for cards */
-  --color-border: #1E2532; /* Flat border color */
-  --color-primary: #00F0FF; /* Neon Cyan */
-  --color-secondary: #39FF14; /* Toxic Green */
-  --color-success: #39FF14;
-  --color-warning: #FFD700;
-  --color-danger: #FF3366;
+  --color-background: #0B0B0E;
+  --color-surface: #111115;
+  --color-border: #1E1E24;
+  --color-primary: #EDEDED;
+  --color-secondary: #A0A0A0;
   
-  --color-text-primary: #FFFFFF;
-  --color-text-secondary: #8B949E;
-  
-  /* Glowing effects for hover states */
-  --color-glow-cyan: rgba(0, 240, 255, 0.5);
-  --color-glow-green: rgba(57, 255, 20, 0.5);
+  --color-text-primary: #EDEDED;
+  --color-text-secondary: #A0A0A0;
+  --color-text-tertiary: #707070;
 
-  /* Animation Easings */
-  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --color-success: #2EAA5F;
+  --color-warning: #F5A623;
+  --color-danger: #E03131;
 }
 
 @layer base {
   :root {
-    --background: #0B0E14;
-    --foreground: #FFFFFF;
+    --background: #0B0B0E;
+    --foreground: #EDEDED;
   }
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: 'Inter', Arial, Helvetica, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom scrollbar for classic cyber feel */
+/* Stark, minimal scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0B0E14;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1E2532;
-  border-radius: 5px;
+  background: #1E1E24;
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #00F0FF;
+  background: #2D2D35;
 }
 
-/* Typography utilities */
-.text-gradient-cyber {
-  background: linear-gradient(90deg, #00F0FF 0%, #39FF14 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.custom-scrollbar::-webkit-scrollbar {
+  height: 6px;
 }
 
-/* Base utility classes for flat, classic UI */
+/* Clean UI utility classes */
 .classic-card {
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 0.5rem;
-  /* NO box-shadows/glassmorphism */
+  border-radius: 6px;
 }
 
-/* Interactive physical press response */
 .btn-interactive {
-  transition: transform 150ms var(--ease-out), border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease, color 150ms ease;
+  transition: all 100ms ease;
 }
 .btn-interactive:active {
-  transform: scale(0.97);
+  transform: scale(0.98);
 }
 
-/* Stagger keyframes */
-@keyframes revealUp {
-  from {
-    opacity: 0;
-    transform: translateY(12px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-.animate-reveal {
-  opacity: 0;
-  animation: revealUp 400ms var(--ease-out) forwards;
-}
-
-/* Waterfall delay classes */
-.stagger-1 { animation-delay: 40ms; }
-.stagger-2 { animation-delay: 80ms; }
-.stagger-3 { animation-delay: 120ms; }
-.stagger-4 { animation-delay: 160ms; }
-.stagger-5 { animation-delay: 200ms; }
-.stagger-6 { animation-delay: 240ms; }
-
-/* Leaderboard row waterfall reveal */
 .leaderboard-row {
-  opacity: 0;
-  animation: revealUp 350ms var(--ease-out) forwards;
+  transition: background-color 150ms ease;
 }
-.leaderboard-row:nth-child(1) { animation-delay: 50ms; }
-.leaderboard-row:nth-child(2) { animation-delay: 90ms; }
-.leaderboard-row:nth-child(3) { animation-delay: 130ms; }
-.leaderboard-row:nth-child(4) { animation-delay: 170ms; }
-.leaderboard-row:nth-child(5) { animation-delay: 210ms; }
-.leaderboard-row:nth-child(6) { animation-delay: 250ms; }
-.leaderboard-row:nth-child(7) { animation-delay: 290ms; }
-.leaderboard-row:nth-child(8) { animation-delay: 330ms; }
-.leaderboard-row:nth-child(9) { animation-delay: 370ms; }
-.leaderboard-row:nth-child(10) { animation-delay: 410ms; }
+.leaderboard-row:hover {
+  background-color: var(--color-surface);
+}

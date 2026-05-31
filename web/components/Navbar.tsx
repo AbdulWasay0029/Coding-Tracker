@@ -28,7 +28,7 @@ export function Navbar() {
 
     return (
         <nav className="border-b border-border bg-background/95 backdrop-blur-sm sticky top-0 z-50">
-            <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-14">
                     <div className="flex items-center gap-8">
                         <Link href="/" className="flex flex-shrink-0 items-center gap-2.5 btn-interactive group">
@@ -69,6 +69,7 @@ export function Navbar() {
                                             {session.user?.name?.charAt(0)}
                                         </div>
                                     )}
+                                    <span className="text-sm font-medium text-text-primary ml-1">{session.user?.name}</span>
                                 </div>
                                 <div className="h-4 w-px bg-border"></div>
                                 <button

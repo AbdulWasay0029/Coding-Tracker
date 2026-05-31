@@ -103,6 +103,9 @@ export async function PUT(req: Request) {
 
         return NextResponse.json(updated, { status: 200 });
     } catch (error: any) {
+        if (error.code === 'P2002') {
+            return NextResponse.json({ error: 'Profile already exists for this platform and username.' }, { status: 400 });
+        }
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }

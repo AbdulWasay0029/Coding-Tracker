@@ -1,25 +1,25 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #0B0B0E;
-  --color-surface: #111115;
-  --color-border: #1E1E24;
-  --color-primary: #EDEDED;
-  --color-secondary: #A0A0A0;
+  --color-background: #0B0E14; /* Deep Space Black */
+  --color-surface: #111620; /* Slightly lighter for cards */
+  --color-border: #1E2532; /* Flat border color */
+  --color-primary: #00F0FF; /* Neon Cyan */
+  --color-secondary: #39FF14; /* Toxic Green */
   
-  --color-text-primary: #EDEDED;
-  --color-text-secondary: #A0A0A0;
-  --color-text-tertiary: #707070;
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #8B949E;
+  --color-text-tertiary: #6E7681;
 
-  --color-success: #2EAA5F;
-  --color-warning: #F5A623;
-  --color-danger: #E03131;
+  --color-success: #39FF14;
+  --color-warning: #FFD700;
+  --color-danger: #FF3366;
 }
 
 @layer base {
   :root {
-    --background: #0B0B0E;
-    --foreground: #EDEDED;
+    --background: #0B0E14;
+    --foreground: #FFFFFF;
   }
 }
 

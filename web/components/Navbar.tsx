@@ -32,11 +32,11 @@ export function Navbar() {
                 <div className="flex items-center justify-between h-14">
                     <div className="flex items-center gap-8">
                         <Link href="/" className="flex flex-shrink-0 items-center gap-2.5 btn-interactive group">
-                            <div className="p-1 rounded bg-surface border border-border group-hover:border-text-secondary transition-colors">
-                                <Command className="w-4 h-4 text-text-primary" />
+                            <div className="p-1 rounded bg-surface border border-border group-hover:border-primary transition-colors">
+                                <Command className="w-4 h-4 text-primary" />
                             </div>
-                            <span className="font-semibold text-sm tracking-tight text-text-primary transition-colors">
-                                CodeSync
+                            <span className="font-semibold text-lg tracking-tight text-white transition-colors">
+                                Code<span className="text-primary">Sync</span>
                             </span>
                         </Link>
                         

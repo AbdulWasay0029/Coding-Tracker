@@ -97,20 +97,24 @@ async function runAndReply(
         return;
     }
 
+    // Format dateStr from YYYY-MM-DD to DD/MM/YYYY
+    const [yyyy, mm, dd] = dateStr.split('-');
+    const displayDate = `${dd}/${mm}/${yyyy}`;
+
     // Format grouped links for Embed
     const embed = new EmbedBuilder()
-        .setTitle(`📅 ${dateStr} Report`)
+        .setTitle(`📅 ${displayDate} Report`)
         .setDescription(`**${result.links.length}** problem(s) solved!`)
         .setColor(0x39FF14); // CodeSync Toxic Green
 
-    for (const [platform, urls] of Object.entries(result.groupedLinks)) {
+    for (const [platform, items] of Object.entries(result.groupedLinks)) {
         const name = PLATFORM_NAMES[platform] || platform;
         const emoji = PLATFORM_EMOJI[platform] || '⚪';
         
-        const linkList = (urls as string[]).map(url => `• [View Problem](${url})`).join('\n');
+        const linkList = items.map(item => `• [${item.title}](${item.url})`).join('\n');
         
         embed.addFields({
-            name: `${emoji} ${name} (${(urls as string[]).length})`,
+            name: `${emoji} ${name} (${items.length})`,
             value: linkList
         });
     }

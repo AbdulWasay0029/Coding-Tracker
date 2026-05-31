@@ -16,7 +16,7 @@ import { withCache } from '../core/cache';
 
 export interface TrackerResult {
     links: string[]; // Flat list for general logic
-    groupedLinks: Record<string, string[]>; // platform -> urls
+    groupedLinks: Record<string, { title: string, url: string }[]>; // platform -> {title, url}
     errors: string[];
 }
 
@@ -26,7 +26,7 @@ export async function runTrackerForUser(
     endTimestamp: number
 ): Promise<TrackerResult> {
     const flatLinks: string[] = [];
-    const groupedLinks: Record<string, string[]> = {};
+    const groupedLinks: Record<string, { title: string, url: string }[]> = {};
     const errors: string[] = [];
 
     const profiles = await prisma.userProfile.findMany({ where: { discordUserId } });
@@ -76,6 +76,7 @@ export async function runTrackerForUser(
 
         const platformKey = profile.platform.toUpperCase();
         const links: string[] = [];
+        const platformGroup: { title: string, url: string }[] = [];
         const seen = new Set<string>();
 
         for (const sub of submissions) {
@@ -113,11 +114,12 @@ export async function runTrackerForUser(
             );
 
             links.push(sub.url);
+            platformGroup.push({ title: sub.title, url: sub.url });
         }
 
         if (links.length > 0) {
             flatLinks.push(...links);
-            groupedLinks[platformKey] = (groupedLinks[platformKey] || []).concat(links);
+            groupedLinks[platformKey] = (groupedLinks[platformKey] || []).concat(platformGroup);
         }
     }
 

@@ -12,6 +12,10 @@ export default async function AdminPage() {
         redirect('/');
     }
 
+    if (session.error === 'RefreshAccessTokenError') {
+        redirect('/api/auth/signin');
+    }
+
     // Fetch user's guilds from Discord
     const res = await fetch('https://discord.com/api/users/@me/guilds', {
         headers: {

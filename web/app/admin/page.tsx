@@ -23,7 +23,9 @@ export default async function AdminPage() {
 
     if (!res.ok) {
         // Token might be expired, or Discord API issue
-        redirect('/');
+        const errText = await res.text();
+        console.error(`[Admin] Failed to fetch guilds from Discord: ${res.status} ${res.statusText}`, errText);
+        redirect('/dashboard');
     }
 
     const allGuilds = await res.json();

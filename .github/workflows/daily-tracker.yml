@@ -26,7 +26,7 @@ jobs:
         run: npx prisma generate
 
       - name: Run daily tracker
-        run: npx tsx scripts/github-tracker.ts
+        run: npx tsx src/scrapers/github-tracker.ts
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}

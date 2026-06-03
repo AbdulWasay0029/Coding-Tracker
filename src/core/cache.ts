@@ -40,7 +40,7 @@ export async function withCache<T>(
         if (entry && entry.expiresAt <= Date.now() + 100) {
             memoryCache.delete(key);
         }
-    }, (ttlSeconds * 1000) + 1000);
+    }, (ttlSeconds * 1000) + 1000).unref();
 
     return freshData;
 }

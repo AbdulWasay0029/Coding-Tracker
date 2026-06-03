@@ -87,7 +87,7 @@ async function main() {
                 const name = platform === 'SMARTINTERVIEWS' ? 'SmartInterviews' :
                              platform.charAt(0) + platform.slice(1).toLowerCase();
 
-                userLines.push(`  ${emoji} **${name}**:\n    ${urls.map(l => `- [${l.title}](<${l.url}>)`).join('\n    ')}`);
+                userLines.push(`  ${emoji} **${name}**:\n    ${urls.map(l => `<${l.url}>`).join('\n    ')}`);
             }
 
             lines.push(`👤 <@${discordUserId}>`);

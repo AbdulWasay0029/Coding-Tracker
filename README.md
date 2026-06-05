@@ -72,10 +72,10 @@ A high-performance, 24/7 autonomous bot powered by `discord.js`.
 | Command | Description |
 | --- | --- |
 | `/setup` | Server administrators configure tracking and announcement channels. |
-| `/add-profile` | Map your Discord account to your coding platform usernames. |
-| `/update-profile` | Edit your mapped username or token. |
-| `/remove-profile` | Unlink an incorrect platform mapping. |
-| `/list-profiles` | Confirm which platforms are currently mapped to your account. |
+| `/add-profile` | Get a secure link to the Web Dashboard to link new accounts. |
+| `/update-profile` | Get a secure link to the Web Dashboard to edit accounts. |
+| `/remove-profile` | Get a secure link to the Web Dashboard to unlink accounts. |
+| `/list-profiles` | Get a secure link to the Web Dashboard to view linked platforms. |
 | `/check [date]` | Generate a personal progress report for today (or a past date). |
 | `/leaderboard` | View the top 10 solvers for this week. |
 | `/export-report` | Download a CSV of student data for this server. |

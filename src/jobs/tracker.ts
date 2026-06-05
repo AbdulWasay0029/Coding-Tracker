@@ -42,20 +42,20 @@ export async function runTrackerForUser(
 
         try {
             if (profile.platform === 'LEETCODE') {
-                submissions = await withCache(`lc-${profile.username}`, 300, () => fetchLeetCodeSubmissions(profile.username, startTimestamp));
+                submissions = await withCache(`lc-${profile.username}-${startTimestamp}`, 300, () => fetchLeetCodeSubmissions(profile.username, startTimestamp));
             } else if (profile.platform === 'CODEFORCES') {
-                submissions = await withCache(`cf-${profile.username}`, 300, () => fetchCodeforcesSubmissions(profile.username, startTimestamp));
+                submissions = await withCache(`cf-${profile.username}-${startTimestamp}`, 300, () => fetchCodeforcesSubmissions(profile.username, startTimestamp));
             } else if (profile.platform === 'CODECHEF') {
-                submissions = await withCache(`cc-${profile.username}`, 300, () => fetchCodeChefSubmissions(profile.username, startTimestamp));
+                submissions = await withCache(`cc-${profile.username}-${startTimestamp}`, 300, () => fetchCodeChefSubmissions(profile.username, startTimestamp));
             } else if (profile.platform === 'SMARTINTERVIEWS') {
                 const decryptedToken = profile.token ? decrypt(profile.token) : undefined;
-                submissions = await withCache(`si-${profile.username}`, 300, () => fetchSmartInterviewsSubmissions(
+                submissions = await withCache(`si-${profile.username}-${startTimestamp}`, 300, () => fetchSmartInterviewsSubmissions(
                     profile.username,
                     decryptedToken,
                     startTimestamp
                 ));
             } else if (profile.platform === 'HACKERRANK') {
-                submissions = await withCache(`hr-${profile.username}`, 300, () => fetchHackerRankSubmissions(profile.username, startTimestamp));
+                submissions = await withCache(`hr-${profile.username}-${startTimestamp}`, 300, () => fetchHackerRankSubmissions(profile.username, startTimestamp));
             }
             return { profile, platformKey, submissions, error: null };
         } catch (err: any) {

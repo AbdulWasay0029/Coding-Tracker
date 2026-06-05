@@ -59,7 +59,7 @@ client.on('interactionCreate', async (interaction: Interaction) => {
                 case 'remove-profile': await handleRemoveProfile(interaction); break;
                 case 'list-profiles': await handleListProfiles(interaction); break;
                 case 'check': 
-                    if (interaction.user.id !== '481554233817300993' && checkLimiter.isRateLimited(interaction.user.id)) {
+                    if (interaction.user.id !== '481554233817300993' && interaction.user.id !== '832267346688737320' && checkLimiter.isRateLimited(interaction.user.id)) {
                         const remaining = Math.ceil(checkLimiter.getRemainingSeconds(interaction.user.id));
                         await interaction.reply({ content: `⏳ You are checking too fast! Please wait **${remaining}s** before scraping profiles again.`, ephemeral: true });
                         break;
@@ -74,7 +74,7 @@ client.on('interactionCreate', async (interaction: Interaction) => {
             }
         } else if (interaction.isButton()) {
             if (interaction.customId.startsWith('recheck:')) {
-                if (interaction.user.id !== '481554233817300993' && checkLimiter.isRateLimited(interaction.user.id)) {
+                if (interaction.user.id !== '481554233817300993' && interaction.user.id !== '832267346688737320' && checkLimiter.isRateLimited(interaction.user.id)) {
                     const remaining = Math.ceil(checkLimiter.getRemainingSeconds(interaction.user.id));
                     await interaction.reply({ content: `⏳ Please wait **${remaining}s** before re-checking. APIs need a break! 🤖`, ephemeral: true });
                     return;

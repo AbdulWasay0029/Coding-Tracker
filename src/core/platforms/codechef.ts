@@ -4,6 +4,8 @@ import { Submission } from './leetcode';
 
 const CC_API = 'https://www.codechef.com/recent/user';
 
+import { codechefLimiter } from '../rate-limiter';
+
 export async function fetchCodeChefSubmissions(username: string, stopBeforeTimestamp?: number): Promise<Submission[]> {
     const submissions: Submission[] = [];
     const MAX_PAGES = stopBeforeTimestamp ? 50 : 5; // Go deeper if we have a target date, otherwise 5 for safety
@@ -12,6 +14,7 @@ export async function fetchCodeChefSubmissions(username: string, stopBeforeTimes
 
     for (let page = 0; page < MAX_PAGES; page++) {
         try {
+            await codechefLimiter.acquire();
             const response = await axios.get(CC_API, {
                 params: {
                     page: page,

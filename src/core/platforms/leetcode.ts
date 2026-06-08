@@ -10,6 +10,8 @@ export interface Submission {
 
 const LEETCODE_API = 'https://leetcode.com/graphql';
 
+import { leetCodeLimiter } from '../rate-limiter';
+
 export async function fetchLeetCodeSubmissions(username: string, stopBeforeTimestamp?: number): Promise<Submission[]> {
     const limit = stopBeforeTimestamp ? 1000 : 20;
     const query = `
@@ -24,6 +26,7 @@ export async function fetchLeetCodeSubmissions(username: string, stopBeforeTimes
   `;
 
     try {
+        await leetCodeLimiter.acquire();
         const response = await axios.post(
             LEETCODE_API,
             {

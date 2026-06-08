@@ -3,6 +3,8 @@ import { Submission } from './leetcode';
 
 const BASE = 'https://www.hackerrank.com';
 
+import { hackerRankLimiter } from '../rate-limiter';
+
 export async function fetchHackerRankSubmissions(username: string, stopBeforeTimestamp?: number): Promise<Submission[]> {
     try {
         const submissions: Submission[] = [];
@@ -16,6 +18,7 @@ export async function fetchHackerRankSubmissions(username: string, stopBeforeTim
         while (offset < maxOffsets * limit) {
             if (hitOlderDate) break;
 
+            await hackerRankLimiter.acquire();
             const { data } = await axios.get(
                 `${BASE}/rest/hackers/${encodeURIComponent(username)}/recent_challenges?limit=${limit}&offset=${offset}`,
                 {

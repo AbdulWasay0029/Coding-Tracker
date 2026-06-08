@@ -50,6 +50,10 @@ client.once('ready', () => {
     // Start background schedulers
     initContestScheduler(client);
     initNightlyScheduler(client);
+    
+    // Start background worker queue for scraping
+    const { startWorker } = require('../jobs/worker');
+    startWorker();
 });
 
 client.on('interactionCreate', async (interaction: Interaction) => {

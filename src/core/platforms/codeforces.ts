@@ -3,9 +3,12 @@ import { Submission } from './leetcode';
 
 const CF_API = 'https://codeforces.com/api/user.status';
 
+import { codeforcesLimiter } from '../rate-limiter';
+
 export async function fetchCodeforcesSubmissions(username: string, stopBeforeTimestamp?: number): Promise<Submission[]> {
     const count = stopBeforeTimestamp ? 2000 : 50;
     try {
+        await codeforcesLimiter.acquire();
         const response = await axios.get(CF_API, {
             params: {
                 handle: username,

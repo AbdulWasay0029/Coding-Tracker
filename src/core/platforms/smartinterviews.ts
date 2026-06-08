@@ -3,6 +3,8 @@ import { Submission } from './leetcode';
 
 const SI_API_GOLDMINE = 'https://hive.smartinterviews.in/api/contest/allUserSubmissions';
 
+import { smartInterviewsLimiter } from '../rate-limiter';
+
 export async function fetchSmartInterviewsSubmissions(username: string, tokenOverride?: string, stopBeforeTimestamp?: number): Promise<Submission[]> {
     try {
         const token = tokenOverride;
@@ -58,6 +60,7 @@ export async function fetchSmartInterviewsSubmissions(username: string, tokenOve
                         contestSlug: contestSlug
                     };
 
+                    await smartInterviewsLimiter.acquire();
                     const { data } = await axios.post(SI_API_GOLDMINE, payload, { headers });
 
                     if (!data || !data.data || !data.data.submissions || data.data.submissions.length === 0) {

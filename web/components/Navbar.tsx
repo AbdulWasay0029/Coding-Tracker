@@ -21,8 +21,10 @@ export function Navbar() {
 
     if (session) {
         navLinks.push(
-            { name: 'Dashboard', href: '/dashboard' },
-            { name: 'Admin', href: '/admin' }
+            { name: 'Profile', href: '/dashboard/profile' },
+            { name: 'Badges', href: '/dashboard/badges' },
+            { name: 'Widgets', href: '/dashboard/widgets' },
+            { name: 'Settings', href: '/dashboard/settings' }
         );
     }
 

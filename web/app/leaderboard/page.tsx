@@ -103,7 +103,7 @@ export default async function LeaderboardPage({ searchParams }: { searchParams: 
     if (session && session.accessToken) {
         const res = await fetch('https://discord.com/api/users/@me/guilds', {
             headers: { Authorization: `Bearer ${session.accessToken}` },
-            next: { revalidate: 60 }
+            cache: 'no-store'
         });
         if (res.ok) {
             const allGuilds = await res.json();

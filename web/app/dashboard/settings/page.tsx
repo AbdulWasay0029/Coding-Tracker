@@ -21,8 +21,7 @@ export default async function AdminPage() {
         headers: {
             Authorization: `Bearer ${session.accessToken}`,
         },
-        // We do not want to cache this heavily in case they gain/lose admin roles
-        next: { revalidate: 60 }
+        cache: 'no-store'
     });
 
     if (!res.ok) {

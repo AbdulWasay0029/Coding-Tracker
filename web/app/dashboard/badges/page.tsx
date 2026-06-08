@@ -2,7 +2,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../../api/auth/[...nextauth]/route';
 import { redirect } from 'next/navigation';
 import { prisma } from '../../../lib/prisma';
-import { Award, Flame, Zap, CheckCircle2, Shield, Moon, Brain, Target } from 'lucide-react';
+import { Award, Flame, Zap, CheckCircle2, Shield, Moon, Brain, Target, Sun, CalendarDays, Code2, Terminal, Swords } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -29,7 +29,11 @@ export default async function BadgesPage() {
     const solvesPerDay: Record<string, number> = {};
     let maxSolvesInOneDay = 0;
     let hasNightOwl = false;
-    let hasSmartInterviews = false;
+    let hasCodeChef = false;
+    let hasEarlyBird = false;
+    let hasWeekendWarrior = false;
+    let hasCodeforces = false;
+    let hasLeetCode = false;
 
     for (const s of solves) {
         // Convert UTC to IST
@@ -42,13 +46,18 @@ export default async function BadgesPage() {
         }
 
         const hour = istDate.getUTCHours();
-        if (hour >= 0 && hour < 4) {
-            hasNightOwl = true;
+        const day = istDate.getUTCDay();
+
+        if (hour >= 0 && hour < 4) hasNightOwl = true;
+        if (hour >= 5 && hour < 9) hasEarlyBird = true;
+
+        if ((day === 0 || day === 6) && solvesPerDay[dateStr] >= 5) {
+            hasWeekendWarrior = true;
         }
 
-        if (s.platform === 'SMARTINTERVIEWS') {
-            hasSmartInterviews = true;
-        }
+        if (s.platform === 'CODECHEF') hasCodeChef = true;
+        if (s.platform === 'CODEFORCES') hasCodeforces = true;
+        if (s.platform === 'LEETCODE') hasLeetCode = true;
     }
 
     // Badges definitions
@@ -72,6 +81,42 @@ export default async function BadgesPage() {
             unlocked: hasNightOwl
         },
         {
+            id: 'early_bird',
+            name: 'Early Bird',
+            description: 'Solve a problem between 5 AM and 9 AM (IST).',
+            icon: <Sun className="w-8 h-8 text-white" />,
+            color: 'from-yellow-400 to-orange-500',
+            glow: 'shadow-[0_0_20px_rgba(250,204,21,0.5)]',
+            unlocked: hasEarlyBird
+        },
+        {
+            id: 'weekend_warrior',
+            name: 'Weekend Warrior',
+            description: 'Solve 5 or more problems on a Saturday or Sunday.',
+            icon: <CalendarDays className="w-8 h-8 text-white" />,
+            color: 'from-blue-600 to-indigo-800',
+            glow: 'shadow-[0_0_20px_rgba(37,99,235,0.5)]',
+            unlocked: hasWeekendWarrior
+        },
+        {
+            id: 'leetcode_legend',
+            name: 'LeetCode Legend',
+            description: 'Connect and solve a problem on LeetCode.',
+            icon: <Code2 className="w-8 h-8 text-white" />,
+            color: 'from-yellow-500 to-yellow-600',
+            glow: 'shadow-[0_0_20px_rgba(234,179,8,0.5)]',
+            unlocked: hasLeetCode
+        },
+        {
+            id: 'codeforces_specialist',
+            name: 'CF Specialist',
+            description: 'Connect and solve a problem on Codeforces.',
+            icon: <Terminal className="w-8 h-8 text-white" />,
+            color: 'from-blue-500 to-red-500',
+            glow: 'shadow-[0_0_20px_rgba(59,130,246,0.5)]',
+            unlocked: hasCodeforces
+        },
+        {
             id: 'daily_grind',
             name: 'The Daily Grind',
             description: 'Solve 10 or more problems in a single day.',
@@ -81,13 +126,13 @@ export default async function BadgesPage() {
             unlocked: maxSolvesInOneDay >= 10
         },
         {
-            id: 'smart_cookie',
-            name: 'Smart Cookie',
-            description: 'Connect and solve a problem on SmartInterviews.',
+            id: 'master_chef',
+            name: 'Master Chef',
+            description: 'Connect and solve a problem on CodeChef.',
             icon: <Brain className="w-8 h-8 text-white" />,
-            color: 'from-pink-500 to-rose-400',
-            glow: 'shadow-[0_0_20px_rgba(236,72,153,0.5)]',
-            unlocked: hasSmartInterviews
+            color: 'from-amber-600 to-orange-800',
+            glow: 'shadow-[0_0_20px_rgba(217,119,6,0.5)]',
+            unlocked: hasCodeChef
         },
         {
             id: 'century',

@@ -89,7 +89,13 @@ export default async function LeaderboardPage({ searchParams }: { searchParams: 
                 if (membersRes.ok) {
                     const members = await membersRes.json();
                     memberIds = members.map((m: any) => m.user.id);
+                } else {
+                    const errText = await membersRes.text();
+                    console.error('[Leaderboard] Failed to fetch members. Status:', membersRes.status, errText);
                 }
+            } else {
+                const errText = await botRes.text();
+                console.error('[Leaderboard] Failed to fetch guild. Status:', botRes.status, errText);
             }
         } catch (e) {
             console.error('Failed to fetch guild members', e);

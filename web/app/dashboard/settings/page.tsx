@@ -36,7 +36,7 @@ export default async function AdminPage() {
 
     // Filter for guilds where the user has ADMINISTRATOR permissions
     // Administrator permission flag is 0x8
-    const adminGuilds = allGuilds.filter((guild: any) => {
+    const adminGuildsRaw = allGuilds.filter((guild: any) => {
         try {
             const perms = BigInt(guild.permissions);
             const adminFlag = BigInt(8);
@@ -45,6 +45,12 @@ export default async function AdminPage() {
             return false;
         }
     });
+
+    const { prisma } = await import('../../../lib/prisma');
+    const configuredGuilds = await prisma.guildConfig.findMany({ select: { guildId: true } });
+    const botGuildIds = new Set(configuredGuilds.map(g => g.guildId));
+
+    const adminGuilds = adminGuildsRaw.filter((guild: any) => botGuildIds.has(guild.id));
 
     return (
         <main className="max-w-6xl mx-auto px-4 py-12">

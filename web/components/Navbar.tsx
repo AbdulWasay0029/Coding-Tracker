@@ -21,7 +21,7 @@ export function Navbar() {
 
     if (session) {
         navLinks.push(
-            { name: 'Profile', href: '/dashboard/profile' },
+            { name: 'Profile', href: '/dashboard' },
             { name: 'Badges', href: '/dashboard/badges' },
             { name: 'Widgets', href: '/dashboard/widgets' },
             { name: 'Settings', href: '/dashboard/settings' }

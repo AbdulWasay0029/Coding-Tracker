@@ -12,9 +12,9 @@ export default async function WidgetsPage() {
     }
 
     const userId = session.user.id;
-    const widgetUrl = `https://codesync.up.railway.app/api/widgets/${userId}.svg`; // Assuming a hypothetical deployment URL for the SVG
+    const widgetUrl = `https://codesync.vercel.app/api/widgets/${userId}.svg`;
     
-    const markdownEmbed = `[![CodeSync Stats](${widgetUrl})](https://codesync.up.railway.app/dashboard/profile)`;
+    const markdownEmbed = `[![CodeSync Stats](${widgetUrl})](https://codesync.vercel.app/dashboard/profile)`;
 
     return (
         <main className="max-w-4xl mx-auto px-4 py-16">

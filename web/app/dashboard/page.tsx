@@ -5,6 +5,24 @@ import { prisma } from '../../lib/prisma';
 import Image from 'next/image';
 import { ProfileManager } from './ProfileManager';
 import { ContributionGraph } from '../../components/ContributionGraph';
+import { Trophy, Zap } from 'lucide-react';
+
+async function getDiscordUser(userId: string) {
+    try {
+        const res = await fetch(`https://discord.com/api/v10/users/${userId}`, {
+            headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` },
+            next: { revalidate: 3600 }
+        });
+        if (!res.ok) return { username: `User ${userId}`, avatar: null };
+        const data = await res.json();
+        return { 
+            username: data.global_name || data.username, 
+            avatar: data.avatar ? `https://cdn.discordapp.com/avatars/${userId}/${data.avatar}.png` : null 
+        };
+    } catch {
+        return { username: `User ${userId}`, avatar: null };
+    }
+}
 
 export default async function DashboardPage() {
     const session = await getServerSession(authOptions);
@@ -29,29 +47,39 @@ export default async function DashboardPage() {
         where: { discordUserId: session.user.id }
     });
 
+    const discordUser = await getDiscordUser(session.user.id);
+
     return (
         <main className="max-w-[1000px] mx-auto px-6 py-12">
-            {/* Minimalist Header */}
-            <header className="flex flex-col md:flex-row items-start md:items-center justify-between mb-10 pb-6 border-b border-border">
-                <div className="flex items-center gap-4">
-                    {session.user.image ? (
-                        <Image src={session.user.image} alt="Avatar" width={48} height={48} className="rounded bg-surface border border-border" />
+            {/* Header section */}
+            <div className="flex flex-col md:flex-row items-center gap-8 mb-16 animate-reveal">
+                <div className="relative">
+                    <div className="absolute inset-0 bg-primary rounded-full blur-2xl opacity-20 animate-pulse" />
+                    {discordUser.avatar ? (
+                        <Image src={discordUser.avatar} alt="Avatar" width={120} height={120} className="rounded-full relative z-10 border-4 border-surface shadow-[0_0_30px_rgba(var(--primary),0.3)]" />
                     ) : (
-                        <div className="w-12 h-12 rounded bg-surface border border-border flex items-center justify-center text-sm font-medium text-text-secondary">
-                            {session.user.name?.charAt(0)}
+                        <div className="w-[120px] h-[120px] rounded-full relative z-10 border-4 border-surface shadow-[0_0_30px_rgba(var(--primary),0.3)] bg-background flex items-center justify-center text-4xl font-bold text-text-secondary">
+                            {discordUser.username.charAt(0)}
                         </div>
                     )}
-                    <div>
-                        <h1 className="text-2xl font-semibold text-text-primary tracking-tight">{session.user.name}</h1>
-                        <p className="text-text-secondary text-sm mt-0.5 font-mono">UID_{session.user.id}</p>
+                </div>
+                <div>
+                    <h1 className="text-4xl font-black text-white tracking-tight mb-2">{discordUser.username}</h1>
+                    <p className="text-text-secondary text-lg">Unified Developer Identity</p>
+                    <div className="flex gap-4 mt-4">
+                        <div className="bg-surface border border-border px-4 py-2 rounded-lg flex items-center gap-2">
+                            <Trophy className="w-4 h-4 text-warning" />
+                            <span className="font-bold text-white">{history.length}</span>
+                            <span className="text-xs text-text-secondary uppercase tracking-wider">Total Solves</span>
+                        </div>
+                        <div className="bg-surface border border-border px-4 py-2 rounded-lg flex items-center gap-2">
+                            <Zap className="w-4 h-4 text-primary" />
+                            <span className="font-bold text-white">Top 5%</span>
+                            <span className="text-xs text-text-secondary uppercase tracking-wider">Global Rank</span>
+                        </div>
                     </div>
                 </div>
-
-                <div className="mt-4 md:mt-0 flex flex-col md:items-end">
-                    <span className="text-xs font-medium text-text-tertiary uppercase tracking-widest mb-1">Total Solved</span>
-                    <span className="text-2xl font-mono text-text-primary">{history.length}</span>
-                </div>
-            </header>
+            </div>
 
             {/* Heatmap (Self-contained card, NO WRAPPER) */}
             <div className="mb-10 w-full flex justify-center">

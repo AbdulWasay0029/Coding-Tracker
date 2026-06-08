@@ -17,9 +17,9 @@ export function LeaderboardHeader({ guilds, currentGuildId, guildName, isLoggedI
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const val = e.target.value;
         if (val === 'global') {
-            router.push('/leaderboard');
+            window.location.href = '/leaderboard';
         } else {
-            router.push(`/leaderboard?guildId=${val}`);
+            window.location.href = `/leaderboard?guildId=${val}`;
         }
     };
 

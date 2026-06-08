@@ -58,23 +58,24 @@ export async function getGuildConfig(guildId: string) {
     });
 }
 
-export async function updateGuildConfig(guildId: string, data: { welcomeChannelId?: string | null, contestChannelId?: string | null, contestRoleId?: string | null }) {
+export async function updateGuildConfig(guildId: string, data: { welcomeChannelId?: string | null, contestChannelId?: string | null, contestRoleId?: string | null, reminderChannelId?: string | null, reminderTime?: string | null }) {
     const session = await getServerSession(authOptions);
     if (!session) throw new Error('Unauthorized');
 
-    // Security: We should verify the user is an admin of this guild, but since they can only see guilds they are an admin of in the UI, we'll keep it simple for now. 
-    // In a strict prod environment, we would re-verify the token here.
-    
     await prisma.guildConfig.upsert({
         where: { guildId },
         update: {
             contestChannelId: data.contestChannelId || null,
             contestRoleId: data.contestRoleId || null,
+            reminderChannelId: data.reminderChannelId || null,
+            reminderTime: data.reminderTime || null,
         },
         create: {
             guildId,
             contestChannelId: data.contestChannelId || null,
             contestRoleId: data.contestRoleId || null,
+            reminderChannelId: data.reminderChannelId || null,
+            reminderTime: data.reminderTime || null,
         }
     });
 

@@ -8,7 +8,7 @@ export function AdminClient({ guilds }: { guilds: any[] }) {
     const [selectedGuild, setSelectedGuild] = useState<string | null>(null);
     const [channels, setChannels] = useState<{id: string, name: string}[]>([]);
     const [roles, setRoles] = useState<{id: string, name: string}[]>([]);
-    const [config, setConfig] = useState<{contestChannelId: string | null, contestRoleId: string | null}>({ contestChannelId: null, contestRoleId: null });
+    const [config, setConfig] = useState<{contestChannelId: string | null, contestRoleId: string | null, reminderChannelId: string | null, reminderTime: string | null}>({ contestChannelId: null, contestRoleId: null, reminderChannelId: null, reminderTime: null });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
@@ -34,10 +34,12 @@ export function AdminClient({ guilds }: { guilds: any[] }) {
             if (fetchedConfig) {
                 setConfig({
                     contestChannelId: fetchedConfig.contestChannelId,
-                    contestRoleId: fetchedConfig.contestRoleId
+                    contestRoleId: fetchedConfig.contestRoleId,
+                    reminderChannelId: fetchedConfig.reminderChannelId,
+                    reminderTime: fetchedConfig.reminderTime
                 });
             } else {
-                setConfig({ contestChannelId: '', contestRoleId: '' });
+                setConfig({ contestChannelId: '', contestRoleId: '', reminderChannelId: '', reminderTime: '' });
             }
             setLoading(false);
         });
@@ -56,6 +58,19 @@ export function AdminClient({ guilds }: { guilds: any[] }) {
             setError(err.message);
         }
         setLoading(false);
+    };
+
+    // Helper to generate 15-minute intervals for time dropdown
+    const generateTimeOptions = () => {
+        const options = [];
+        for (let h = 0; h < 24; h++) {
+            for (let m = 0; m < 60; m += 15) {
+                const hh = h.toString().padStart(2, '0');
+                const mm = m.toString().padStart(2, '0');
+                options.push(`${hh}:${mm}`);
+            }
+        }
+        return options;
     };
 
     return (
@@ -105,40 +120,88 @@ export function AdminClient({ guilds }: { guilds: any[] }) {
 
                         {!error && channels.length > 0 && (
                             <div className="space-y-6">
-                                <div>
-                                    <label className="block text-sm font-bold text-text-secondary mb-2 uppercase tracking-wider mt-6">
-                                        Contest Alerts Channel
-                                    </label>
-                                    <p className="text-sm text-text-secondary mb-3">Where the bot will send automated 10-minute warnings before LeetCode/Codeforces contests begin.</p>
-                                    <select 
-                                        className="w-full bg-background border border-border p-3 rounded-lg text-text-primary focus:ring-2 focus:ring-primary outline-none transition-all"
-                                        value={config.contestChannelId || ''}
-                                        onChange={e => setConfig(prev => ({ ...prev, contestChannelId: e.target.value }))}
-                                        disabled={loading}
-                                    >
-                                        <option value="">-- None (Disable Alerts) --</option>
-                                        {channels.map(c => (
-                                            <option key={c.id} value={c.id}># {c.name}</option>
-                                        ))}
-                                    </select>
+                                <div className="p-4 rounded-lg border border-border bg-background">
+                                    <h4 className="font-bold text-text-primary mb-2 text-md flex items-center gap-2">
+                                        🌙 Nightly Reports (Automated)
+                                    </h4>
+                                    <p className="text-sm text-text-secondary mb-4">CodeSync will automatically compile a daily report of every problem solved by everyone in the server and post it at your specified time.</p>
+                                    
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="block text-xs font-bold text-text-secondary mb-2 uppercase tracking-wider">
+                                                Report Channel
+                                            </label>
+                                            <select 
+                                                className="w-full bg-surface border border-border p-3 rounded-lg text-text-primary focus:ring-2 focus:ring-primary outline-none transition-all"
+                                                value={config.reminderChannelId || ''}
+                                                onChange={e => setConfig(prev => ({ ...prev, reminderChannelId: e.target.value }))}
+                                                disabled={loading}
+                                            >
+                                                <option value="">-- None (Disable Reports) --</option>
+                                                {channels.map(c => (
+                                                    <option key={c.id} value={c.id}># {c.name}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-bold text-text-secondary mb-2 uppercase tracking-wider">
+                                                Time (IST)
+                                            </label>
+                                            <select 
+                                                className="w-full bg-surface border border-border p-3 rounded-lg text-text-primary focus:ring-2 focus:ring-primary outline-none transition-all"
+                                                value={config.reminderTime || ''}
+                                                onChange={e => setConfig(prev => ({ ...prev, reminderTime: e.target.value }))}
+                                                disabled={loading || !config.reminderChannelId}
+                                            >
+                                                <option value="">-- Select Time --</option>
+                                                {generateTimeOptions().map(time => (
+                                                    <option key={time} value={time}>{time} IST</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div>
-                                    <label className="block text-sm font-bold text-text-secondary mb-2 uppercase tracking-wider mt-6">
-                                        Contest Alerts Role (Ping)
-                                    </label>
-                                    <p className="text-sm text-text-secondary mb-3">The Discord role to ping when a contest alert is sent.</p>
-                                    <select 
-                                        className="w-full bg-background border border-border p-3 rounded-lg text-text-primary focus:ring-2 focus:ring-primary outline-none transition-all"
-                                        value={config.contestRoleId || ''}
-                                        onChange={e => setConfig(prev => ({ ...prev, contestRoleId: e.target.value }))}
-                                        disabled={loading}
-                                    >
-                                        <option value="">-- None (No Ping) --</option>
-                                        {roles.map(r => (
-                                            <option key={r.id} value={r.id}>@ {r.name}</option>
-                                        ))}
-                                    </select>
+                                <div className="p-4 rounded-lg border border-border bg-background">
+                                    <h4 className="font-bold text-text-primary mb-2 text-md flex items-center gap-2">
+                                        ⚡ Live Contest Alerts
+                                    </h4>
+                                    <p className="text-sm text-text-secondary mb-4">Automated 10-minute warnings before LeetCode and Codeforces contests begin.</p>
+                                    
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="block text-xs font-bold text-text-secondary mb-2 uppercase tracking-wider">
+                                                Alert Channel
+                                            </label>
+                                            <select 
+                                                className="w-full bg-surface border border-border p-3 rounded-lg text-text-primary focus:ring-2 focus:ring-primary outline-none transition-all"
+                                                value={config.contestChannelId || ''}
+                                                onChange={e => setConfig(prev => ({ ...prev, contestChannelId: e.target.value }))}
+                                                disabled={loading}
+                                            >
+                                                <option value="">-- None (Disable Alerts) --</option>
+                                                {channels.map(c => (
+                                                    <option key={c.id} value={c.id}># {c.name}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-bold text-text-secondary mb-2 uppercase tracking-wider">
+                                                Ping Role
+                                            </label>
+                                            <select 
+                                                className="w-full bg-surface border border-border p-3 rounded-lg text-text-primary focus:ring-2 focus:ring-primary outline-none transition-all"
+                                                value={config.contestRoleId || ''}
+                                                onChange={e => setConfig(prev => ({ ...prev, contestRoleId: e.target.value }))}
+                                                disabled={loading || !config.contestChannelId}
+                                            >
+                                                <option value="">-- None (No Ping) --</option>
+                                                {roles.map(r => (
+                                                    <option key={r.id} value={r.id}>@ {r.name}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div className="p-4 mt-8 rounded-lg border border-primary/20 bg-primary/5 flex flex-col md:flex-row items-center justify-between gap-4">

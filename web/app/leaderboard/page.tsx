@@ -1,15 +1,16 @@
 import { prisma } from '../../lib/prisma';
 import Image from 'next/image';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../api/auth/[...nextauth]/route';
+import { LeaderboardHeader } from './LeaderboardHeader';
 
 export const dynamic = 'force-dynamic';
 
 async function getDiscordUser(userId: string) {
     try {
         const res = await fetch(`https://discord.com/api/v10/users/${userId}`, {
-            headers: {
-                Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}`,
-            },
-            next: { revalidate: 3600 }, // Cache user profile for 1 hour
+            headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` },
+            cache: 'no-store', // Disable cache to prevent locking in failures
         });
         if (!res.ok) return { username: `User ${userId}`, avatar: null };
         const data = await res.json();
@@ -21,10 +22,6 @@ async function getDiscordUser(userId: string) {
         return { username: `User ${userId}`, avatar: null };
     }
 }
-
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../api/auth/[...nextauth]/route';
-import { LeaderboardHeader } from './LeaderboardHeader';
 
 export default async function LeaderboardPage({ searchParams }: { searchParams: { guildId?: string } }) {
     // Calculate the start of the current week (Monday) at 00:00:00 IST
@@ -43,60 +40,7 @@ export default async function LeaderboardPage({ searchParams }: { searchParams: 
     let memberIds: string[] | null = null;
     let guildName = 'Global';
 
-    // If a guildId is selected, fetch its members to filter the leaderboard
-    if (guildId) {
-        try {
-            const botRes = await fetch(`https://discord.com/api/v10/guilds/${guildId}?with_counts=true`, {
-                headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` },
-                next: { revalidate: 3600 }
-            });
-            if (botRes.ok) {
-                const guildData = await botRes.json();
-                guildName = guildData.name;
-                
-                // Fetch up to 1000 members (for larger servers, we'd need pagination or a database sync, but this works for MVP)
-                const membersRes = await fetch(`https://discord.com/api/v10/guilds/${guildId}/members?limit=1000`, {
-                    headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` },
-                    next: { revalidate: 300 }
-                });
-                
-                if (membersRes.ok) {
-                    const members = await membersRes.json();
-                    memberIds = members.map((m: any) => m.user.id);
-                }
-            }
-        } catch (e) {
-            console.error('Failed to fetch guild members', e);
-        }
-    }
-
-    // Determine query filter
-    const whereClause: any = { solvedAt: { gte: startOfWeekUTC } };
-    if (memberIds) {
-        whereClause.discordUserId = { in: memberIds };
-    }
-    
-    const leaderboardData = await prisma.solvedProblem.groupBy({
-        by: ['discordUserId'],
-        where: whereClause,
-        _count: { problemId: true },
-        orderBy: { _count: { problemId: 'desc' } },
-        take: 50,
-    });
-
-    const enrichedData = await Promise.all(
-        leaderboardData.map(async (user: any, idx: number) => {
-            const discordUser = await getDiscordUser(user.discordUserId);
-            return {
-                rank: idx + 1,
-                id: user.discordUserId,
-                problems: user._count.problemId,
-                ...discordUser
-            };
-        })
-    );
-
-    // Fetch user session to determine which servers they can filter by
+    // 1. Fetch user session to determine which servers they can filter by
     const session = await getServerSession(authOptions);
     let userGuilds: { id: string, name: string }[] = [];
 
@@ -116,9 +60,43 @@ export default async function LeaderboardPage({ searchParams }: { searchParams: 
                 .filter((g: any) => botGuildIds.has(g.id))
                 .map((g: any) => ({ id: g.id, name: g.name }));
         }
+    }
 
-        // If we have a specific guildId but it's not in userGuilds (e.g. they aren't in the server but viewing it via link), inject it
-        if (guildId && !userGuilds.find(g => g.id === guildId) && guildName !== 'Global') {
+    // 2. Resolve Guild Name and Fetch Members
+    if (guildId) {
+        // Fallback to userGuilds if Discord API fails
+        const matchedGuild = userGuilds.find(g => g.id === guildId);
+        if (matchedGuild) guildName = matchedGuild.name;
+
+        // Default to empty array to PREVENT leaking global leaderboard if API fails!
+        memberIds = []; 
+
+        try {
+            const botRes = await fetch(`https://discord.com/api/v10/guilds/${guildId}?with_counts=true`, {
+                headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` },
+                cache: 'no-store'
+            });
+            if (botRes.ok) {
+                const guildData = await botRes.json();
+                guildName = guildData.name; // Authoritative name
+                
+                // Fetch up to 1000 members
+                const membersRes = await fetch(`https://discord.com/api/v10/guilds/${guildId}/members?limit=1000`, {
+                    headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` },
+                    cache: 'no-store'
+                });
+                
+                if (membersRes.ok) {
+                    const members = await membersRes.json();
+                    memberIds = members.map((m: any) => m.user.id);
+                }
+            }
+        } catch (e) {
+            console.error('Failed to fetch guild members', e);
+        }
+
+        // Inject into dropdown if it's somehow completely missing
+        if (!userGuilds.find(g => g.id === guildId) && guildName !== 'Global') {
             userGuilds.push({ id: guildId, name: guildName });
         }
     }

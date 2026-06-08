@@ -36,7 +36,7 @@ export function LeaderboardHeader({ guilds, currentGuildId, guildName, isLoggedI
                 {isLoggedIn ? (
                     <div className="relative">
                         <select 
-                            className="appearance-none bg-surface border border-border text-text-primary text-sm rounded-lg px-4 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer transition-colors"
+                            className="appearance-none bg-surface border border-border text-text-primary text-sm rounded-lg px-4 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer transition-colors max-w-[150px] sm:max-w-[250px] md:max-w-[300px] truncate"
                             value={currentGuildId || 'global'}
                             onChange={handleChange}
                         >

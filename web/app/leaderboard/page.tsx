@@ -22,7 +22,11 @@ async function getDiscordUser(userId: string) {
     }
 }
 
-export default async function LeaderboardPage() {
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../api/auth/[...nextauth]/route';
+import { LeaderboardHeader } from './LeaderboardHeader';
+
+export default async function LeaderboardPage({ searchParams }: { searchParams: { guildId?: string } }) {
     // Calculate the start of the current week (Monday) at 00:00:00 IST
     const istOffset = 5.5 * 60 * 60 * 1000;
     const nowIST = new Date(Date.now() + istOffset);
@@ -34,11 +38,47 @@ export default async function LeaderboardPage() {
     startOfWeekIST.setUTCHours(0, 0, 0, 0);
     
     const startOfWeekUTC = new Date(startOfWeekIST.getTime() - istOffset);
+
+    const guildId = searchParams.guildId;
+    let memberIds: string[] | null = null;
+    let guildName = 'Global';
+
+    // If a guildId is selected, fetch its members to filter the leaderboard
+    if (guildId) {
+        try {
+            const botRes = await fetch(`https://discord.com/api/v10/guilds/${guildId}?with_counts=true`, {
+                headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` },
+                next: { revalidate: 3600 }
+            });
+            if (botRes.ok) {
+                const guildData = await botRes.json();
+                guildName = guildData.name;
+                
+                // Fetch up to 1000 members (for larger servers, we'd need pagination or a database sync, but this works for MVP)
+                const membersRes = await fetch(`https://discord.com/api/v10/guilds/${guildId}/members?limit=1000`, {
+                    headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` },
+                    next: { revalidate: 300 }
+                });
+                
+                if (membersRes.ok) {
+                    const members = await membersRes.json();
+                    memberIds = members.map((m: any) => m.user.id);
+                }
+            }
+        } catch (e) {
+            console.error('Failed to fetch guild members', e);
+        }
+    }
+
+    // Determine query filter
+    const whereClause: any = { solvedAt: { gte: startOfWeekUTC } };
+    if (memberIds) {
+        whereClause.discordUserId = { in: memberIds };
+    }
     
-    // Global aggregate query
     const leaderboardData = await prisma.solvedProblem.groupBy({
         by: ['discordUserId'],
-        where: { solvedAt: { gte: startOfWeekUTC } },
+        where: whereClause,
         _count: { problemId: true },
         orderBy: { _count: { problemId: 'desc' } },
         take: 50,
@@ -56,18 +96,36 @@ export default async function LeaderboardPage() {
         })
     );
 
+    // Fetch user session to determine which servers they can filter by
+    const session = await getServerSession(authOptions);
+    let userGuilds: { id: string, name: string }[] = [];
+
+    if (session && session.accessToken) {
+        const res = await fetch('https://discord.com/api/users/@me/guilds', {
+            headers: { Authorization: `Bearer ${session.accessToken}` },
+            next: { revalidate: 60 }
+        });
+        if (res.ok) {
+            const allGuilds = await res.json();
+            
+            // Intersect with bot configs
+            const configuredGuilds = await prisma.guildConfig.findMany({ select: { guildId: true } });
+            const botGuildIds = new Set(configuredGuilds.map(g => g.guildId));
+
+            userGuilds = allGuilds
+                .filter((g: any) => botGuildIds.has(g.id))
+                .map((g: any) => ({ id: g.id, name: g.name }));
+        }
+    }
+
     return (
         <main className="max-w-5xl mx-auto px-4 py-16">
-            <div className="mb-8 border-b border-border pb-6 animate-reveal stagger-1 flex flex-col md:flex-row items-center justify-between gap-4">
-                <div>
-                    <h1 className="text-3xl font-bold text-white tracking-tight">Global Leaderboard</h1>
-                    <p className="text-text-secondary mt-2 text-sm">Real-time ranking of top developers based on problems solved this week.</p>
-                </div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-medium text-primary">
-                    <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                    Live Ranking
-                </div>
-            </div>
+            <LeaderboardHeader 
+                guilds={userGuilds} 
+                currentGuildId={guildId} 
+                guildName={guildName} 
+                isLoggedIn={!!session} 
+            />
 
             <div className="bg-[#05070A] border border-border rounded-xl overflow-hidden animate-reveal stagger-2">
                 <table className="w-full text-left border-collapse">
@@ -123,7 +181,7 @@ export default async function LeaderboardPage() {
                         {enrichedData.length === 0 && (
                             <tr>
                                 <td colSpan={3} className="p-12 text-center text-text-secondary font-mono">
-                                    &gt; No problems solved this week yet. Initialize the grind.
+                                    &gt; No problems solved in {guildName} this week yet. Initialize the grind.
                                 </td>
                             </tr>
                         )}

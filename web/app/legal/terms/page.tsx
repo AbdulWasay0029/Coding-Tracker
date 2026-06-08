@@ -45,7 +45,7 @@ export default function TermsOfServicePage() {
 
                 <section>
                     <h2 className="text-2xl font-bold text-white mb-4">6. Changes to Terms</h2>
-                    <p>We reserve the right to modify or replace these Terms at any time. Significant changes will be announced in our official Discord community.</p>
+                    <p>We reserve the right to modify or replace these Terms at any time. Significant changes will be announced in our <a href="https://discord.gg/qfhKfnJCau" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">official Discord community</a>.</p>
                 </section>
             </div>
         </main>

@@ -16,6 +16,7 @@ import { handleLeaderboard } from './commands/leaderboard';
 import { handleExportReport } from './commands/export-report';
 import { handleRefresh } from './commands/refresh';
 import { initContestScheduler } from '../jobs/contests';
+import { initNightlyScheduler } from '../jobs/nightly-cron';
 import { RateLimiter } from '../core/rate-limiter';
 import express from 'express';
 
@@ -46,8 +47,9 @@ client.once('ready', () => {
         status: 'online',
     });
     
-    // Start background contest scheduler
+    // Start background schedulers
     initContestScheduler(client);
+    initNightlyScheduler(client);
 });
 
 client.on('interactionCreate', async (interaction: Interaction) => {
@@ -89,55 +91,5 @@ client.on('interactionCreate', async (interaction: Interaction) => {
     }
 });
 
-// ─── Onboarding Event ────────────────────────────────────────────────────────
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
-
-client.on('guildMemberAdd', async (member) => {
-    try {
-        const config = await prisma.guildConfig.findUnique({
-            where: { guildId: member.guild.id }
-        });
-
-        if (!config?.welcomeChannelId) return; // Opt-in ONLY
-
-        const channel = member.guild.channels.cache.get(config.welcomeChannelId) as TextChannel;
-        if (!channel) return;
-
-        const welcomeEmbed = new EmbedBuilder()
-            .setTitle(`Welcome to ${member.guild.name}, ${member.user.username}! 🚀`)
-            .setDescription(`I'm **CodeSync**, here to track your competitive programming progress globally.\n\nClick the button below to link your LeetCode, Codeforces, CodeChef, and HackerRank accounts in 30 seconds.`)
-            .addFields(
-                { name: '📊 Climb the Leaderboard', value: 'Compete against your server-mates automatically.' },
-                { name: '🔥 Build your Streak', value: 'Track your daily solves and earn roles.' }
-            )
-            .setColor(0x5865F2)
-            .setThumbnail(member.guild.iconURL() || member.user.displayAvatarURL());
-
-        const row = new ActionRowBuilder<ButtonBuilder>()
-            .addComponents(
-                new ButtonBuilder()
-                    .setLabel('🚀 Setup My Profile')
-                    .setStyle(ButtonStyle.Link)
-                    .setURL('https://codesync-hub.vercel.app/')
-            );
-
-        try {
-            // Attempt zero-friction DM onboarding
-            await member.user.send({
-                embeds: [welcomeEmbed],
-                components: [row]
-            });
-        } catch (dmError) {
-            // Fallback: If DMs are closed, send in the welcome channel with a soft ping
-            await channel.send({ 
-                content: `Hey <@${member.id}>! I tried to DM you but your DMs are closed. Check this out to get started:`,
-                embeds: [welcomeEmbed],
-                components: [row]
-            });
-        }
-    } catch (err) {
-        console.error('[Onboarding] Error:', err);
-    }
-});
 
 client.login(process.env.DISCORD_BOT_TOKEN);

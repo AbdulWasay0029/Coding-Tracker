@@ -8,7 +8,7 @@ export function AdminClient({ guilds }: { guilds: any[] }) {
     const [selectedGuild, setSelectedGuild] = useState<string | null>(null);
     const [channels, setChannels] = useState<{id: string, name: string}[]>([]);
     const [roles, setRoles] = useState<{id: string, name: string}[]>([]);
-    const [config, setConfig] = useState<{welcomeChannelId: string | null, contestChannelId: string | null, contestRoleId: string | null}>({ welcomeChannelId: null, contestChannelId: null, contestRoleId: null });
+    const [config, setConfig] = useState<{contestChannelId: string | null, contestRoleId: string | null}>({ contestChannelId: null, contestRoleId: null });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
@@ -33,12 +33,11 @@ export function AdminClient({ guilds }: { guilds: any[] }) {
             setRoles(fetchedRoles);
             if (fetchedConfig) {
                 setConfig({
-                    welcomeChannelId: fetchedConfig.welcomeChannelId,
                     contestChannelId: fetchedConfig.contestChannelId,
                     contestRoleId: fetchedConfig.contestRoleId
                 });
             } else {
-                setConfig({ welcomeChannelId: '', contestChannelId: '', contestRoleId: '' });
+                setConfig({ contestChannelId: '', contestRoleId: '' });
             }
             setLoading(false);
         });
@@ -107,24 +106,6 @@ export function AdminClient({ guilds }: { guilds: any[] }) {
                         {!error && channels.length > 0 && (
                             <div className="space-y-6">
                                 <div>
-                                    <label className="block text-sm font-bold text-text-secondary mb-2 uppercase tracking-wider">
-                                        Welcome Channel
-                                    </label>
-                                    <p className="text-sm text-text-secondary mb-3">Where the bot will ping users if their DMs are disabled during onboarding.</p>
-                                    <select 
-                                        className="w-full bg-background border border-border p-3 rounded-lg text-text-primary focus:ring-2 focus:ring-primary outline-none transition-all"
-                                        value={config.welcomeChannelId || ''}
-                                        onChange={e => setConfig(prev => ({ ...prev, welcomeChannelId: e.target.value }))}
-                                        disabled={loading}
-                                    >
-                                        <option value="">-- None (Disable Fallback) --</option>
-                                        {channels.map(c => (
-                                            <option key={c.id} value={c.id}># {c.name}</option>
-                                        ))}
-                                    </select>
-                                </div>
-
-                                <div>
                                     <label className="block text-sm font-bold text-text-secondary mb-2 uppercase tracking-wider mt-6">
                                         Contest Alerts Channel
                                     </label>
@@ -158,6 +139,25 @@ export function AdminClient({ guilds }: { guilds: any[] }) {
                                             <option key={r.id} value={r.id}>@ {r.name}</option>
                                         ))}
                                     </select>
+                                </div>
+
+                                <div className="p-4 mt-8 rounded-lg border border-primary/20 bg-primary/5 flex flex-col md:flex-row items-center justify-between gap-4">
+                                    <div>
+                                        <h4 className="font-bold text-text-primary mb-1 text-sm">Force Sync Leaderboard</h4>
+                                        <p className="text-xs text-text-secondary">Manually trigger a full server data scrape. Limited to 1 use per day.</p>
+                                    </div>
+                                    <button 
+                                        type="button"
+                                        disabled={loading}
+                                        onClick={async () => {
+                                            if (confirm('Are you sure? This will scrape data for all users in your server and may take a few minutes.')) {
+                                                alert('Force Sync initiated in the background! Please wait a few minutes for the leaderboard to update.');
+                                            }
+                                        }}
+                                        className="px-4 py-2 bg-background border border-primary text-primary hover:bg-primary/10 rounded font-medium text-sm transition-all whitespace-nowrap"
+                                    >
+                                        Force Sync (Beta)
+                                    </button>
                                 </div>
 
                                 <div className="pt-6 border-t border-border mt-8 flex justify-end">

@@ -51,7 +51,7 @@ export default function PrivacyPolicyPage() {
 
                 <section>
                     <h2 className="text-2xl font-bold text-white mb-4">Contact Us</h2>
-                    <p>If you have any questions about this Privacy Policy, please contact us via our official Discord community.</p>
+                    <p>If you have any questions about this Privacy Policy, please contact us via our <a href="https://discord.gg/qfhKfnJCau" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">official Discord community</a>.</p>
                 </section>
             </div>
         </main>

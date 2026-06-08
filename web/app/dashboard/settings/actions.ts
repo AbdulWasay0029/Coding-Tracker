@@ -1,8 +1,8 @@
 'use server';
 
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../api/auth/[...nextauth]/route';
-import { prisma } from '../../lib/prisma';
+import { authOptions } from '../../api/auth/[...nextauth]/route';
+import { prisma } from '../../../lib/prisma';
 
 export async function getGuildChannels(guildId: string) {
     const session = await getServerSession(authOptions);
@@ -68,13 +68,11 @@ export async function updateGuildConfig(guildId: string, data: { welcomeChannelI
     await prisma.guildConfig.upsert({
         where: { guildId },
         update: {
-            welcomeChannelId: data.welcomeChannelId || null,
             contestChannelId: data.contestChannelId || null,
             contestRoleId: data.contestRoleId || null,
         },
         create: {
             guildId,
-            welcomeChannelId: data.welcomeChannelId || null,
             contestChannelId: data.contestChannelId || null,
             contestRoleId: data.contestRoleId || null,
         }

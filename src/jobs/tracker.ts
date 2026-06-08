@@ -23,8 +23,11 @@ export interface TrackerResult {
 export async function runTrackerForUser(
     discordUserId: string,
     startTimestamp: number,
-    endTimestamp: number
+    endTimestamp: number,
+    fetchStartOverride?: number
 ): Promise<TrackerResult> {
+    const actualStartTimestamp = fetchStartOverride ?? startTimestamp;
+    
     const flatLinks: string[] = [];
     const groupedLinks: Record<string, { title: string, url: string }[]> = {};
     const errors: string[] = [];
@@ -42,20 +45,20 @@ export async function runTrackerForUser(
 
         try {
             if (profile.platform === 'LEETCODE') {
-                submissions = await withCache(`lc-${profile.username}-${startTimestamp}`, 300, () => fetchLeetCodeSubmissions(profile.username, startTimestamp));
+                submissions = await withCache(`lc-${profile.username}-${actualStartTimestamp}`, 300, () => fetchLeetCodeSubmissions(profile.username, actualStartTimestamp));
             } else if (profile.platform === 'CODEFORCES') {
-                submissions = await withCache(`cf-${profile.username}-${startTimestamp}`, 300, () => fetchCodeforcesSubmissions(profile.username, startTimestamp));
+                submissions = await withCache(`cf-${profile.username}-${actualStartTimestamp}`, 300, () => fetchCodeforcesSubmissions(profile.username, actualStartTimestamp));
             } else if (profile.platform === 'CODECHEF') {
-                submissions = await withCache(`cc-${profile.username}-${startTimestamp}`, 300, () => fetchCodeChefSubmissions(profile.username, startTimestamp));
+                submissions = await withCache(`cc-${profile.username}-${actualStartTimestamp}`, 300, () => fetchCodeChefSubmissions(profile.username, actualStartTimestamp));
             } else if (profile.platform === 'SMARTINTERVIEWS') {
                 const decryptedToken = profile.token ? decrypt(profile.token) : undefined;
-                submissions = await withCache(`si-${profile.username}-${startTimestamp}`, 300, () => fetchSmartInterviewsSubmissions(
+                submissions = await withCache(`si-${profile.username}-${actualStartTimestamp}`, 300, () => fetchSmartInterviewsSubmissions(
                     profile.username,
                     decryptedToken,
-                    startTimestamp
+                    actualStartTimestamp
                 ));
             } else if (profile.platform === 'HACKERRANK') {
-                submissions = await withCache(`hr-${profile.username}-${startTimestamp}`, 300, () => fetchHackerRankSubmissions(profile.username, startTimestamp));
+                submissions = await withCache(`hr-${profile.username}-${actualStartTimestamp}`, 300, () => fetchHackerRankSubmissions(profile.username, actualStartTimestamp));
             }
             return { profile, platformKey, submissions, error: null };
         } catch (err: any) {
@@ -80,7 +83,9 @@ export async function runTrackerForUser(
         const seen = new Set<string>();
 
         for (const sub of submissions) {
-            if (sub.timestamp < startTimestamp || sub.timestamp >= endTimestamp) continue;
+            // Filter out anything older than our fetch boundary
+            if (sub.timestamp < actualStartTimestamp) continue;
+            
             if (seen.has(sub.titleSlug)) continue;
             seen.add(sub.titleSlug);
 
@@ -113,8 +118,12 @@ export async function runTrackerForUser(
                 })
             );
 
-            links.push(sub.url);
-            platformGroup.push({ title: sub.title, url: sub.url });
+            // IMPORTANT: Only return links for the specific daily report window requested!
+            // This allows us to silently heal older DB entries without spamming Discord
+            if (sub.timestamp >= startTimestamp && sub.timestamp < endTimestamp) {
+                links.push(sub.url);
+                platformGroup.push({ title: sub.title, url: sub.url });
+            }
         }
 
         if (links.length > 0) {

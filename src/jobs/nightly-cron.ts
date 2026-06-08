@@ -48,7 +48,10 @@ async function processGuildNightlyReport(client: Client, config: any) {
 
         if (trackedUsers.length === 0) return;
 
+        // The Report Window is today. But the Fetch Window is 3 days, silently recovering missed data!
         const { startTimestamp, endTimestamp, dateStr: label } = getTimestampsForDate('today');
+        const fetchStartTimestamp = startTimestamp - (86400 * 2); // 2 days before today (3 days total)
+
         const lines: string[] = [];
         lines.push(`📅 **Daily Links — ${label}**\n`);
 
@@ -57,7 +60,7 @@ async function processGuildNightlyReport(client: Client, config: any) {
 
         for (const { discordUserId } of trackedUsers) {
             // Scrape data only for this user
-            const result = await runTrackerForUser(discordUserId, startTimestamp, endTimestamp);
+            const result = await runTrackerForUser(discordUserId, startTimestamp, endTimestamp, fetchStartTimestamp);
             
             if (result.links.length > 0) {
                 const userLines: string[] = [];

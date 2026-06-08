@@ -107,11 +107,11 @@ export default async function LeaderboardPage({ searchParams }: { searchParams: 
         }
     }
 
-    const records = await prisma.problemRecord.groupBy({
-        by: ['userId'],
+    const records = await prisma.solvedProblem.groupBy({
+        by: ['discordUserId'],
         where: {
             solvedAt: { gte: startOfWeekUTC },
-            ...(guildId ? { userId: { in: memberIds || [] } } : {})
+            ...(guildId ? { discordUserId: { in: memberIds || [] } } : {})
         },
         _count: { id: true },
         orderBy: { _count: { id: 'desc' } },
@@ -119,9 +119,9 @@ export default async function LeaderboardPage({ searchParams }: { searchParams: 
     });
 
     const enrichedData = await Promise.all(records.map(async (r, i) => {
-        const user = await getDiscordUser(r.userId);
+        const user = await getDiscordUser(r.discordUserId);
         return {
-            id: r.userId,
+            id: r.discordUserId,
             rank: i + 1,
             username: user.username,
             avatar: user.avatar,

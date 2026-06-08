@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]/route';
 import { prisma } from '../../../lib/prisma';
+import { encrypt } from '../../../../src/core/encryption';
 
 export async function POST(req: Request) {
     const session = await getServerSession(authOptions);
@@ -25,7 +26,7 @@ export async function POST(req: Request) {
                 discordUserId: session.user.id,
                 platform: formattedPlatform,
                 username: formattedUsername,
-                token: token ? token.trim() : null
+                token: token ? encrypt(token.trim()) : null
             }
         });
 
@@ -97,7 +98,7 @@ export async function PUT(req: Request) {
             where: { id },
             data: {
                 username: username.trim(),
-                token: token ? token.trim() : null
+                token: token ? encrypt(token.trim()) : null
             }
         });
 

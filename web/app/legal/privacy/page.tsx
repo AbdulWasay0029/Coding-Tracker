@@ -37,7 +37,7 @@ export default function PrivacyPolicyPage() {
 
                 <section className="mb-12">
                     <h2 className="text-2xl font-bold text-white mb-4">3. Data Retention and Deletion</h2>
-                    <p className="mb-4">You own your data. If you wish to leave the platform, you can delete your profile via the Web Dashboard or by using the `/delete-profile` command in Discord. Upon deletion:</p>
+                    <p className="mb-4">You own your data. If you wish to leave the platform, you can delete your profile via the Web Dashboard. Upon deletion:</p>
                     <ul className="list-disc pl-6 space-y-2 mb-4">
                         <li>Your Discord link and platform usernames are instantly removed from our active databases.</li>
                         <li>Your historical solved problems are permanently purged.</li>

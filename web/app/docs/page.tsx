@@ -26,7 +26,7 @@ export default function DocsPage() {
 
                         <div className="bg-surface border border-border p-6 rounded-xl">
                             <h3 className="text-lg font-bold text-primary font-mono mb-2">/list-profiles</h3>
-                            <p className="text-text-secondary mb-4">View all your currently connected coding platforms.</p>
+                            <p className="text-text-secondary mb-4">Provides a secure link to the Web Dashboard to view and manage all your currently connected coding platforms.</p>
                         </div>
                     </div>
                 </section>
@@ -35,20 +35,19 @@ export default function DocsPage() {
                     <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
                         <Users className="w-6 h-6 text-warning" /> Profile Management
                     </h2>
-                    <div className="space-y-6">
                         <div className="bg-surface border border-border p-6 rounded-xl">
                             <h3 className="text-lg font-bold text-warning font-mono mb-2">/add-profile</h3>
-                            <p className="text-text-secondary mb-4">Link a new platform to your CodeSync account directly through Discord.</p>
+                            <p className="text-text-secondary mb-4">Provides a secure link to the Web Dashboard where you can link a new coding platform to your CodeSync account.</p>
                         </div>
 
                         <div className="bg-surface border border-border p-6 rounded-xl">
                             <h3 className="text-lg font-bold text-warning font-mono mb-2">/update-profile</h3>
-                            <p className="text-text-secondary mb-4">Update the username or token for an existing connected platform.</p>
+                            <p className="text-text-secondary mb-4">Provides a secure link to the Web Dashboard where you can update credentials for connected platforms.</p>
                         </div>
 
                         <div className="bg-surface border border-border p-6 rounded-xl">
                             <h3 className="text-lg font-bold text-warning font-mono mb-2">/remove-profile</h3>
-                            <p className="text-text-secondary mb-4">Disconnect a coding platform from your account.</p>
+                            <p className="text-text-secondary mb-4">Provides a secure link to the Web Dashboard where you can permanently disconnect coding platforms.</p>
                         </div>
                     </div>
                 </section>

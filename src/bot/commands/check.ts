@@ -90,7 +90,7 @@ async function runAndReply(
             .setColor(0x00F0FF); // CodeSync Cyan
 
         if (result.errors && result.errors.length > 0) {
-            emptyEmbed.addFields({ name: '⚠️ Sync Warnings', value: `${result.errors.join(', ')}\n*Tokens may have expired. Reconnect on the web dashboard.*` });
+            emptyEmbed.addFields({ name: '⚠️ Sync Warnings', value: result.errors.join('\n') });
         }
 
         await reply({ embeds: [emptyEmbed], components: [row] });
@@ -120,7 +120,7 @@ async function runAndReply(
     }
 
     if (result.errors && result.errors.length > 0) {
-        embed.addFields({ name: '⚠️ Sync Warnings', value: `${result.errors.join(', ')}\n*Tokens may have expired. Reconnect on the web dashboard.*` });
+        embed.addFields({ name: '⚠️ Sync Warnings', value: result.errors.join('\n') });
     }
 
     await reply({ embeds: [embed], components: [row] });

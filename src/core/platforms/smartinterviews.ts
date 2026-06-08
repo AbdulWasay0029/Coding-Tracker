@@ -5,9 +5,8 @@ const SI_API_GOLDMINE = 'https://hive.smartinterviews.in/api/contest/allUserSubm
 
 export async function fetchSmartInterviewsSubmissions(username: string, tokenOverride?: string, stopBeforeTimestamp?: number): Promise<Submission[]> {
     try {
-        const token = tokenOverride || process.env.SMARTINTERVIEWS_TOKEN;
-        // If no token, return empty (or we could keep heatmap fallback, 
-        // but user seems to have token now so let's focus on quality).
+        const token = tokenOverride;
+        
         if (!token) {
             console.log('SmartInterviews: No token found, skipping.');
             return [];

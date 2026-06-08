@@ -6,7 +6,7 @@ import { prisma } from '../core/prisma';
 interface Contest {
     id: string;
     name: string;
-    platform: 'LeetCode' | 'Codeforces' | 'CodeChef';
+    platform: 'LeetCode' | 'Codeforces' | 'CodeChef' | 'SmartInterviews';
     url: string;
     startTimeMs: number;
 }
@@ -14,19 +14,22 @@ interface Contest {
 const LC_WEEKLY_REF = { date: new Date('2026-03-29T02:30:00Z'), id: 495 };
 const LC_BIWEEKLY_REF = { date: new Date('2026-03-28T14:30:00Z'), id: 179 };
 const CC_STARTERS_REF = { date: new Date('2026-03-25T14:30:00Z'), id: 231 };
+const SI_MONDAY_REF = { date: new Date('2026-06-08T12:30:00Z'), id: 6 }; // 18:00 IST is 12:30 UTC
 const ONE_WEEK = 7 * 24 * 60 * 60 * 1000;
 const TWO_WEEKS = 14 * 24 * 60 * 60 * 1000;
 
 const COLORS = {
     'LeetCode': 0xFFA116,
     'Codeforces': 0x1F8ACB,
-    'CodeChef': 0x5C4D3C
+    'CodeChef': 0x5C4D3C,
+    'SmartInterviews': 0x3B82F6
 };
 
 const THUMBNAILS = {
     'LeetCode': 'https://upload.wikimedia.org/wikipedia/commons/8/8e/LeetCode_Logo_1.png',
     'Codeforces': 'https://cdn.iconscout.com/icon/free/png-256/code-forces-3628695-3029920.png',
-    'CodeChef': 'https://cdn.codechef.com/images/cc-logo.png'
+    'CodeChef': 'https://cdn.codechef.com/images/cc-logo.png',
+    'SmartInterviews': 'https://img.icons8.com/color/512/code.png'
 };
 
 const notified60 = new Set<string>();
@@ -79,6 +82,23 @@ function generateStaticContests(): Contest[] {
                 name: `Starters ${nextId}`,
                 platform: 'CodeChef',
                 url: `https://www.codechef.com/START${nextId}`,
+                startTimeMs: nextTime
+            });
+        }
+    }
+    
+    // Next 4 SmartInterviews Monday Munch
+    for (let i = 0; i < 4; i++) {
+        const weeksPassed = Math.floor((now - SI_MONDAY_REF.date.getTime()) / ONE_WEEK);
+        const nextId = SI_MONDAY_REF.id + weeksPassed + i;
+        const nextTime = SI_MONDAY_REF.date.getTime() + ((weeksPassed + i) * ONE_WEEK);
+        const idStr = nextId.toString().padStart(3, '0');
+        if (nextTime > now - ONE_WEEK) {
+            contests.push({
+                id: `si-mondaymunch-${nextId}`,
+                name: `Monday Munch - DSA Challenge ${idStr}`,
+                platform: 'SmartInterviews',
+                url: `https://smartinterviews.in/contests/DSAMONDAY${idStr}`,
                 startTimeMs: nextTime
             });
         }

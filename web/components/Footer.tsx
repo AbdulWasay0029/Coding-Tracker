@@ -48,6 +48,14 @@ export function Footer() {
                             </li>
                         </ul>
                     </div>
+
+                    <div>
+                        <h3 className="font-bold text-white mb-4">Legal</h3>
+                        <ul className="space-y-3 text-sm text-text-secondary">
+                            <li><Link href="/legal/terms" className="hover:text-primary transition-colors">Terms of Service</Link></li>
+                            <li><Link href="/legal/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
+                        </ul>
+                    </div>
                 </div>
                 
                 <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-text-secondary">

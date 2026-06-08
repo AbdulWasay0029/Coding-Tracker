@@ -2,7 +2,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../../api/auth/[...nextauth]/route';
 import { redirect } from 'next/navigation';
 import { prisma } from '../../../lib/prisma';
-import { Award, Flame, Zap, CheckCircle2, Shield } from 'lucide-react';
+import { Award, Flame, Zap, CheckCircle2, Shield, Moon, Brain, Target } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -22,14 +22,34 @@ export default async function BadgesPage() {
 
     const totalSolves = solves.length;
     
-    // Check platforms used
-    const platforms = new Set(solves.map(s => {
-        if (s.problemId.includes('LC_')) return 'LeetCode';
-        if (s.problemId.includes('CF_')) return 'Codeforces';
-        if (s.problemId.includes('CC_')) return 'CodeChef';
-        if (s.problemId.includes('HR_')) return 'HackerRank';
-        return 'Other';
-    }));
+    // Check platforms used (Fixed bug: using s.platform instead of s.problemId)
+    const platforms = new Set(solves.map(s => s.platform));
+
+    // Calculate advanced stats
+    const solvesPerDay: Record<string, number> = {};
+    let maxSolvesInOneDay = 0;
+    let hasNightOwl = false;
+    let hasSmartInterviews = false;
+
+    for (const s of solves) {
+        // Convert UTC to IST
+        const istDate = new Date(s.solvedAt.getTime() + 5.5 * 60 * 60 * 1000);
+        const dateStr = istDate.toISOString().split('T')[0];
+        
+        solvesPerDay[dateStr] = (solvesPerDay[dateStr] || 0) + 1;
+        if (solvesPerDay[dateStr] > maxSolvesInOneDay) {
+            maxSolvesInOneDay = solvesPerDay[dateStr];
+        }
+
+        const hour = istDate.getUTCHours();
+        if (hour >= 0 && hour < 4) {
+            hasNightOwl = true;
+        }
+
+        if (s.platform === 'SMARTINTERVIEWS') {
+            hasSmartInterviews = true;
+        }
+    }
 
     // Badges definitions
     const badges = [
@@ -41,6 +61,33 @@ export default async function BadgesPage() {
             color: 'from-blue-500 to-cyan-400',
             glow: 'shadow-[0_0_20px_rgba(59,130,246,0.5)]',
             unlocked: totalSolves > 0
+        },
+        {
+            id: 'night_owl',
+            name: 'Night Owl',
+            description: 'Solve a problem between Midnight and 4 AM (IST).',
+            icon: <Moon className="w-8 h-8 text-white" />,
+            color: 'from-indigo-600 to-purple-800',
+            glow: 'shadow-[0_0_20px_rgba(79,70,229,0.5)]',
+            unlocked: hasNightOwl
+        },
+        {
+            id: 'daily_grind',
+            name: 'The Daily Grind',
+            description: 'Solve 10 or more problems in a single day.',
+            icon: <Target className="w-8 h-8 text-white" />,
+            color: 'from-emerald-500 to-teal-400',
+            glow: 'shadow-[0_0_20px_rgba(16,185,129,0.5)]',
+            unlocked: maxSolvesInOneDay >= 10
+        },
+        {
+            id: 'smart_cookie',
+            name: 'Smart Cookie',
+            description: 'Connect and solve a problem on SmartInterviews.',
+            icon: <Brain className="w-8 h-8 text-white" />,
+            color: 'from-pink-500 to-rose-400',
+            glow: 'shadow-[0_0_20px_rgba(236,72,153,0.5)]',
+            unlocked: hasSmartInterviews
         },
         {
             id: 'century',
@@ -75,7 +122,7 @@ export default async function BadgesPage() {
         <main className="max-w-6xl mx-auto px-4 py-16">
             <div className="mb-12 animate-reveal stagger-1">
                 <h1 className="text-4xl font-black text-white tracking-tight mb-2 flex items-center gap-3">
-                    <Flame className="w-8 h-8 text-primary" /> Trick or Treat
+                    <Flame className="w-8 h-8 text-primary" /> Profile Badges
                 </h1>
                 <p className="text-text-secondary text-lg">Earn exclusive badges as you level up your unified developer identity.</p>
             </div>

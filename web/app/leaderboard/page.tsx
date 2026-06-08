@@ -107,6 +107,28 @@ export default async function LeaderboardPage({ searchParams }: { searchParams: 
         }
     }
 
+    const records = await prisma.problemRecord.groupBy({
+        by: ['userId'],
+        where: {
+            solvedAt: { gte: startOfWeekUTC },
+            ...(guildId ? { userId: { in: memberIds || [] } } : {})
+        },
+        _count: { id: true },
+        orderBy: { _count: { id: 'desc' } },
+        take: 100
+    });
+
+    const enrichedData = await Promise.all(records.map(async (r, i) => {
+        const user = await getDiscordUser(r.userId);
+        return {
+            id: r.userId,
+            rank: i + 1,
+            username: user.username,
+            avatar: user.avatar,
+            problems: r._count.id
+        };
+    }));
+
     return (
         <main className="max-w-5xl mx-auto px-4 py-16">
             <LeaderboardHeader 

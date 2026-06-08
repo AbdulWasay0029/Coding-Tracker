@@ -34,6 +34,7 @@ export default async function BadgesPage() {
     let hasWeekendWarrior = false;
     let hasCodeforces = false;
     let hasLeetCode = false;
+    let hasSmartInterviews = false;
 
     for (const s of solves) {
         // Convert UTC to IST
@@ -58,6 +59,7 @@ export default async function BadgesPage() {
         if (s.platform === 'CODECHEF') hasCodeChef = true;
         if (s.platform === 'CODEFORCES') hasCodeforces = true;
         if (s.platform === 'LEETCODE') hasLeetCode = true;
+        if (s.platform === 'SMARTINTERVIEWS') hasSmartInterviews = true;
     }
 
     // Badges definitions
@@ -115,6 +117,15 @@ export default async function BadgesPage() {
             color: 'from-blue-500 to-red-500',
             glow: 'shadow-[0_0_20px_rgba(59,130,246,0.5)]',
             unlocked: hasCodeforces
+        },
+        {
+            id: 'smart_cookie',
+            name: 'Smart Cookie',
+            description: 'Connect and solve a problem on SmartInterviews.',
+            icon: <Brain className="w-8 h-8 text-white" />,
+            color: 'from-pink-500 to-rose-400',
+            glow: 'shadow-[0_0_20px_rgba(236,72,153,0.5)]',
+            unlocked: hasSmartInterviews
         },
         {
             id: 'daily_grind',

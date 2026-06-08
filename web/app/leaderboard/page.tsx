@@ -107,14 +107,12 @@ export default async function LeaderboardPage({ searchParams }: { searchParams: 
         });
         if (res.ok) {
             const allGuilds = await res.json();
-            
-            // Intersect with bot configs
-            const configuredGuilds = await prisma.guildConfig.findMany({ select: { guildId: true } });
-            const botGuildIds = new Set(configuredGuilds.map(g => g.guildId));
+            userGuilds = allGuilds.map((g: any) => ({ id: g.id, name: g.name }));
+        }
 
-            userGuilds = allGuilds
-                .filter((g: any) => botGuildIds.has(g.id))
-                .map((g: any) => ({ id: g.id, name: g.name }));
+        // If we have a specific guildId but it's not in userGuilds (e.g. they aren't in the server but viewing it via link), inject it
+        if (guildId && !userGuilds.find(g => g.id === guildId) && guildName !== 'Global') {
+            userGuilds.push({ id: guildId, name: guildName });
         }
     }
 

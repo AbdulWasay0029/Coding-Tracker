@@ -68,14 +68,14 @@ export async function updateGuildConfig(guildId: string, data: { welcomeChannelI
             contestChannelId: data.contestChannelId || null,
             contestRoleId: data.contestRoleId || null,
             reminderChannelId: data.reminderChannelId || null,
-            reminderTime: data.reminderTime || null,
+            reminderTime: data.reminderTime || "22:00",
         },
         create: {
             guildId,
             contestChannelId: data.contestChannelId || null,
             contestRoleId: data.contestRoleId || null,
             reminderChannelId: data.reminderChannelId || null,
-            reminderTime: data.reminderTime || null,
+            reminderTime: data.reminderTime || "22:00",
         }
     });
 

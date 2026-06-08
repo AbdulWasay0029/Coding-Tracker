@@ -23,7 +23,7 @@ async function getDiscordUser(userId: string) {
     }
 }
 
-export default async function LeaderboardPage({ searchParams }: { searchParams: { guildId?: string } }) {
+export default async function LeaderboardPage({ searchParams }: { searchParams: Promise<{ guildId?: string }> }) {
     // Calculate the start of the current week (Monday) at 00:00:00 IST
     const istOffset = 5.5 * 60 * 60 * 1000;
     const nowIST = new Date(Date.now() + istOffset);
@@ -36,7 +36,8 @@ export default async function LeaderboardPage({ searchParams }: { searchParams: 
     
     const startOfWeekUTC = new Date(startOfWeekIST.getTime() - istOffset);
 
-    const guildId = searchParams.guildId;
+    const params = await searchParams;
+    const guildId = params.guildId;
     let memberIds: string[] | null = null;
     let guildName = 'Global';
 

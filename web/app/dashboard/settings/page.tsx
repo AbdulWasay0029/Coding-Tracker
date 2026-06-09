@@ -1,92 +1,238 @@
-import Link from 'next/link';
-import { Settings, ShieldAlert, LayoutTemplate, BookOpen, Terminal, ChevronRight } from 'lucide-react';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../api/auth/[...nextauth]/route';
-import { redirect } from 'next/navigation';
+'use client';
 
-export const dynamic = 'force-dynamic';
+import { useState } from 'react';
+import { User, Globe, Palette, Shield, Save, ArrowRight } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 
-export default async function SettingsHubPage() {
-    const session = await getServerSession(authOptions);
-    if (!session || !session.user) {
-        redirect('/');
-    }
+export default function SettingsHub() {
+    const { data: session } = useSession();
+    const [activeTab, setActiveTab] = useState('account');
 
-    const settingsLinks = [
-        {
-            title: 'Profile & Account',
-            description: 'Manage your connected platforms and tokens.',
-            icon: <Settings className="w-6 h-6 text-primary" />,
-            href: '/dashboard',
-            tag: 'General'
-        },
-        {
-            title: 'Profile Widgets',
-            description: 'Generate dynamic images of your stats for your GitHub README.',
-            icon: <LayoutTemplate className="w-6 h-6 text-indigo-400" />,
-            href: '/dashboard/settings/widgets',
-            tag: 'Integrations'
-        },
-        {
-            title: 'Documentation',
-            description: 'Learn about all bot commands and setup guides.',
-            icon: <BookOpen className="w-6 h-6 text-emerald-400" />,
-            href: '/dashboard/settings/docs',
-            tag: 'Resources'
-        },
-        {
-            title: 'Admin Portal',
-            description: 'Manage server configurations and data exports. (Admin only)',
-            icon: <ShieldAlert className="w-6 h-6 text-warning" />,
-            href: '#', // Placeholder for future admin portal
-            tag: 'Restricted'
-        }
+    const tabs = [
+        { id: 'account', label: 'Account Profile', icon: User },
+        { id: 'platforms', label: 'Connected Platforms', icon: Globe },
+        { id: 'appearance', label: 'Appearance', icon: Palette },
+        { id: 'security', label: 'Security & Privacy', icon: Shield },
     ];
 
     return (
-        <main className="max-w-[1200px] mx-auto px-4 sm:px-6 py-12">
-            <div className="mb-12 animate-reveal stagger-1 flex flex-col items-center md:items-start border-b border-white/5 pb-8 relative">
-                <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[300px] h-[100px] bg-[#60A5FA] opacity-[0.05] blur-[50px] rounded-full pointer-events-none" />
-                <h1 className="text-3xl md:text-4xl font-bold text-white/95 tracking-tight flex items-center gap-3 relative z-10">
-                    <div className="w-12 h-12 rounded-xl bg-[#3B82F6]/10 flex items-center justify-center border border-[#3B82F6]/20">
-                        <Terminal className="w-6 h-6 text-[#60A5FA]" />
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            <div className="mb-10 animate-reveal">
+                <h1 className="text-3xl font-bold text-white/95 tracking-tight flex items-center gap-3">
+                    <div className="p-2 bg-[#3B82F6]/10 border border-[#3B82F6]/20 rounded-lg">
+                        <User className="w-6 h-6 text-[#60A5FA]" />
                     </div>
-                    Settings Hub
+                    Settings
                 </h1>
-                <p className="text-white/60 mt-4 text-lg max-w-2xl text-center md:text-left relative z-10">
-                    Manage your unified developer identity, configure integrations, and explore platform capabilities.
-                </p>
+                <p className="text-white/50 mt-2">Manage your profile, preferences, and platform integrations.</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-reveal stagger-2">
-                {settingsLinks.map((link, i) => (
-                    <Link href={link.href} key={link.title} className={`block group ${i === 0 ? 'md:col-span-2 lg:col-span-2' : ''}`}>
-                        <div className="glass-subtle rounded-2xl p-8 h-full hover:bg-[#1A1D24]/80 hover:border-[#60A5FA]/30 transition-all duration-300 hover:shadow-[0_8px_32px_-8px_rgba(96,165,250,0.2)] relative overflow-hidden flex flex-col">
-                            {/* Accent Glow on Hover */}
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-[#60A5FA] opacity-0 group-hover:opacity-10 blur-[50px] rounded-full transition-opacity duration-500" />
-                            
-                            <div className="flex justify-between items-start mb-6">
-                                <div className="w-14 h-14 rounded-2xl bg-[#0B0E14]/60 border border-white/10 flex items-center justify-center group-hover:scale-110 group-hover:border-[#60A5FA]/30 group-hover:shadow-[0_0_15px_rgba(96,165,250,0.2)] transition-all duration-300 relative z-10">
-                                    {link.icon}
+            <div className="flex flex-col lg:flex-row gap-8">
+                {/* Sidebar Navigation */}
+                <div className="w-full lg:w-64 flex-shrink-0 animate-reveal stagger-1">
+                    <div className="glass-subtle rounded-2xl p-4 sticky top-24 flex flex-col gap-2">
+                        {tabs.map((tab) => {
+                            const Icon = tab.icon;
+                            const isActive = activeTab === tab.id;
+                            return (
+                                <button
+                                    key={tab.id}
+                                    onClick={() => setActiveTab(tab.id)}
+                                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-300 ${
+                                        isActive 
+                                            ? 'bg-[#3B82F6]/10 text-[#60A5FA] border border-[#3B82F6]/30 shadow-[0_0_15px_rgba(59,130,246,0.1)]' 
+                                            : 'text-white/60 hover:bg-white/5 hover:text-white border border-transparent'
+                                    }`}
+                                >
+                                    <Icon className="w-5 h-5" />
+                                    {tab.label}
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                {/* Main Content Area */}
+                <div className="flex-1 animate-reveal stagger-2">
+                    {activeTab === 'account' && (
+                        <div className="space-y-6">
+                            <div className="glass-subtle rounded-2xl p-8">
+                                <h2 className="text-xl font-bold text-white/90 mb-6">Public Profile</h2>
+                                
+                                <div className="flex items-center gap-6 mb-8">
+                                    <div className="w-20 h-20 rounded-full bg-[#1A1D24] border border-[#60A5FA]/30 flex items-center justify-center text-2xl font-bold text-[#60A5FA] shadow-[0_0_15px_rgba(96,165,250,0.1)]">
+                                        {session?.user?.name?.charAt(0) || 'U'}
+                                    </div>
+                                    <div>
+                                        <button className="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-sm font-medium text-white transition-colors">
+                                            Change Avatar
+                                        </button>
+                                        <p className="text-xs text-white/40 mt-2 font-mono uppercase tracking-wider">JPG, GIF or PNG. Max size of 800K</p>
+                                    </div>
                                 </div>
-                                <div className="bg-[#0B0E14]/60 border border-white/5 px-3 py-1.5 rounded-lg text-[10px] font-mono text-[#60A5FA] uppercase tracking-wider relative z-10">
-                                    {link.tag}
+
+                                <div className="space-y-6">
+                                    <div>
+                                        <label className="block text-sm font-bold text-white/70 mb-2">Display Name</label>
+                                        <input 
+                                            type="text" 
+                                            defaultValue={session?.user?.name || ''}
+                                            className="w-full bg-[#0B0E14] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#60A5FA] focus:ring-1 focus:ring-[#60A5FA] transition-all"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-bold text-white/70 mb-2">Bio</label>
+                                        <textarea 
+                                            rows={3}
+                                            placeholder="Tell us a little bit about yourself..."
+                                            className="w-full bg-[#0B0E14] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#60A5FA] focus:ring-1 focus:ring-[#60A5FA] transition-all resize-none"
+                                        />
+                                    </div>
+                                    <div className="pt-6 border-t border-white/5 flex justify-end">
+                                        <button className="flex items-center gap-2 px-6 py-3 bg-[#60A5FA] hover:bg-[#3B82F6] text-[#0B0E14] font-bold rounded-xl transition-all duration-300 shadow-[0_0_20px_rgba(96,165,250,0.3)] hover:scale-105 hover:shadow-[0_0_30px_rgba(96,165,250,0.4)]">
+                                            <Save className="w-5 h-5" /> Save Changes
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                            
-                            <div className="flex-1 flex flex-col justify-end relative z-10">
-                                <h2 className="text-xl md:text-2xl font-bold text-white/95 mb-3 flex items-center justify-between group-hover:text-[#60A5FA] transition-colors">
-                                    {link.title}
-                                    <ChevronRight className="w-6 h-6 text-white/20 group-hover:text-[#60A5FA] group-hover:translate-x-2 transition-all duration-300" />
-                                </h2>
-                                <p className="text-white/50 text-sm md:text-base leading-relaxed">
-                                    {link.description}
-                                </p>
                             </div>
                         </div>
-                    </Link>
-                ))}
+                    )}
+
+                    {activeTab === 'platforms' && (
+                        <div className="space-y-6">
+                            <div className="glass-subtle rounded-2xl p-8">
+                                <h2 className="text-xl font-bold text-white/90 mb-2">Connected Platforms</h2>
+                                <p className="text-sm text-white/50 mb-8">Link your coding accounts to automatically sync your stats to your profile.</p>
+
+                                <div className="space-y-4">
+                                    {/* LeetCode Form */}
+                                    <div className="p-6 bg-[#0B0E14] border border-white/5 rounded-2xl hover:border-white/10 transition-colors group">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <div className="flex items-center gap-3">
+                                                <div className="p-2.5 bg-[#F59E0B]/10 rounded-xl group-hover:bg-[#F59E0B]/20 transition-colors">
+                                                    <Globe className="w-6 h-6 text-[#F59E0B]" />
+                                                </div>
+                                                <div>
+                                                    <h3 className="text-lg font-bold text-white/90">LeetCode</h3>
+                                                    <p className="text-xs text-white/50 font-mono uppercase tracking-wider">Not connected</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-3">
+                                            <input 
+                                                type="text" 
+                                                placeholder="LeetCode Username"
+                                                className="flex-1 bg-[#1A1D24] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#F59E0B]"
+                                            />
+                                            <button className="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-sm font-bold text-white transition-colors">
+                                                Connect
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* Codeforces Form */}
+                                    <div className="p-6 bg-[#0B0E14] border border-white/5 rounded-2xl hover:border-white/10 transition-colors group">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <div className="flex items-center gap-3">
+                                                <div className="p-2.5 bg-[#EF4444]/10 rounded-xl group-hover:bg-[#EF4444]/20 transition-colors">
+                                                    <Globe className="w-6 h-6 text-[#EF4444]" />
+                                                </div>
+                                                <div>
+                                                    <h3 className="text-lg font-bold text-white/90">Codeforces</h3>
+                                                    <p className="text-xs text-white/50 font-mono uppercase tracking-wider">Not connected</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-3">
+                                            <input 
+                                                type="text" 
+                                                placeholder="Codeforces Handle"
+                                                className="flex-1 bg-[#1A1D24] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#EF4444]"
+                                            />
+                                            <button className="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-sm font-bold text-white transition-colors">
+                                                Connect
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {activeTab === 'appearance' && (
+                        <div className="space-y-6">
+                            <div className="glass-subtle rounded-2xl p-8">
+                                <h2 className="text-xl font-bold text-white/90 mb-6">Theme Preferences</h2>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <button className="p-8 border-2 border-[#60A5FA] bg-[#3B82F6]/5 rounded-2xl flex flex-col items-center gap-4 relative overflow-hidden group hover:bg-[#3B82F6]/10 transition-colors">
+                                        <div className="absolute inset-0 bg-gradient-to-br from-[#3B82F6]/20 to-transparent opacity-50" />
+                                        <div className="w-16 h-16 rounded-full bg-[#0B0E14] border border-[#3B82F6]/30 flex items-center justify-center relative z-10 shadow-[0_0_20px_rgba(59,130,246,0.2)]">
+                                            <div className="w-5 h-5 rounded-full bg-[#60A5FA] shadow-[0_0_15px_#60A5FA]" />
+                                        </div>
+                                        <span className="font-bold text-lg text-white relative z-10">CodeSync Dark</span>
+                                        <span className="text-xs text-[#60A5FA] font-bold tracking-wider uppercase relative z-10">Active Theme</span>
+                                    </button>
+
+                                    <button className="p-8 border border-white/10 bg-[#0B0E14] hover:bg-[#1A1D24] rounded-2xl flex flex-col items-center gap-4 transition-colors opacity-50 cursor-not-allowed">
+                                        <div className="w-16 h-16 rounded-full bg-white border border-gray-200 flex items-center justify-center">
+                                            <div className="w-5 h-5 rounded-full bg-gray-400" />
+                                        </div>
+                                        <span className="font-bold text-lg text-white/50">Light Mode</span>
+                                        <span className="text-xs text-white/30 font-bold tracking-wider uppercase">Coming Soon</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {activeTab === 'security' && (
+                        <div className="space-y-6">
+                            <div className="glass-subtle rounded-2xl p-8">
+                                <h2 className="text-xl font-bold text-white/90 mb-6">Privacy Options</h2>
+                                
+                                <div className="space-y-4">
+                                    <div className="flex items-center justify-between p-6 bg-[#0B0E14] border border-white/5 rounded-2xl hover:border-white/10 transition-colors">
+                                        <div>
+                                            <h3 className="font-bold text-white/90">Public Leaderboard</h3>
+                                            <p className="text-sm text-white/50 mt-1">Allow your stats to be shown on global rankings.</p>
+                                        </div>
+                                        <label className="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" className="sr-only peer" defaultChecked />
+                                            <div className="w-14 h-7 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-[#10B981] shadow-[inset_0_2px_4px_rgba(0,0,0,0.3)]"></div>
+                                        </label>
+                                    </div>
+
+                                    <div className="flex items-center justify-between p-6 bg-[#0B0E14] border border-white/5 rounded-2xl hover:border-white/10 transition-colors">
+                                        <div>
+                                            <h3 className="font-bold text-white/90">Discord DM Notifications</h3>
+                                            <p className="text-sm text-white/50 mt-1">Receive direct messages for daily streak summaries.</p>
+                                        </div>
+                                        <label className="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" className="sr-only peer" />
+                                            <div className="w-14 h-7 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-[#10B981] shadow-[inset_0_2px_4px_rgba(0,0,0,0.3)]"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            {/* Danger Zone */}
+                            <div className="glass-subtle rounded-2xl p-8 border-[#EF4444]/20 relative overflow-hidden">
+                                <div className="absolute top-0 right-0 w-64 h-64 bg-[#EF4444] opacity-[0.03] blur-[100px] rounded-full pointer-events-none" />
+                                <h2 className="text-xl font-bold text-[#EF4444] mb-6 relative z-10">Danger Zone</h2>
+                                <div className="p-6 bg-[#0B0E14] border border-[#EF4444]/20 rounded-2xl flex items-center justify-between relative z-10">
+                                    <div>
+                                        <h3 className="font-bold text-white/90">Delete Account</h3>
+                                        <p className="text-sm text-white/50 mt-1">Permanently remove your account and all associated data.</p>
+                                    </div>
+                                    <button className="px-6 py-3 bg-[#EF4444]/10 hover:bg-[#EF4444]/20 text-[#EF4444] border border-[#EF4444]/30 rounded-xl text-sm font-bold transition-colors">
+                                        Delete Account
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
             </div>
-        </main>
+        </div>
     );
 }

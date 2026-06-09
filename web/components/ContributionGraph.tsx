@@ -42,36 +42,35 @@ export function ContributionGraph({ history }: { history: SolvedProblem[] }) {
     }
     if (currentGroup) monthGroups.push(currentGroup);
 
-    // 4. Render the LeetCode-style blocked grid
+    // 4. Render the CodeSync-style blocked grid
     return (
-        <div className="w-full bg-[#0d1117] border border-[#30363d] rounded-xl p-6 shadow-sm overflow-hidden flex flex-col items-center">
-            <div className="w-full max-w-[900px] mb-4 flex justify-between items-end">
+        <div className="w-full flex flex-col items-center">
+            <div className="w-full max-w-[900px] mb-4 flex justify-between items-end px-2">
                 <div>
-                    <h3 className="text-lg font-semibold text-gray-200">Contribution Activity</h3>
-                    <p className="text-xs text-gray-400 mt-1">{history.length} problems solved in the last year</p>
+                    <h3 className="text-sm font-semibold text-white/90">Activity Heatmap</h3>
+                    <p className="text-[10px] uppercase tracking-wider font-mono text-[#60A5FA] mt-1">{history.length} problems solved</p>
                 </div>
-                <div className="flex gap-1.5 items-center text-xs text-gray-400">
+                <div className="flex gap-1.5 items-center text-xs text-white/40 font-mono">
                     <span className="mr-1">Less</span>
-                    <div className="w-3 h-3 bg-[#161b22] rounded-[2px]"></div>
-                    <div className="w-3 h-3 bg-[#0e4429] rounded-[2px]"></div>
-                    <div className="w-3 h-3 bg-[#006d32] rounded-[2px]"></div>
-                    <div className="w-3 h-3 bg-[#26a641] rounded-[2px]"></div>
-                    <div className="w-3 h-3 bg-[#39d353] rounded-[2px]"></div>
+                    <div className="w-3 h-3 bg-[#1A1D24] border border-white/5 rounded-[2px]"></div>
+                    <div className="w-3 h-3 bg-[#10B981]/20 rounded-[2px]"></div>
+                    <div className="w-3 h-3 bg-[#10B981]/50 rounded-[2px]"></div>
+                    <div className="w-3 h-3 bg-[#10B981]/80 rounded-[2px]"></div>
+                    <div className="w-3 h-3 bg-[#10B981] shadow-[0_0_8px_rgba(16,185,129,0.5)] rounded-[2px]"></div>
                     <span className="ml-1">More</span>
                 </div>
             </div>
 
             <div className="w-full max-w-[900px] overflow-x-auto custom-scrollbar pb-4 flex justify-center">
-                <div className="min-w-max flex gap-3">
+                <div className="min-w-max flex gap-2.5">
                     {monthGroups.map((group, gIdx) => {
                         // Find how many padding cells we need at the start of this month block
-                        // dayOfWeek goes from 0 (Sun) to 6 (Sat)
                         const firstDayOfWeek = group.days[0].dayOfWeek;
                         const paddingCells = Array(firstDayOfWeek).fill(null);
 
                         return (
                             <div key={gIdx} className="flex flex-col">
-                                <span className="text-xs text-gray-400 mb-2 font-medium">{group.name}</span>
+                                <span className="text-[10px] text-white/40 mb-2 font-mono uppercase tracking-wider">{group.name}</span>
                                 <div className="grid grid-rows-7 grid-flow-col gap-1">
                                     {/* Invisible padding cells so the first day starts on the correct row */}
                                     {paddingCells.map((_, i) => (
@@ -81,17 +80,22 @@ export function ContributionGraph({ history }: { history: SolvedProblem[] }) {
                                     {/* Actual days of the month */}
                                     {group.days.map((dayObj, dIdx) => {
                                         const count = solvesByDate[dayObj.dateStr] || 0;
-                                        let bgClass = "bg-[#161b22]"; // Empty cell
-                                        if (count > 0 && count <= 2) bgClass = "bg-[#0e4429]";
-                                        else if (count > 2 && count <= 5) bgClass = "bg-[#006d32]";
-                                        else if (count > 5 && count <= 8) bgClass = "bg-[#26a641]";
-                                        else if (count > 8) bgClass = "bg-[#39d353]";
+                                        let bgClass = "bg-[#1A1D24] border border-white/5"; // Empty cell
+                                        let glowClass = "";
+                                        
+                                        if (count > 0 && count <= 2) bgClass = "bg-[#10B981]/20";
+                                        else if (count > 2 && count <= 5) bgClass = "bg-[#10B981]/50";
+                                        else if (count > 5 && count <= 8) bgClass = "bg-[#10B981]/80";
+                                        else if (count > 8) {
+                                            bgClass = "bg-[#10B981]";
+                                            glowClass = "shadow-[0_0_8px_rgba(16,185,129,0.5)]";
+                                        }
 
                                         return (
                                             <div 
                                                 key={dIdx}
                                                 title={`${count} problems solved on ${dayObj.dateStr}`}
-                                                className={`w-3 h-3 rounded-[2px] ${bgClass} transition-all hover:ring-1 hover:ring-white/50 cursor-pointer`}
+                                                className={`w-3 h-3 rounded-[2px] ${bgClass} ${glowClass} transition-all duration-300 hover:ring-1 hover:ring-white/80 hover:scale-125 cursor-pointer z-10 hover:z-20`}
                                             />
                                         );
                                     })}

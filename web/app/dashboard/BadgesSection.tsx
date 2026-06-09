@@ -146,63 +146,64 @@ export async function BadgesSection({ userId }: { userId: string }) {
             id: 'polyglot',
             name: 'The Polyglot',
             description: 'Solve problems on at least 3 different coding platforms.',
-            icon: '🌐',
+            icon: <GlobeIcon />,
             color: 'from-purple-500 to-pink-500',
             glow: 'shadow-[0_0_20px_rgba(168,85,247,0.5)]',
             unlocked: platforms.size >= 3
         },
         {
             id: 'veteran',
-            name: 'Veteran Solver',
+            name: 'CodeSync Veteran',
             description: 'Surpass 500 total problems solved.',
-            icon: '🛡️',
+            icon: <Shield className="w-8 h-8 text-white" />,
+            color: 'from-rose-600 to-red-500',
+            glow: 'shadow-[0_0_20px_rgba(225,29,72,0.5)]',
             unlocked: totalSolves >= 500
         }
     ];
 
-    const earnedBadges = badges.filter(b => b.unlocked);
-
     return (
-        <section className="glass-subtle rounded-2xl p-6 md:p-8 flex flex-col h-full animate-reveal stagger-4">
-            <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-semibold text-white/95 flex items-center gap-2">
-                    <Award className="w-5 h-5 text-[#A78BFA]" /> Achievements
-                </h2>
-                <span className="px-3 py-1 bg-[#A78BFA]/10 text-[#A78BFA] text-xs font-mono rounded-lg border border-[#A78BFA]/20">
-                    {earnedBadges.length} Earned
-                </span>
-            </div>
-            
-            <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 -mr-2">
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 p-2">
-                    {badges.map(badge => {
-                        const isEarned = earnedBadges.some(b => b.id === badge.id);
-                        return (
-                            <div 
-                                key={badge.id}
-                                className={`relative group rounded-xl p-4 flex flex-col items-center justify-center text-center gap-3 transition-all duration-300 ${
-                                    isEarned 
-                                    ? 'bg-[#1A1D24] border border-[#A78BFA]/30 hover:border-[#A78BFA]/60 shadow-[0_0_15px_rgba(167,139,250,0.1)] hover:shadow-[0_0_20px_rgba(167,139,250,0.2)] hover:-translate-y-1' 
-                                    : 'bg-[#0B0E14] border border-white/5 opacity-50 grayscale hover:opacity-100 hover:grayscale-0'
-                                }`}
-                            >
-                                <div className="relative w-12 h-12 flex items-center justify-center">
-                                    {isEarned && <div className="absolute inset-0 bg-[#A78BFA] opacity-20 blur-md rounded-full" />}
-                                    <span className="text-3xl relative z-10 filter drop-shadow-md">{badge.icon}</span>
-                                </div>
-                                <div className="flex flex-col gap-1 w-full">
-                                    <span className="text-xs font-bold text-white/90 truncate">{badge.name}</span>
-                                    <span className="text-[10px] text-white/50 leading-tight line-clamp-2">{badge.description}</span>
-                                </div>
-                                {!isEarned && (
-                                    <div className="absolute inset-0 bg-[#0B0E14]/80 backdrop-blur-[1px] rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <span className="text-xs font-semibold text-[#A78BFA]">Locked</span>
-                                    </div>
-                                )}
-                            </div>
-                        );
-                    })}
+        <section className="glass-subtle rounded-2xl p-6 md:p-8 flex flex-col h-full gap-6">
+            <div className="flex items-center justify-between border-b border-white/5 pb-4">
+                <div>
+                    <h2 className="text-xl font-semibold text-white/95 flex items-center gap-2">
+                        <Award className="w-5 h-5 text-[#60A5FA]" /> Achievements
+                    </h2>
                 </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4 overflow-y-auto custom-scrollbar flex-1 pr-2">
+                {badges.map(badge => (
+                    <div 
+                        key={badge.id}
+                        className={`relative rounded-xl p-5 overflow-hidden transition-all duration-300 flex items-center gap-4 ${
+                            badge.unlocked 
+                                ? `bg-[#1A1D24]/60 backdrop-blur-md border border-white/10 ${badge.glow} hover:-translate-y-1 hover:border-white/20` 
+                                : 'bg-[#0B0E14]/40 border border-white/5 opacity-60 grayscale hover:grayscale-[50%]'
+                        }`}
+                    >
+                        {badge.unlocked && (
+                            <div className="absolute top-2 right-2">
+                                <CheckCircle2 className="w-4 h-4 text-[#10B981]" />
+                            </div>
+                        )}
+                        
+                        <div className={`w-12 h-12 flex-shrink-0 rounded-full bg-gradient-to-br ${badge.color} flex items-center justify-center shadow-lg`}>
+                            {badge.icon}
+                        </div>
+                        
+                        <div className="flex flex-col flex-1">
+                            <h3 className="text-sm font-bold text-white/95 mb-0.5">{badge.name}</h3>
+                            <p className="text-white/50 text-[11px] leading-snug">{badge.description}</p>
+                            
+                            {!badge.unlocked && (
+                                <div className="mt-2 text-[10px] font-mono text-white/30 bg-black/50 py-0.5 px-1.5 rounded w-fit border border-white/5">
+                                    🔒 Locked
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                ))}
             </div>
         </section>
     );

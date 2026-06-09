@@ -54,45 +54,34 @@ export default async function DashboardPage() {
 
     return (
         <main className="max-w-[1200px] mx-auto px-4 sm:px-6 py-12 flex flex-col gap-8">
-            {/* Clean Profile Header Section */}
-            <div className="relative w-full rounded-3xl overflow-hidden glass-subtle p-8 md:p-12 animate-reveal flex flex-col md:flex-row gap-8 items-center md:items-start border-white/5 z-10 mb-2">
-                {/* Background Art / Glow (Subtle) */}
-                <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#60A5FA] opacity-[0.03] blur-[80px] rounded-full pointer-events-none -translate-y-1/2 translate-x-1/3" />
-                <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-[#A78BFA] opacity-[0.03] blur-[80px] rounded-full pointer-events-none translate-y-1/2 -translate-x-1/3" />
-
-                {/* Avatar Column */}
-                <div className="relative shrink-0 flex flex-col items-center">
-                    <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white/5 shadow-lg relative z-10 bg-[#1A1D24]">
-                        {discordUser.avatar ? (
-                            <Image 
-                                src={discordUser.avatar} 
-                                alt={discordUser.username} 
-                                fill 
-                                className="object-cover"
-                            />
-                        ) : (
-                            <div className="w-full h-full flex items-center justify-center text-4xl font-bold text-[#60A5FA]">
-                                {discordUser.username.charAt(0)}
-                            </div>
-                        )}
-                    </div>
+            {/* Massive Profile Header Section */}
+            <div className="glass-strong rounded-3xl p-8 md:p-12 relative overflow-hidden flex flex-col md:flex-row items-center md:items-start gap-8 border-[#3B82F6]/20 shadow-[0_12px_40px_-10px_rgba(59,130,246,0.15)] animate-reveal mb-2">
+                {/* Background atmospheric glow */}
+                <div className="absolute top-0 right-0 w-full h-full pointer-events-none overflow-hidden rounded-3xl">
+                    <div className="absolute top-[-50%] right-[-10%] w-[60%] h-[150%] bg-[#3B82F6] opacity-10 blur-[100px] rounded-full" />
                 </div>
 
-                {/* Info Column */}
-                <div className="flex flex-col flex-1 relative z-10 text-center md:text-left mt-2">
-                    <div className="mb-6">
-                        <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight mb-2">
-                            {discordUser.username}
-                        </h1>
-                        <p className="text-[#60A5FA] font-mono text-sm uppercase tracking-widest font-semibold flex items-center justify-center md:justify-start gap-2">
-                            <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
-                            Online & Tracking
-                        </p>
+                <div className="relative z-10">
+                    <div className="absolute inset-0 bg-[#3B82F6] rounded-full blur-xl opacity-30 animate-pulse" />
+                    {discordUser.avatar ? (
+                        <Image src={discordUser.avatar} alt="Avatar" width={140} height={140} className="rounded-full relative z-10 border-4 border-[#3B82F6]/50 shadow-[0_0_30px_rgba(59,130,246,0.4)] bg-[#0B0E14] object-cover" />
+                    ) : (
+                        <div className="w-[140px] h-[140px] rounded-full relative z-10 border-4 border-[#3B82F6]/50 shadow-[0_0_30px_rgba(59,130,246,0.4)] bg-[#1A1D24] flex items-center justify-center text-5xl font-bold text-white/80">
+                            {discordUser.username.charAt(0)}
+                        </div>
+                    )}
+                </div>
+
+                <div className="relative z-10 flex flex-col items-center md:items-start flex-1 text-center md:text-left">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#3B82F6]/10 border border-[#3B82F6]/30 text-xs font-mono text-[#60A5FA] mb-4">
+                        <span className="w-2 h-2 rounded-full bg-[#3B82F6] shadow-[0_0_8px_#3B82F6] animate-pulse" />
+                        CodeSync Active
                     </div>
+                    <h1 className="text-4xl md:text-5xl font-bold text-white/95 tracking-tight mb-6">{discordUser.username}</h1>
                     
                     <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
-                        <div className="glass-subtle px-6 py-4 rounded-xl flex items-center gap-4 hover:bg-white/5 transition-colors">
-                            <div className="w-10 h-10 rounded-full bg-[#F59E0B]/10 flex items-center justify-center">
+                        <div className="glass-subtle px-6 py-4 rounded-xl flex items-center gap-4">
+                            <div className="w-10 h-10 rounded-full bg-[#F59E0B]/20 flex items-center justify-center">
                                 <Trophy className="w-5 h-5 text-[#F59E0B]" />
                             </div>
                             <div className="flex flex-col">
@@ -100,8 +89,8 @@ export default async function DashboardPage() {
                                 <span className="text-xs text-white/50 uppercase tracking-widest font-mono">Total Solved</span>
                             </div>
                         </div>
-                        <div className="glass-subtle px-6 py-4 rounded-xl flex items-center gap-4 border-[#10B981]/20 hover:bg-[#10B981]/5 transition-colors">
-                            <div className="w-10 h-10 rounded-full bg-[#10B981]/10 flex items-center justify-center">
+                        <div className="glass-subtle px-6 py-4 rounded-xl flex items-center gap-4 border-[#10B981]/20">
+                            <div className="w-10 h-10 rounded-full bg-[#10B981]/20 flex items-center justify-center">
                                 <Zap className="w-5 h-5 text-[#10B981]" />
                             </div>
                             <div className="flex flex-col">
@@ -114,50 +103,53 @@ export default async function DashboardPage() {
             </div>
 
             {/* Heatmap Section */}
-            <div className="w-full animate-reveal stagger-2 mb-4">
-                <ContributionGraph history={history} />
+            <div className="w-full glass-subtle rounded-2xl p-6 md:p-8 animate-reveal stagger-2 flex flex-col gap-4 mb-4">
+                <h2 className="text-xl font-semibold text-white/95 flex items-center gap-2">
+                    <Zap className="w-5 h-5 text-[#60A5FA]" /> 365-Day Activity
+                </h2>
+                <div className="w-full overflow-x-auto custom-scrollbar pb-2">
+                    <ContributionGraph history={history} />
+                </div>
             </div>
 
-            {/* Main Content Split */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-reveal stagger-3">
-                {/* Left Column: Platform Grid & Recent Activity */}
-                <div className="lg:col-span-8 flex flex-col gap-8">
-                    
-                    {/* Read-Only Connected Platforms Widget */}
-                    <div className="glass-subtle rounded-2xl p-6 md:p-8 flex flex-col gap-6">
-                        <div className="flex justify-between items-center">
-                            <h2 className="text-xl font-semibold text-white/95 flex items-center gap-2">
-                                <Globe className="w-5 h-5 text-[#60A5FA]" /> Connected Platforms
-                            </h2>
-                            <Link href="/dashboard/settings" className="text-xs font-mono uppercase tracking-wider text-[#60A5FA] hover:text-white transition-colors bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">
-                                Manage
-                            </Link>
-                        </div>
-                        
-                        {profiles.length > 0 ? (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {profiles.map(p => (
-                                    <div key={p.id} className="bg-[#0B0E14] border border-white/5 rounded-xl p-4 flex items-center gap-4">
-                                        <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center font-bold text-white/50">
-                                            {p.platform.charAt(0)}
-                                        </div>
-                                        <div className="flex flex-col">
-                                            <span className="font-semibold text-white/90">{p.username}</span>
-                                            <span className="text-[10px] uppercase font-mono tracking-wider text-white/40">{p.platform}</span>
-                                        </div>
-                                    </div>
-                                ))}
+            {/* Connected Platforms Widget */}
+            <div className="w-full glass-subtle rounded-2xl p-6 md:p-8 flex flex-col gap-6 animate-reveal stagger-3 mb-2">
+                <div className="flex justify-between items-center">
+                    <h2 className="text-xl font-semibold text-white/95 flex items-center gap-2">
+                        <Globe className="w-5 h-5 text-[#60A5FA]" /> Connected Platforms
+                    </h2>
+                    <Link href="/dashboard/settings" className="text-xs font-mono uppercase tracking-wider text-[#60A5FA] hover:text-white transition-colors bg-white/5 px-4 py-2 rounded-lg border border-white/10 hover:bg-[#60A5FA]/10">
+                        Manage Platforms
+                    </Link>
+                </div>
+                
+                {profiles.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        {profiles.map(p => (
+                            <div key={p.id} className="bg-[#0B0E14] border border-white/5 rounded-xl p-4 flex items-center gap-4 hover:border-white/10 transition-colors">
+                                <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center font-bold text-white/50">
+                                    {p.platform.charAt(0)}
+                                </div>
+                                <div className="flex flex-col truncate">
+                                    <span className="font-semibold text-white/90 truncate">{p.username}</span>
+                                    <span className="text-[10px] uppercase font-mono tracking-wider text-white/40">{p.platform}</span>
+                                </div>
                             </div>
-                        ) : (
-                            <div className="text-center p-8 bg-[#0B0E14] border border-white/5 rounded-xl flex flex-col items-center gap-3">
-                                <Globe className="w-8 h-8 text-white/20" />
-                                <p className="text-sm text-white/50">No platforms connected yet.</p>
-                                <Link href="/dashboard/settings" className="mt-2 text-sm text-[#60A5FA] hover:underline">Connect your first platform</Link>
-                            </div>
-                        )}
+                        ))}
                     </div>
+                ) : (
+                    <div className="text-center p-8 bg-[#0B0E14] border border-white/5 rounded-xl flex flex-col items-center gap-3">
+                        <Globe className="w-8 h-8 text-white/20" />
+                        <p className="text-sm text-white/50">No platforms connected yet.</p>
+                        <Link href="/dashboard/settings" className="mt-2 text-sm text-[#60A5FA] hover:underline">Connect your first platform</Link>
+                    </div>
+                )}
+            </div>
 
-                    {/* Recent Activity */}
+            {/* Main Content Split: Recent Activity & Badges */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-reveal stagger-4">
+                {/* Left Column: Recent Activity */}
+                <div className="lg:col-span-6 flex flex-col">
                     <div className="glass-subtle rounded-2xl overflow-hidden flex flex-col h-[500px]">
                         <div className="px-6 py-5 border-b border-white/5 bg-[#0B0E14]/40 flex items-center justify-between">
                             <h2 className="text-lg font-semibold text-white/95">Recent Submissions</h2>
@@ -167,11 +159,11 @@ export default async function DashboardPage() {
                             <div className="flex-1 overflow-y-auto custom-scrollbar">
                                 {history.slice(0, 100).map((problem: any) => (
                                     <div key={problem.id} className="flex items-center justify-between px-6 py-4 border-b border-white/5 hover:bg-[#1A1D24]/60 transition-colors group">
-                                        <div className="flex flex-col gap-1">
-                                            <span className="text-sm font-medium text-white/90 truncate max-w-[300px] group-hover:text-white transition-colors">{problem.title}</span>
+                                        <div className="flex flex-col gap-1 overflow-hidden pr-2">
+                                            <span className="text-sm font-medium text-white/90 truncate group-hover:text-white transition-colors">{problem.title}</span>
                                             <span className="text-xs text-[#60A5FA]/80 uppercase tracking-wider font-mono">{problem.platform}</span>
                                         </div>
-                                        <div className="flex items-center gap-4">
+                                        <div className="flex items-center gap-4 shrink-0">
                                             <span className="text-xs text-white/40 font-mono">{new Date(problem.solvedAt).toISOString().split('T')[0]}</span>
                                             <span className="w-2 h-2 rounded-full bg-[#10B981] shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
                                         </div>
@@ -190,8 +182,10 @@ export default async function DashboardPage() {
                 </div>
 
                 {/* Right Column: Badges */}
-                <div className="lg:col-span-4">
-                    <BadgesSection userId={session.user.id} />
+                <div className="lg:col-span-6">
+                    <div className="h-[500px]">
+                        <BadgesSection userId={session.user.id} />
+                    </div>
                 </div>
             </div>
         </main>

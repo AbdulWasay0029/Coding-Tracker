@@ -15,6 +15,8 @@ export function Navbar() {
     const toggleMenu = () => setMobileMenuOpen(!mobileMenuOpen);
 
     const navLinks = [
+        { name: 'Features', href: '/#features' },
+        { name: 'Community', href: '/#community' },
         { name: 'Leaderboard', href: '/leaderboard' },
     ];
 

@@ -4,6 +4,28 @@ import { authOptions } from '../auth/[...nextauth]/route';
 import { prisma } from '../../../lib/prisma';
 import { encrypt } from '../../../../src/core/encryption';
 
+export async function GET(req: Request) {
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    try {
+        const profiles = await prisma.userProfile.findMany({
+            where: { discordUserId: session.user.id },
+            select: {
+                id: true,
+                platform: true,
+                username: true,
+                // Do not return token for security
+            }
+        });
+        return NextResponse.json(profiles);
+    } catch (error: any) {
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    }
+}
+
 export async function POST(req: Request) {
     const session = await getServerSession(authOptions);
     if (!session || !session.user) {

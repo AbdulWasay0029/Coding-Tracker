@@ -6,9 +6,7 @@ import { prisma } from '../../lib/prisma';
 import Image from 'next/image';
 import { ProfileManager } from './ProfileManager';
 import { ContributionGraph } from '../../components/ContributionGraph';
-import { Trophy, Zap, Globe, Terminal } from 'lucide-react';
-
-import { BadgesSection } from './BadgesSection';
+import { Trophy, Zap, Globe, Terminal, Flame } from 'lucide-react';
 
 async function getDiscordUser(userId: string) {
     try {
@@ -98,6 +96,15 @@ export default async function DashboardPage() {
                                 <span className="text-xs text-white/50 uppercase tracking-widest font-mono">Global Rank</span>
                             </div>
                         </div>
+                        <Link href="/dashboard/badges" className="glass-subtle px-6 py-4 rounded-xl flex items-center gap-4 border-[#EF4444]/20 hover:bg-white/10 transition-colors group cursor-pointer">
+                            <div className="w-10 h-10 rounded-full bg-[#EF4444]/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <Flame className="w-5 h-5 text-[#EF4444]" />
+                            </div>
+                            <div className="flex flex-col">
+                                <span className="font-mono text-xl font-black text-white/95">Badges</span>
+                                <span className="text-xs text-[#EF4444] uppercase tracking-widest font-mono group-hover:text-white transition-colors">View All</span>
+                            </div>
+                        </Link>
                     </div>
                 </div>
             </div>
@@ -123,7 +130,7 @@ export default async function DashboardPage() {
                     <h2 className="text-xl font-semibold text-white/95 flex items-center gap-2">
                         <Globe className="w-5 h-5 text-[#60A5FA]" /> Connected Platforms
                     </h2>
-                    <Link href="/dashboard/settings/profiles" className="text-xs font-mono uppercase tracking-wider text-[#60A5FA] hover:text-white transition-colors bg-white/5 px-4 py-2 rounded-lg border border-white/10 hover:bg-[#60A5FA]/10">
+                    <Link href="/dashboard/settings?tab=platforms" className="text-xs font-mono uppercase tracking-wider text-[#60A5FA] hover:text-white transition-colors bg-white/5 px-4 py-2 rounded-lg border border-white/10 hover:bg-[#60A5FA]/10">
                         Manage Platforms
                     </Link>
                 </div>
@@ -151,10 +158,8 @@ export default async function DashboardPage() {
                 )}
             </div>
 
-            {/* Main Content Split: Recent Activity & Badges */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-reveal stagger-4">
-                {/* Left Column: Recent Activity */}
-                <div className="lg:col-span-6 flex flex-col">
+            {/* Recent Activity */}
+            <div className="animate-reveal stagger-4 flex flex-col">
                     <div className="glass-subtle rounded-2xl overflow-hidden flex flex-col h-[500px]">
                         <div className="px-6 py-5 border-b border-white/5 bg-[#0B0E14]/40 flex items-center justify-between">
                             <h2 className="text-lg font-semibold text-white/95">Recent Submissions</h2>
@@ -185,14 +190,6 @@ export default async function DashboardPage() {
                         )}
                     </div>
                 </div>
-
-                {/* Right Column: Badges */}
-                <div className="lg:col-span-6">
-                    <div className="h-[500px]">
-                        <BadgesSection userId={session.user.id} />
-                    </div>
-                </div>
-            </div>
         </main>
     );
 }

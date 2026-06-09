@@ -28,7 +28,7 @@ export default function Home() {
                     <h1 className="text-5xl sm:text-6xl lg:text-[5rem] font-bold tracking-tight leading-[1.05] animate-reveal stagger-2">
                         <span className="text-white/95">Your Unified </span>
                         <br className="hidden lg:block" />
-                        <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#60A5FA] to-[#A78BFA]">Developer Identity.</span>
+                        <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#60A5FA] to-[#A78BFA]">Coding Profile.</span>
                     </h1>
                     
                     <p className="text-lg md:text-xl text-white/70 max-w-xl font-normal animate-reveal stagger-3">
@@ -153,7 +153,7 @@ export default function Home() {
             </div>
 
             {/* Core Features Grid */}
-            <div className="py-32 relative z-10 bg-[#0B0E14]">
+            <div id="features" className="py-32 relative z-10 bg-[#0B0E14]">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-20 animate-reveal stagger-2">
                         <h2 className="text-4xl md:text-5xl font-bold text-white/95">Built for the Community</h2>
@@ -198,10 +198,10 @@ export default function Home() {
             </div>
 
             {/* FAQ Section */}
-            <div className="bg-[#05070A] py-32 border-t border-white/5 relative z-10">
+            <div id="community" className="bg-[#05070A] py-32 border-t border-white/5 relative z-10">
                 <div className="max-w-4xl mx-auto px-4">
                     <div className="text-center mb-16 animate-reveal stagger-2">
-                        <h2 className="text-3xl md:text-4xl font-bold text-white/95">Frequently Asked Questions</h2>
+                        <h2 className="text-3xl md:text-4xl font-bold text-white/95">Community FAQ</h2>
                     </div>
                     <div className="divide-y divide-white/10 border-y border-white/10 animate-reveal stagger-3">
                         <div className="py-8 flex flex-col gap-3 group">

@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { User, Globe, Palette, Shield, Save, ArrowRight } from 'lucide-react';
 import { useSession } from 'next-auth/react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import SettingsPlatformsManager from './SettingsPlatformsManager';
 import { AdminClient } from './AdminClient';
 import WidgetsClient from './widgets/WidgetsClient';
@@ -12,7 +13,14 @@ import { FileText, Code2, Server } from 'lucide-react';
 export default function SettingsHub({ session: serverSession, adminGuilds }: { session: any, adminGuilds: any[] }) {
     const { data: clientSession } = useSession();
     const session = clientSession || serverSession;
-    const [activeTab, setActiveTab] = useState('account');
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'account');
+
+    useEffect(() => {
+        const tab = searchParams.get('tab');
+        if (tab) setActiveTab(tab);
+    }, [searchParams]);
 
     const tabs = [
         { id: 'account', label: 'Account Profile', icon: User },
@@ -46,7 +54,10 @@ export default function SettingsHub({ session: serverSession, adminGuilds }: { s
                             return (
                                 <button
                                     key={tab.id}
-                                    onClick={() => setActiveTab(tab.id)}
+                                    onClick={() => {
+                                        setActiveTab(tab.id);
+                                        router.push(`?tab=${tab.id}`, { scroll: false });
+                                    }}
                                     className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-300 ${
                                         isActive 
                                             ? 'bg-[#3B82F6]/10 text-[#60A5FA] border border-[#3B82F6]/30 shadow-[0_0_15px_rgba(59,130,246,0.1)]' 

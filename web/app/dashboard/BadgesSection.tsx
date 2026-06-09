@@ -1,19 +1,7 @@
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../api/auth/[...nextauth]/route';
-import { redirect } from 'next/navigation';
-import { prisma } from '../../../lib/prisma';
-import { Award, Flame, Zap, CheckCircle2, Shield, Moon, Brain, Target, Sun, CalendarDays, Code2, Terminal, Swords } from 'lucide-react';
+import { prisma } from '../../lib/prisma';
+import { Award, Flame, Zap, CheckCircle2, Shield, Moon, Brain, Target, Sun, CalendarDays, Code2, Terminal } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
-
-export default async function BadgesPage() {
-    const session = await getServerSession(authOptions);
-    if (!session || !session.user?.id) {
-        redirect('/api/auth/signin');
-    }
-
-    const userId = session.user.id;
-
+export async function BadgesSection({ userId }: { userId: string }) {
     // Fetch user stats to compute badges dynamically
     const solves = await prisma.solvedProblem.findMany({
         where: { discordUserId: userId },
@@ -22,7 +10,7 @@ export default async function BadgesPage() {
 
     const totalSolves = solves.length;
     
-    // Check platforms used (Fixed bug: using s.platform instead of s.problemId)
+    // Check platforms used
     const platforms = new Set(solves.map(s => s.platform));
 
     // Calculate advanced stats
@@ -175,46 +163,48 @@ export default async function BadgesPage() {
     ];
 
     return (
-        <main className="max-w-6xl mx-auto px-4 py-16">
-            <div className="mb-12 animate-reveal stagger-1">
-                <h1 className="text-4xl font-black text-white tracking-tight mb-2 flex items-center gap-3">
-                    <Flame className="w-8 h-8 text-primary" /> Profile Badges
-                </h1>
-                <p className="text-text-secondary text-lg">Earn exclusive badges as you level up your unified developer identity.</p>
+        <section className="mt-8">
+            <div className="mb-6 animate-reveal stagger-1 flex items-center justify-between">
+                <div>
+                    <h2 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
+                        <Flame className="w-6 h-6 text-primary" /> Profile Badges
+                    </h2>
+                    <p className="text-text-secondary text-sm mt-1">Earn exclusive badges as you level up.</p>
+                </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 animate-reveal stagger-2">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 animate-reveal stagger-2">
                 {badges.map(badge => (
                     <div 
                         key={badge.id}
-                        className={`relative rounded-xl p-6 overflow-hidden transition-all duration-300 ${
+                        className={`relative rounded-xl p-5 overflow-hidden transition-all duration-300 ${
                             badge.unlocked 
-                                ? `bg-surface border border-white/10 ${badge.glow} hover:-translate-y-2` 
+                                ? `bg-surface border border-white/10 ${badge.glow} hover:-translate-y-1` 
                                 : 'bg-[#05070A] border border-border opacity-50 grayscale hover:grayscale-0'
                         }`}
                     >
                         {badge.unlocked && (
-                            <div className="absolute top-3 right-3">
-                                <CheckCircle2 className="w-5 h-5 text-primary" />
+                            <div className="absolute top-2 right-2">
+                                <CheckCircle2 className="w-4 h-4 text-primary" />
                             </div>
                         )}
                         
-                        <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${badge.color} flex items-center justify-center mb-6 shadow-lg`}>
+                        <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${badge.color} flex items-center justify-center mb-4 shadow-lg`}>
                             {badge.icon}
                         </div>
                         
-                        <h3 className="text-xl font-bold text-white mb-2">{badge.name}</h3>
-                        <p className="text-text-secondary text-sm">{badge.description}</p>
+                        <h3 className="text-sm font-bold text-white mb-1">{badge.name}</h3>
+                        <p className="text-text-tertiary text-xs leading-tight">{badge.description}</p>
                         
                         {!badge.unlocked && (
-                            <div className="mt-6 text-xs font-mono text-text-secondary bg-black/50 py-1 px-2 rounded w-fit">
+                            <div className="mt-4 text-[10px] font-mono text-text-secondary bg-black/50 py-0.5 px-1.5 rounded w-fit">
                                 🔒 Locked
                             </div>
                         )}
                     </div>
                 ))}
             </div>
-        </main>
+        </section>
     );
 }
 

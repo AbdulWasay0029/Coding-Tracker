@@ -16,14 +16,11 @@ export function Navbar() {
 
     const navLinks = [
         { name: 'Leaderboard', href: '/leaderboard' },
-        { name: 'Documentation', href: '/docs' },
     ];
 
     if (session) {
         navLinks.push(
-            { name: 'Profile', href: '/dashboard' },
-            { name: 'Badges', href: '/dashboard/badges' },
-            { name: 'Widgets', href: '/dashboard/widgets' },
+            { name: 'Dashboard', href: '/dashboard' },
             { name: 'Settings', href: '/dashboard/settings' }
         );
     }

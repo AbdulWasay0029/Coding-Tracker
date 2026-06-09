@@ -35,6 +35,7 @@ export default function DocsPage() {
                     <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
                         <Users className="w-6 h-6 text-warning" /> Profile Management
                     </h2>
+                    <div className="space-y-6">
                         <div className="bg-surface border border-border p-6 rounded-xl">
                             <h3 className="text-lg font-bold text-warning font-mono mb-2">/add-profile</h3>
                             <p className="text-text-secondary mb-4">Provides a secure link to the Web Dashboard where you can link a new coding platform to your CodeSync account.</p>

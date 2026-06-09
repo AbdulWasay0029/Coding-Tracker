@@ -7,6 +7,8 @@ import { ProfileManager } from './ProfileManager';
 import { ContributionGraph } from '../../components/ContributionGraph';
 import { Trophy, Zap } from 'lucide-react';
 
+import { BadgesSection } from './BadgesSection';
+
 async function getDiscordUser(userId: string) {
     try {
         const res = await fetch(`https://discord.com/api/v10/users/${userId}`, {
@@ -121,6 +123,9 @@ export default async function DashboardPage() {
                     </div>
                 </div>
             </div>
+
+            {/* Badges Section */}
+            <BadgesSection userId={session.user.id} />
         </main>
     );
 }

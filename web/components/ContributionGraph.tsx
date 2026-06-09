@@ -45,11 +45,7 @@ export function ContributionGraph({ history }: { history: SolvedProblem[] }) {
     // 4. Render the CodeSync-style blocked grid
     return (
         <div className="w-full flex flex-col items-center">
-            <div className="w-full max-w-[900px] mb-4 flex justify-between items-end px-2">
-                <div>
-                    <h3 className="text-sm font-semibold text-white/90">Activity Heatmap</h3>
-                    <p className="text-[10px] uppercase tracking-wider font-mono text-[#60A5FA] mt-1">{history.length} problems solved</p>
-                </div>
+            <div className="w-full max-w-[900px] mb-4 flex justify-end px-2">
                 <div className="flex gap-1.5 items-center text-xs text-white/40 font-mono">
                     <span className="mr-1">Less</span>
                     <div className="w-3 h-3 bg-[#1A1D24] border border-white/5 rounded-[2px]"></div>

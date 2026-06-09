@@ -1,0 +1,926 @@
+<!DOCTYPE html><html><head>
+    <style>@layer theme, base, paraflow, components, utilities;</style><meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    
+    
+    
+    <style id="moxt-styled">@layer paraflow{@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&family=Open+Sans:wght@300;400;500;600;700;800&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Roboto+Condensed:wght@100;200;300;400;500;600;700;800;900&family=Roboto+Mono:wght@100;200;300;400;500;600;700&family=PT+Serif:wght@400;700&family=Arimo:wght@400;500;600;700&family=Raleway:wght@100;200;300;400;500;600;700;800;900&family=Nunito:wght@200;300;400;500;600;700&;800;900&family=Rubik:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&family=Ubuntu:wght@300;400;500;700&family=Merriweather:wght@300;400;500;600;700;800;900&family=Roboto+Slab:wght@100;200;300;400;500;600;700&family=Libre+Baskerville:wght@400;700&family=Inconsolata:wght@200;300;400;500;600;700;800;900&family=Dancing+Script:wght@400;500;600;700&family=Kanit:wght@100;200;300;400;500;600;700;800;900&display=swap');
+.pf-a2872e81-bg-orbs {
+    overflow-x: hidden;
+    overflow-y: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+.pf-a2872e81-orb {
+    filter: blur(120px);
+    opacity: 0.12;
+    position: absolute;
+    border-radius: 50%;
+}
+.pf-a2872e81-orb-1 {
+    top: -10%;
+    right: 15%;
+    width: 500px;
+    height: 500px;
+}
+.pf-a2872e81-orb-2 {
+    bottom: -10%;
+    left: -5%;
+    width: 400px;
+    height: 400px;
+}
+.pf-a2872e81-nav {
+    backdrop-filter: blur(20px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 1.5rem 0;
+    background: rgba(26, 29, 36, 0.3);
+}
+.pf-a2872e81-nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1600px;
+    padding: 0 2rem;
+    margin: 0 auto;
+}
+.pf-a2872e81-logo {
+    background-clip: text;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+.pf-a2872e81-nav-links {
+    display: flex;
+    row-gap: 2.5rem;
+    column-gap: 2.5rem;
+}
+.pf-a2872e81-nav-right {
+    display: flex;
+    align-items: center;
+    row-gap: 1.5rem;
+    column-gap: 1.5rem;
+}
+.pf-a2872e81-notification-icon {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+}
+.pf-a2872e81-notification-badge {
+    display: flex;
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    justify-content: center;
+    align-items: center;
+    width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    border-radius: 50%;
+}
+.pf-a2872e81-user-avatar {
+    width: 40px;
+    height: 40px;
+    box-shadow: var( --shadow-glow-blue );
+    border-radius: 50%;
+}
+.pf-a2872e81-container {
+    position: relative;
+    max-width: 1600px;
+    z-index: 1;
+    padding: 3rem 2rem;
+    margin: 0 auto;
+}
+.pf-a2872e81-page-header {
+    margin-bottom: 3rem;
+}
+.pf-a2872e81-page-title {
+    background-clip: text;
+    margin-bottom: 0.5rem;
+    font-size: 3rem;
+    font-weight: 700;
+}
+.pf-a2872e81-page-subtitle {
+    color: var( --text-secondary );
+    font-size: 1.2rem;
+}
+.pf-a2872e81-bento-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    row-gap: 1.5rem;
+    column-gap: 1.5rem;
+}
+.pf-a2872e81-bento-card {
+    backdrop-filter: blur(20px);
+    box-shadow: var( --shadow-card );
+    padding: 2.5rem;
+    border-radius: 24px;
+}
+.pf-a2872e81-card-large {
+    grid-column-start: span 2;
+    grid-column-end: auto;
+}
+.pf-a2872e81-card-header {
+    display: flex;
+    align-items: center;
+    row-gap: 0.75rem;
+    column-gap: 0.75rem;
+    margin-bottom: 2rem;
+}
+.pf-a2872e81-card-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    font-size: 1.25rem;
+    border-radius: 12px;
+}
+.pf-a2872e81-card-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+.pf-a2872e81-profile-display {
+    display: flex;
+    align-items: center;
+    row-gap: 2rem;
+    column-gap: 2rem;
+    margin-bottom: 2.5rem;
+    padding-bottom: 2.5rem;
+}
+.pf-a2872e81-profile-avatar-large {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    box-shadow: var( --shadow-glow-blue );
+    border-radius: 50%;
+}
+.pf-a2872e81-profile-discriminator {
+    font-family: "JetBrains Mono", monospace;
+    color: var( --text-muted );
+    font-size: 0.9rem;
+}
+.pf-a2872e81-user-id {
+    font-family: "JetBrains Mono", monospace;
+    margin-top: 0.5rem;
+    color: var( --text-muted );
+    font-size: 0.85rem;
+}
+.pf-a2872e81-settings-section {
+    margin-bottom: 2rem;
+}
+.pf-a2872e81-section-label {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+    color: var( --text-secondary );
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+.pf-a2872e81-toggle-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+}
+.pf-a2872e81-toggle-switch {
+    position: relative;
+    width: 48px;
+    height: 28px;
+    border-radius: 14px;
+}
+.pf-a2872e81-toggle-slider {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 24px;
+    height: 24px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+    background: white;
+}
+.pf-a2872e81-btn {
+    display: inline-flex;
+    align-items: center;
+    row-gap: 0.5rem;
+    column-gap: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-width: initial;
+    border-color: initial;
+    border-style: none;
+    border-radius: 12px;
+}
+.pf-a2872e81-btn-primary {
+    box-shadow: var( --shadow-glow-blue );
+    color: white;
+}
+.pf-a2872e81-btn-secondary {
+    color: var( --text-primary );
+}
+.pf-a2872e81-btn-danger {
+    color: var( --error-red );
+    border-width: 1px;
+    border-color: rgba(239, 68, 68, 0.3);
+    border-style: solid;
+    background: rgba(239, 68, 68, 0.2);
+}
+.pf-a2872e81-btn-block {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+.pf-a2872e81-action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 1rem;
+    column-gap: 1rem;
+    margin-top: 1.5rem;
+}
+.pf-a2872e81-danger-zone {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top-color: rgba(239, 68, 68, 0.2);
+    border-top-style: solid;
+    border-top-width: 1px;
+}
+.pf-a2872e81-platform-list {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+    column-gap: 1rem;
+}
+.pf-a2872e81-platform-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem;
+    border-radius: 16px;
+}
+.pf-a2872e81-platform-info {
+    display: flex;
+    align-items: center;
+    row-gap: 1rem;
+    column-gap: 1rem;
+}
+.pf-a2872e81-platform-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+    border-radius: 10px;
+    background: rgba(59, 130, 246, 0.1);
+}
+.pf-a2872e81-status-badge {
+    display: inline-flex;
+    align-items: center;
+    row-gap: 0.5rem;
+    column-gap: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.4rem 0.9rem;
+    border-radius: 20px;
+}
+.pf-a2872e81-status-connected {
+    color: var( --success-emerald );
+    border-width: 1px;
+    border-color: rgba(16, 185, 129, 0.3);
+    border-style: solid;
+    background: rgba(16, 185, 129, 0.2);
+}
+.pf-a2872e81-status-disconnected {
+    color: var( --error-red );
+    border-width: 1px;
+    border-color: rgba(239, 68, 68, 0.3);
+    border-style: solid;
+    background: rgba(239, 68, 68, 0.2);
+}
+.pf-a2872e81-link-list {
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.75rem;
+    column-gap: 0.75rem;
+}
+.pf-a2872e81-link-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var( --text-primary );
+    padding: 1rem;
+    border-width: 1px;
+    border-color: transparent;
+    border-style: solid;
+    border-radius: 12px;
+}
+.pf-a2872e81-link-content {
+    display: flex;
+    align-items: center;
+    row-gap: 0.75rem;
+    column-gap: 0.75rem;
+}
+.pf-a2872e81-link-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 32px;
+    height: 32px;
+    color: var( --primary-cyan );
+}
+.pf-a2872e81-widget-preview {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    border-radius: 16px;
+}
+.pf-a2872e81-widget-preview-img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 120px;
+    max-width: 400px;
+    color: var( --text-muted );
+    font-size: 0.85rem;
+    margin: 0 auto;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(16, 185, 129, 0.1));
+}
+.pf-a2872e81-widget-options {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+    column-gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+.pf-a2872e81-input-group {
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.5rem;
+    column-gap: 0.5rem;
+}
+.pf-a2872e81-input-field {
+    font-family: "JetBrains Mono", monospace;
+    width: 100%;
+    color: var( --text-primary );
+    font-size: 0.9rem;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+}
+.pf-a2872e81-checkbox-item {
+    display: flex;
+    align-items: center;
+    row-gap: 0.75rem;
+    column-gap: 0.75rem;
+    padding: 0.5rem 0;
+}
+.pf-a2872e81-checkbox {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+}
+.pf-a2872e81-admin-badge {
+    display: inline-flex;
+    align-items: center;
+    row-gap: 0.5rem;
+    column-gap: 0.5rem;
+    color: rgba(11, 14, 20, 1);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.35rem 0.75rem;
+    border-radius: 12px;
+}
+.pf-a2872e81-admin-card {
+    border-color: rgba(167, 139, 250, 0.3);
+}
+}</style>
+<!--FontAwesome version: 6.7.2--><link rel="stylesheet" href="https://static.paraflowcontent.com/public/css/font-awesome/font-awesome.672.css"><!--Tailwind version: 4.0.17--><script src="https://static.paraflowcontent.com/public/js/tailwind/tailwind.js"></script><!--iconify-icon version: 3.0.0--><script src="https://static.paraflowcontent.com/public/js/iconify/iconify-icon-3.0.0.js"></script></head>
+<body id="16:1" title="settings-hub.html" orderindex="80" relativetransform="2480, 176" class="w-[390px]">
+
+<div id="16:2" orderindex="80" class="pf-a2872e81-bg-orbs">
+<div id="16:3" orderindex="80" class="pf-a2872e81-orb pf-a2872e81-orb-1"></div>
+<div id="16:4" orderindex="81" class="pf-a2872e81-orb pf-a2872e81-orb-2"></div>
+</div>
+
+<nav id="16:5" orderindex="81" class="pf-a2872e81-nav">
+<div id="16:6" orderindex="80" class="pf-a2872e81-nav-container">
+<div id="16:7" orderindex="80" class="pf-a2872e81-logo">CodeSync</div>
+<ul id="16:8" orderindex="81" class="pf-a2872e81-nav-links">
+<li id="16:9" orderindex="80"><a id="16:10" orderindex="80" href="dashboard.html">Dashboard</a></li>
+<li id="16:11" orderindex="81"><a id="16:12" orderindex="80" href="leaderboard.html">Leaderboard</a></li>
+<li id="16:13" orderindex="82"><a id="16:14" orderindex="80" class="active" href="settings-hub.html">Settings</a></li>
+</ul>
+<div id="16:15" orderindex="82" class="pf-a2872e81-nav-right">
+<div id="16:16" orderindex="80" class="pf-a2872e81-notification-icon">
+<iconify-icon id="16:17" orderindex="80" style="font-size: 1.25rem;" icon="lucide:bell"></iconify-icon>
+<div id="16:18" orderindex="81" class="pf-a2872e81-notification-badge">3</div>
+</div>
+<img id="16:19" orderindex="81" class="pf-a2872e81-user-avatar" alt="User Avatar" src="https://i.pravatar.cc/150?img=68">
+</div>
+</div>
+</nav>
+
+<div id="16:20" orderindex="82" class="pf-a2872e81-container">
+
+<div id="16:21" orderindex="80" class="pf-a2872e81-page-header">
+<h1 id="16:22" orderindex="80" class="pf-a2872e81-page-title">Settings</h1>
+<p id="16:23" orderindex="81" class="pf-a2872e81-page-subtitle">Manage your profile, connections, and preferences</p>
+</div>
+
+<div id="16:24" orderindex="81" class="pf-a2872e81-bento-grid">
+
+<div id="16:25" orderindex="80" class="pf-a2872e81-bento-card pf-a2872e81-card-large">
+<div id="16:26" orderindex="80" class="pf-a2872e81-card-header">
+<div id="16:27" orderindex="80" class="pf-a2872e81-card-icon">
+<iconify-icon id="16:28" orderindex="80" style="font-size: 1.25rem;" icon="lucide:user"></iconify-icon>
+</div>
+<h2 id="16:29" orderindex="81" class="pf-a2872e81-card-title">Profile &amp; Account</h2>
+</div>
+
+<div id="16:30" orderindex="81" class="pf-a2872e81-profile-display">
+<img id="16:31" orderindex="80" class="pf-a2872e81-profile-avatar-large" alt="Profile Avatar" src="https://i.pravatar.cc/150?img=68">
+<div id="16:32" orderindex="81" class="profile-info">
+<h3 id="16:33" orderindex="80">CodeMaster</h3>
+<p id="16:34" orderindex="81" class="pf-a2872e81-profile-discriminator">#3742</p>
+<p id="16:35" orderindex="82" class="pf-a2872e81-user-id">ID: 847562938475629384</p>
+</div>
+</div>
+
+<div id="16:36" orderindex="82" class="pf-a2872e81-settings-section">
+<div id="16:37" orderindex="80" class="pf-a2872e81-section-label">Visibility Settings</div>
+<div id="16:38" orderindex="81" class="pf-a2872e81-toggle-item">
+<div id="16:39" orderindex="80" class="toggle-info">
+<h4 id="16:40" orderindex="80">Public Profile</h4>
+<p id="16:41" orderindex="81">Allow others to view your profile and stats</p>
+</div>
+<div id="16:42" orderindex="81" class="pf-a2872e81-toggle-switch active">
+<div id="16:43" orderindex="80" class="pf-a2872e81-toggle-slider"></div>
+</div>
+</div>
+<div id="16:44" orderindex="82" class="pf-a2872e81-toggle-item">
+<div id="16:45" orderindex="80" class="toggle-info">
+<h4 id="16:46" orderindex="80">Show on Leaderboards</h4>
+<p id="16:47" orderindex="81">Display your rank in server leaderboards</p>
+</div>
+<div id="16:48" orderindex="81" class="pf-a2872e81-toggle-switch active">
+<div id="16:49" orderindex="80" class="pf-a2872e81-toggle-slider"></div>
+</div>
+</div>
+<div id="16:50" orderindex="83" class="pf-a2872e81-toggle-item">
+<div id="16:51" orderindex="80" class="toggle-info">
+<h4 id="16:52" orderindex="80">Display Badge Collection</h4>
+<p id="16:53" orderindex="81">Show earned badges on your profile</p>
+</div>
+<div id="16:54" orderindex="81" class="pf-a2872e81-toggle-switch active">
+<div id="16:55" orderindex="80" class="pf-a2872e81-toggle-slider"></div>
+</div>
+</div>
+</div>
+
+<div id="16:56" orderindex="83" class="pf-a2872e81-action-buttons">
+<button id="16:57" orderindex="80" class="pf-a2872e81-btn pf-a2872e81-btn-primary">
+<iconify-icon id="16:58" orderindex="80" icon="lucide:refresh-cw"></iconify-icon>
+                        <span id="0:1" orderindex="81">Sync All Platforms</span>
+                    </button>
+<button id="16:59" orderindex="81" class="pf-a2872e81-btn pf-a2872e81-btn-secondary">
+<iconify-icon id="16:60" orderindex="80" icon="lucide:download"></iconify-icon>
+                        <span id="0:2" orderindex="81">Export Data</span>
+                    </button>
+</div>
+
+<div id="16:61" orderindex="84" class="pf-a2872e81-danger-zone">
+<button id="16:62" orderindex="80" class="pf-a2872e81-btn pf-a2872e81-btn-danger">
+<iconify-icon id="16:63" orderindex="80" icon="lucide:trash-2"></iconify-icon>
+                        <span id="0:3" orderindex="81">Delete Account</span>
+                    </button>
+</div>
+</div>
+
+<div id="16:64" orderindex="81" class="pf-a2872e81-bento-card">
+<div id="16:65" orderindex="80" class="pf-a2872e81-card-header">
+<div id="16:66" orderindex="80" class="pf-a2872e81-card-icon">
+<iconify-icon id="16:67" orderindex="80" style="font-size: 1.25rem;" icon="lucide:code"></iconify-icon>
+</div>
+<h2 id="16:68" orderindex="81" class="pf-a2872e81-card-title">Profile Widgets</h2>
+</div>
+
+<div id="16:69" orderindex="81" class="pf-a2872e81-widget-preview">
+<div id="16:70" orderindex="80" class="pf-a2872e81-widget-preview-img">
+<iconify-icon id="16:71" orderindex="80" style="font-size: 2rem;" icon="lucide:image"></iconify-icon>
+<span id="16:72" orderindex="81" class="ml-2">Widget Preview</span>
+</div>
+</div>
+
+<div id="16:73" orderindex="82" class="pf-a2872e81-widget-options">
+<div id="16:74" orderindex="80" class="pf-a2872e81-input-group">
+<label id="16:75" orderindex="80">Widget Style</label>
+<select id="16:76" orderindex="81" class="pf-a2872e81-input-field">
+<option id="16:77" orderindex="80">Compact</option>
+<option id="16:78" orderindex="81">Full</option>
+<option id="16:79" orderindex="82">Minimal</option>
+</select>
+</div>
+<div id="16:80" orderindex="81" class="pf-a2872e81-checkbox-item">
+<div id="16:81" orderindex="80" class="pf-a2872e81-checkbox checked"></div>
+<label id="16:82" orderindex="81">Show Contribution Heatmap</label>
+</div>
+<div id="16:83" orderindex="82" class="pf-a2872e81-checkbox-item">
+<div id="16:84" orderindex="80" class="pf-a2872e81-checkbox checked"></div>
+<label id="16:85" orderindex="81">Show Badge Collection</label>
+</div>
+<div id="16:86" orderindex="83" class="pf-a2872e81-checkbox-item">
+<div id="16:87" orderindex="80" class="pf-a2872e81-checkbox"></div>
+<label id="16:88" orderindex="81">Show Platform Breakdown</label>
+</div>
+</div>
+
+<div id="16:89" orderindex="83" class="pf-a2872e81-action-buttons">
+<button id="16:90" orderindex="80" class="pf-a2872e81-btn pf-a2872e81-btn-secondary pf-a2872e81-btn-block">
+<iconify-icon id="16:91" orderindex="80" icon="lucide:link"></iconify-icon>
+                        <span id="0:4" orderindex="81">Copy SVG Link</span>
+                    </button>
+<button id="16:92" orderindex="81" class="pf-a2872e81-btn pf-a2872e81-btn-secondary pf-a2872e81-btn-block">
+<iconify-icon id="16:93" orderindex="80" icon="lucide:download"></iconify-icon>
+                        <span id="0:5" orderindex="81">Download PNG</span>
+                    </button>
+</div>
+
+<div id="16:94" orderindex="84" class="pf-a2872e81-input-group mt-6">
+<label id="16:95" orderindex="80">Shareable Profile Link</label>
+<div id="16:96" orderindex="81" class="flex gap-y-2 gap-x-2">
+<input id="16:97" orderindex="80" class="pf-a2872e81-input-field" value="codesync.dev/profile/codemaster" type="text">
+<button id="16:98" orderindex="81" class="pf-a2872e81-btn pf-a2872e81-btn-secondary">
+<iconify-icon id="16:99" orderindex="80" icon="lucide:copy"></iconify-icon>
+</button>
+</div>
+</div>
+</div>
+
+<div id="16:100" orderindex="82" class="pf-a2872e81-bento-card">
+<div id="16:101" orderindex="80" class="pf-a2872e81-card-header">
+<div id="16:102" orderindex="80" class="pf-a2872e81-card-icon">
+<iconify-icon id="16:103" orderindex="80" style="font-size: 1.25rem;" icon="lucide:link-2"></iconify-icon>
+</div>
+<h2 id="16:104" orderindex="81" class="pf-a2872e81-card-title">Platform Connections</h2>
+</div>
+<div id="16:105" orderindex="81" class="pf-a2872e81-platform-list">
+<div id="16:106" orderindex="80" class="pf-a2872e81-platform-item">
+<div id="16:107" orderindex="80" class="pf-a2872e81-platform-info">
+<div id="16:108" orderindex="80" class="pf-a2872e81-platform-logo">🔷</div>
+<div id="16:109" orderindex="81" class="platform-details">
+<h4 id="16:110" orderindex="80">LeetCode</h4>
+<p id="16:111" orderindex="81">Last synced: 2 hours ago</p>
+</div>
+</div>
+<span id="16:112" orderindex="81" class="pf-a2872e81-status-badge pf-a2872e81-status-connected">
+<iconify-icon id="16:113" orderindex="80" style="font-size: 0.85rem;" icon="lucide:check-circle"></iconify-icon>
+                            <span id="0:6" orderindex="81">Connected</span>
+                        </span>
+</div>
+<div id="16:114" orderindex="81" class="pf-a2872e81-platform-item">
+<div id="16:115" orderindex="80" class="pf-a2872e81-platform-info">
+<div id="16:116" orderindex="80" class="pf-a2872e81-platform-logo">🍴</div>
+<div id="16:117" orderindex="81" class="platform-details">
+<h4 id="16:118" orderindex="80">CodeChef</h4>
+<p id="16:119" orderindex="81">Last synced: 5 hours ago</p>
+</div>
+</div>
+<span id="16:120" orderindex="81" class="pf-a2872e81-status-badge pf-a2872e81-status-connected">
+<iconify-icon id="16:121" orderindex="80" style="font-size: 0.85rem;" icon="lucide:check-circle"></iconify-icon>
+                            <span id="0:7" orderindex="81">Connected</span>
+                        </span>
+</div>
+<div id="16:122" orderindex="82" class="pf-a2872e81-platform-item">
+<div id="16:123" orderindex="80" class="pf-a2872e81-platform-info">
+<div id="16:124" orderindex="80" class="pf-a2872e81-platform-logo">⚔️</div>
+<div id="16:125" orderindex="81" class="platform-details">
+<h4 id="16:126" orderindex="80">Codeforces</h4>
+<p id="16:127" orderindex="81">Last synced: 1 day ago</p>
+</div>
+</div>
+<span id="16:128" orderindex="81" class="pf-a2872e81-status-badge pf-a2872e81-status-connected">
+<iconify-icon id="16:129" orderindex="80" style="font-size: 0.85rem;" icon="lucide:check-circle"></iconify-icon>
+                            <span id="0:8" orderindex="81">Connected</span>
+                        </span>
+</div>
+<div id="16:130" orderindex="83" class="pf-a2872e81-platform-item">
+<div id="16:131" orderindex="80" class="pf-a2872e81-platform-info">
+<div id="16:132" orderindex="80" class="pf-a2872e81-platform-logo">💚</div>
+<div id="16:133" orderindex="81" class="platform-details">
+<h4 id="16:134" orderindex="80">HackerRank</h4>
+<p id="16:135" orderindex="81">Not connected</p>
+</div>
+</div>
+<span id="16:136" orderindex="81" class="pf-a2872e81-status-badge pf-a2872e81-status-disconnected">
+<iconify-icon id="16:137" orderindex="80" style="font-size: 0.85rem;" icon="lucide:x-circle"></iconify-icon>
+                            <span id="0:9" orderindex="81">Disconnected</span>
+                        </span>
+</div>
+<div id="16:138" orderindex="84" class="pf-a2872e81-platform-item">
+<div id="16:139" orderindex="80" class="pf-a2872e81-platform-info">
+<div id="16:140" orderindex="80" class="pf-a2872e81-platform-logo">🧠</div>
+<div id="16:141" orderindex="81" class="platform-details">
+<h4 id="16:142" orderindex="80">SmartInterviews</h4>
+<p id="16:143" orderindex="81">Last synced: 3 days ago</p>
+</div>
+</div>
+<span id="16:144" orderindex="81" class="pf-a2872e81-status-badge pf-a2872e81-status-connected">
+<iconify-icon id="16:145" orderindex="80" style="font-size: 0.85rem;" icon="lucide:check-circle"></iconify-icon>
+                            <span id="0:10" orderindex="81">Connected</span>
+                        </span>
+</div>
+</div>
+<button id="16:146" orderindex="82" class="pf-a2872e81-btn pf-a2872e81-btn-primary pf-a2872e81-btn-block mt-6">
+                    Manage All Connections
+                </button>
+</div>
+
+<div id="16:147" orderindex="83" class="pf-a2872e81-bento-card">
+<div id="16:148" orderindex="80" class="pf-a2872e81-card-header">
+<div id="16:149" orderindex="80" class="pf-a2872e81-card-icon">
+<iconify-icon id="16:150" orderindex="80" style="font-size: 1.25rem;" icon="lucide:book-open"></iconify-icon>
+</div>
+<h2 id="16:151" orderindex="81" class="pf-a2872e81-card-title">Documentation</h2>
+</div>
+<div id="16:152" orderindex="81" class="pf-a2872e81-link-list">
+<a id="16:153" orderindex="80" class="pf-a2872e81-link-item" href="#">
+<div id="16:154" orderindex="80" class="pf-a2872e81-link-content">
+<div id="16:155" orderindex="80" class="pf-a2872e81-link-icon">
+<iconify-icon id="16:156" orderindex="80" style="font-size: 1.25rem;" icon="lucide:book"></iconify-icon>
+</div>
+<span id="16:157" orderindex="81">Getting Started Guide</span>
+</div>
+<iconify-icon id="16:158" orderindex="81" icon="lucide:arrow-right"></iconify-icon>
+</a>
+<a id="16:159" orderindex="81" class="pf-a2872e81-link-item" href="#">
+<div id="16:160" orderindex="80" class="pf-a2872e81-link-content">
+<div id="16:161" orderindex="80" class="pf-a2872e81-link-icon">
+<iconify-icon id="16:162" orderindex="80" style="font-size: 1.25rem;" icon="lucide:code-2"></iconify-icon>
+</div>
+<span id="16:163" orderindex="81">API Documentation</span>
+</div>
+<iconify-icon id="16:164" orderindex="81" icon="lucide:arrow-right"></iconify-icon>
+</a>
+<a id="16:165" orderindex="82" class="pf-a2872e81-link-item" href="#">
+<div id="16:166" orderindex="80" class="pf-a2872e81-link-content">
+<div id="16:167" orderindex="80" class="pf-a2872e81-link-icon">
+<iconify-icon id="16:168" orderindex="80" style="font-size: 1.25rem;" icon="lucide:help-circle"></iconify-icon>
+</div>
+<span id="16:169" orderindex="81">FAQ &amp; Troubleshooting</span>
+</div>
+<iconify-icon id="16:170" orderindex="81" icon="lucide:arrow-right"></iconify-icon>
+</a>
+<a id="16:171" orderindex="83" class="pf-a2872e81-link-item" href="#">
+<div id="16:172" orderindex="80" class="pf-a2872e81-link-content">
+<div id="16:173" orderindex="80" class="pf-a2872e81-link-icon">
+<iconify-icon id="16:174" orderindex="80" style="font-size: 1.25rem;" icon="lucide:play-circle"></iconify-icon>
+</div>
+<span id="16:175" orderindex="81">Video Tutorials</span>
+</div>
+<iconify-icon id="16:176" orderindex="81" icon="lucide:arrow-right"></iconify-icon>
+</a>
+<a id="16:177" orderindex="84" class="pf-a2872e81-link-item" href="#">
+<div id="16:178" orderindex="80" class="pf-a2872e81-link-content">
+<div id="16:179" orderindex="80" class="pf-a2872e81-link-icon">
+<iconify-icon id="16:180" orderindex="80" style="font-size: 1.25rem;" icon="lucide:list"></iconify-icon>
+</div>
+<span id="16:181" orderindex="81">Release Notes</span>
+</div>
+<iconify-icon id="16:182" orderindex="81" icon="lucide:arrow-right"></iconify-icon>
+</a>
+</div>
+<div id="16:183" orderindex="82" class="pf-a2872e81-action-buttons mt-6">
+<button id="16:184" orderindex="80" class="pf-a2872e81-btn pf-a2872e81-btn-secondary pf-a2872e81-btn-block">
+<iconify-icon id="16:185" orderindex="80" icon="lucide:message-circle"></iconify-icon>
+                        <span id="0:11" orderindex="81">Join Discord Community</span>
+                    </button>
+<button id="16:186" orderindex="81" class="pf-a2872e81-btn pf-a2872e81-btn-secondary pf-a2872e81-btn-block">
+<iconify-icon id="16:187" orderindex="80" icon="lucide:github"></iconify-icon>
+                        <span id="0:12" orderindex="81">View GitHub Repo</span>
+                    </button>
+</div>
+</div>
+
+<div id="16:188" orderindex="84" class="pf-a2872e81-bento-card">
+<div id="16:189" orderindex="80" class="pf-a2872e81-card-header">
+<div id="16:190" orderindex="80" class="pf-a2872e81-card-icon">
+<iconify-icon id="16:191" orderindex="80" style="font-size: 1.25rem;" icon="lucide:bell"></iconify-icon>
+</div>
+<h2 id="16:192" orderindex="81" class="pf-a2872e81-card-title">Notifications</h2>
+</div>
+<div id="16:193" orderindex="81" class="pf-a2872e81-settings-section">
+<div id="16:194" orderindex="80" class="pf-a2872e81-section-label">Notification Settings</div>
+<div id="16:195" orderindex="81" class="pf-a2872e81-toggle-item">
+<div id="16:196" orderindex="80" class="toggle-info">
+<h4 id="16:197" orderindex="80">Email Notifications</h4>
+<p id="16:198" orderindex="81">Receive updates via email</p>
+</div>
+<div id="16:199" orderindex="81" class="pf-a2872e81-toggle-switch active">
+<div id="16:200" orderindex="80" class="pf-a2872e81-toggle-slider"></div>
+</div>
+</div>
+<div id="16:201" orderindex="82" class="pf-a2872e81-toggle-item">
+<div id="16:202" orderindex="80" class="toggle-info">
+<h4 id="16:203" orderindex="80">Discord DM Notifications</h4>
+<p id="16:204" orderindex="81">Get notified via Discord messages</p>
+</div>
+<div id="16:205" orderindex="81" class="pf-a2872e81-toggle-switch">
+<div id="16:206" orderindex="80" class="pf-a2872e81-toggle-slider"></div>
+</div>
+</div>
+<div id="16:207" orderindex="83" class="pf-a2872e81-toggle-item">
+<div id="16:208" orderindex="80" class="toggle-info">
+<h4 id="16:209" orderindex="80">Rank Change Alerts</h4>
+<p id="16:210" orderindex="81">Notify when your rank changes</p>
+</div>
+<div id="16:211" orderindex="81" class="pf-a2872e81-toggle-switch active">
+<div id="16:212" orderindex="80" class="pf-a2872e81-toggle-slider"></div>
+</div>
+</div>
+<div id="16:213" orderindex="84" class="pf-a2872e81-toggle-item">
+<div id="16:214" orderindex="80" class="toggle-info">
+<h4 id="16:215" orderindex="80">Achievement Notifications</h4>
+<p id="16:216" orderindex="81">Alert when you unlock badges</p>
+</div>
+<div id="16:217" orderindex="81" class="pf-a2872e81-toggle-switch active">
+<div id="16:218" orderindex="80" class="pf-a2872e81-toggle-slider"></div>
+</div>
+</div>
+</div>
+<div id="16:219" orderindex="82" class="pf-a2872e81-settings-section">
+<div id="16:220" orderindex="80" class="pf-a2872e81-section-label">Preferences</div>
+<div id="16:221" orderindex="81" class="pf-a2872e81-input-group">
+<label id="16:222" orderindex="80">Default Leaderboard View</label>
+<select id="16:223" orderindex="81" class="pf-a2872e81-input-field">
+<option id="16:224" orderindex="80">Weekly</option>
+<option id="16:225" orderindex="81">Monthly</option>
+<option id="16:226" orderindex="82">All-Time</option>
+</select>
+</div>
+<div id="16:227" orderindex="82" class="pf-a2872e81-input-group mt-4">
+<label id="16:228" orderindex="80">Dashboard Theme</label>
+<select id="16:229" orderindex="81" class="pf-a2872e81-input-field">
+<option id="16:230" orderindex="80">Auto</option>
+<option id="16:231" orderindex="81">Dark</option>
+<option id="16:232" orderindex="82">Light</option>
+</select>
+</div>
+<div id="16:233" orderindex="83" class="pf-a2872e81-checkbox-item mt-4">
+<div id="16:234" orderindex="80" class="pf-a2872e81-checkbox checked"></div>
+<label id="16:235" orderindex="81">Show Tutorial Tips</label>
+</div>
+</div>
+</div>
+
+<div id="16:236" orderindex="85" class="pf-a2872e81-bento-card pf-a2872e81-admin-card">
+<div id="16:237" orderindex="80" class="pf-a2872e81-card-header">
+<div id="16:238" orderindex="80" class="pf-a2872e81-card-icon">
+<iconify-icon id="16:239" orderindex="80" style="font-size: 1.25rem;" icon="lucide:shield"></iconify-icon>
+</div>
+<h2 id="16:240" orderindex="81" class="pf-a2872e81-card-title">Admin Portal</h2>
+<span id="16:241" orderindex="82" class="pf-a2872e81-admin-badge">
+<iconify-icon id="16:242" orderindex="80" style="font-size: 0.75rem;" icon="lucide:crown"></iconify-icon>
+                        <span id="0:13" orderindex="81">Admin</span>
+                    </span>
+</div>
+<div id="16:243" orderindex="81" class="pf-a2872e81-link-list">
+<a id="16:244" orderindex="80" class="pf-a2872e81-link-item" href="#">
+<div id="16:245" orderindex="80" class="pf-a2872e81-link-content">
+<div id="16:246" orderindex="80" class="pf-a2872e81-link-icon" style="color: var( --accent-purple );">
+<iconify-icon id="16:247" orderindex="80" style="font-size: 1.25rem;" icon="lucide:server"></iconify-icon>
+</div>
+<div id="16:248" orderindex="81">
+<div id="16:249" orderindex="80" class="font-semibold">Server Management</div>
+<div id="16:250" orderindex="81" style="color: var( --text-muted ); font-size: 0.85rem;">Manage Discord integrations</div>
+</div>
+</div>
+<iconify-icon id="16:251" orderindex="81" icon="lucide:arrow-right"></iconify-icon>
+</a>
+<a id="16:252" orderindex="81" class="pf-a2872e81-link-item" href="#">
+<div id="16:253" orderindex="80" class="pf-a2872e81-link-content">
+<div id="16:254" orderindex="80" class="pf-a2872e81-link-icon" style="color: var( --accent-purple );">
+<iconify-icon id="16:255" orderindex="80" style="font-size: 1.25rem;" icon="lucide:users"></iconify-icon>
+</div>
+<div id="16:256" orderindex="81">
+<div id="16:257" orderindex="80" class="font-semibold">User Moderation</div>
+<div id="16:258" orderindex="81" style="color: var( --text-muted ); font-size: 0.85rem;">Review flagged accounts</div>
+</div>
+</div>
+<iconify-icon id="16:259" orderindex="81" icon="lucide:arrow-right"></iconify-icon>
+</a>
+<a id="16:260" orderindex="82" class="pf-a2872e81-link-item" href="#">
+<div id="16:261" orderindex="80" class="pf-a2872e81-link-content">
+<div id="16:262" orderindex="80" class="pf-a2872e81-link-icon" style="color: var( --accent-purple );">
+<iconify-icon id="16:263" orderindex="80" style="font-size: 1.25rem;" icon="lucide:bar-chart-2"></iconify-icon>
+</div>
+<div id="16:264" orderindex="81">
+<div id="16:265" orderindex="80" class="font-semibold">Analytics Dashboard</div>
+<div id="16:266" orderindex="81" style="color: var( --text-muted ); font-size: 0.85rem;">Platform-wide statistics</div>
+</div>
+</div>
+<iconify-icon id="16:267" orderindex="81" icon="lucide:arrow-right"></iconify-icon>
+</a>
+<a id="16:268" orderindex="83" class="pf-a2872e81-link-item" href="#">
+<div id="16:269" orderindex="80" class="pf-a2872e81-link-content">
+<div id="16:270" orderindex="80" class="pf-a2872e81-link-icon" style="color: var( --accent-purple );">
+<iconify-icon id="16:271" orderindex="80" style="font-size: 1.25rem;" icon="lucide:settings"></iconify-icon>
+</div>
+<div id="16:272" orderindex="81">
+<div id="16:273" orderindex="80" class="font-semibold">System Settings</div>
+<div id="16:274" orderindex="81" style="color: var( --text-muted ); font-size: 0.85rem;">Configure platform behavior</div>
+</div>
+</div>
+<iconify-icon id="16:275" orderindex="81" icon="lucide:arrow-right"></iconify-icon>
+</a>
+</div>
+<button id="16:276" orderindex="82" class="pf-a2872e81-btn pf-a2872e81-btn-primary pf-a2872e81-btn-block mt-6" style="box-shadow: 0 4px 24px -4px rgba(167, 139, 250, 0.4);">
+<iconify-icon id="16:277" orderindex="80" icon="lucide:arrow-right-circle"></iconify-icon>
+                    <span id="0:14" orderindex="81">Enter Admin Portal</span>
+                </button>
+</div>
+
+<div id="16:278" orderindex="86" class="pf-a2872e81-bento-card">
+<div id="16:279" orderindex="80" class="pf-a2872e81-card-header">
+<div id="16:280" orderindex="80" class="pf-a2872e81-card-icon">
+<iconify-icon id="16:281" orderindex="80" style="font-size: 1.25rem;" icon="lucide:lock"></iconify-icon>
+</div>
+<h2 id="16:282" orderindex="81" class="pf-a2872e81-card-title">Security &amp; Privacy</h2>
+</div>
+<div id="16:283" orderindex="81" class="pf-a2872e81-settings-section">
+<div id="16:284" orderindex="80" class="pf-a2872e81-section-label">Connected Sessions</div>
+<div id="16:285" orderindex="81" class="pf-a2872e81-platform-item mb-3">
+<div id="16:286" orderindex="80" class="pf-a2872e81-platform-info">
+<div id="16:287" orderindex="80" class="pf-a2872e81-platform-logo" style="background: rgba(16, 185, 129, 0.1);">
+<iconify-icon id="16:288" orderindex="80" style="color: var( --success-emerald ); font-size: 1.25rem;" icon="lucide:monitor"></iconify-icon>
+</div>
+<div id="16:289" orderindex="81" class="platform-details">
+<h4 id="16:290" orderindex="80">Windows Desktop</h4>
+<p id="16:291" orderindex="81">Active now • San Francisco, CA</p>
+</div>
+</div>
+<button id="16:292" orderindex="81" class="pf-a2872e81-btn pf-a2872e81-btn-danger" style="font-size: 0.85rem; padding: 0.5rem 1rem;">Revoke</button>
+</div>
+<div id="16:293" orderindex="82" class="pf-a2872e81-platform-item">
+<div id="16:294" orderindex="80" class="pf-a2872e81-platform-info">
+<div id="16:295" orderindex="80" class="pf-a2872e81-platform-logo" style="background: rgba(96, 165, 250, 0.1);">
+<iconify-icon id="16:296" orderindex="80" style="color: var( --primary-cyan ); font-size: 1.25rem;" icon="lucide:smartphone"></iconify-icon>
+</div>
+<div id="16:297" orderindex="81" class="platform-details">
+<h4 id="16:298" orderindex="80">iPhone 14</h4>
+<p id="16:299" orderindex="81">2 hours ago • San Francisco, CA</p>
+</div>
+</div>
+<button id="16:300" orderindex="81" class="pf-a2872e81-btn pf-a2872e81-btn-danger" style="font-size: 0.85rem; padding: 0.5rem 1rem;">Revoke</button>
+</div>
+</div>
+<div id="16:301" orderindex="82" class="pf-a2872e81-settings-section">
+<div id="16:302" orderindex="80" class="pf-a2872e81-section-label">Privacy Controls</div>
+<div id="16:303" orderindex="81" class="pf-a2872e81-toggle-item">
+<div id="16:304" orderindex="80" class="toggle-info">
+<h4 id="16:305" orderindex="80">Analytics Data Collection</h4>
+<p id="16:306" orderindex="81">Help improve the platform</p>
+</div>
+<div id="16:307" orderindex="81" class="pf-a2872e81-toggle-switch active">
+<div id="16:308" orderindex="80" class="pf-a2872e81-toggle-slider"></div>
+</div>
+</div>
+<div id="16:309" orderindex="82" class="pf-a2872e81-toggle-item">
+<div id="16:310" orderindex="80" class="toggle-info">
+<h4 id="16:311" orderindex="80">Third-Party App Sharing</h4>
+<p id="16:312" orderindex="81">Share profile with connected apps</p>
+</div>
+<div id="16:313" orderindex="81" class="pf-a2872e81-toggle-switch">
+<div id="16:314" orderindex="80" class="pf-a2872e81-toggle-slider"></div>
+</div>
+</div>
+</div>
+<div id="16:315" orderindex="83" class="pf-a2872e81-action-buttons mt-6">
+<button id="16:316" orderindex="80" class="pf-a2872e81-btn pf-a2872e81-btn-secondary pf-a2872e81-btn-block">
+<iconify-icon id="16:317" orderindex="80" icon="lucide:shield-check"></iconify-icon>
+                        <span id="0:15" orderindex="81">Review Permissions</span>
+                    </button>
+<button id="16:318" orderindex="81" class="pf-a2872e81-btn pf-a2872e81-btn-secondary pf-a2872e81-btn-block">
+<iconify-icon id="16:319" orderindex="80" icon="lucide:download"></iconify-icon>
+                        <span id="0:16" orderindex="81">Privacy Report</span>
+                    </button>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+</body></html>

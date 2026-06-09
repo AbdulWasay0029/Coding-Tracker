@@ -1,0 +1,526 @@
+<!DOCTYPE html><html><head>
+    <style>@layer theme, base, paraflow, components, utilities;</style><meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    
+    
+    
+    <style id="moxt-styled">@layer paraflow{@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&family=Open+Sans:wght@300;400;500;600;700;800&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Roboto+Condensed:wght@100;200;300;400;500;600;700;800;900&family=Roboto+Mono:wght@100;200;300;400;500;600;700&family=PT+Serif:wght@400;700&family=Arimo:wght@400;500;600;700&family=Raleway:wght@100;200;300;400;500;600;700;800;900&family=Nunito:wght@200;300;400;500;600;700&;800;900&family=Rubik:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&family=Ubuntu:wght@300;400;500;700&family=Merriweather:wght@300;400;500;600;700;800;900&family=Roboto+Slab:wght@100;200;300;400;500;600;700&family=Libre+Baskerville:wght@400;700&family=Inconsolata:wght@200;300;400;500;600;700;800;900&family=Dancing+Script:wght@400;500;600;700&family=Kanit:wght@100;200;300;400;500;600;700;800;900&display=swap');
+.pf-d14c86d0-bg-gradient-orbs {
+    overflow-x: hidden;
+    overflow-y: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+.pf-d14c86d0-orb {
+    filter: blur(120px);
+    opacity: 0.15;
+    position: absolute;
+    border-radius: 50%;
+}
+.pf-d14c86d0-orb-1 {
+    top: -10%;
+    right: 10%;
+    width: 600px;
+    height: 600px;
+}
+.pf-d14c86d0-orb-2 {
+    bottom: -15%;
+    left: -10%;
+    width: 500px;
+    height: 500px;
+}
+.pf-d14c86d0-orb-3 {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 400px;
+}
+.pf-d14c86d0-container {
+    position: relative;
+    max-width: 1440px;
+    z-index: 1;
+    padding: 0 4rem;
+    margin: 0 auto;
+}
+.pf-d14c86d0-nav {
+    backdrop-filter: blur(20px);
+    display: flex;
+    position: sticky;
+    top: 0;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    padding: 1.5rem 4rem;
+    margin: 0 -4rem;
+    background: rgba(26, 29, 36, 0.3);
+}
+.pf-d14c86d0-logo {
+    background-clip: text;
+    letter-spacing: -0.02em;
+    text-shadow: var( --shadow-glow-blue );
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+.pf-d14c86d0-nav-links {
+    display: flex;
+    row-gap: 3rem;
+    column-gap: 3rem;
+}
+.pf-d14c86d0-nav-cta {
+    display: flex;
+    align-items: center;
+    row-gap: 1rem;
+    column-gap: 1rem;
+}
+.pf-d14c86d0-btn {
+    overflow-x: hidden;
+    overflow-y: hidden;
+    display: inline-flex;
+    position: relative;
+    align-items: center;
+    row-gap: 0.5rem;
+    column-gap: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 0.75rem 1.75rem;
+    border-width: initial;
+    border-color: initial;
+    border-style: none;
+    border-radius: 12px;
+}
+.pf-d14c86d0-btn-primary {
+    box-shadow: var( --shadow-glow-blue ) , var( --shadow-card );
+    color: var( --text-primary );
+}
+.pf-d14c86d0-btn-secondary {
+    backdrop-filter: blur(20px);
+    color: var( --text-primary );
+    background: rgba(26, 29, 36, 0.6);
+}
+.pf-d14c86d0-hero {
+    text-align: center;
+    position: relative;
+    padding: 8rem 0;
+}
+.pf-d14c86d0-platform-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 2rem;
+    column-gap: 2rem;
+    margin: 3rem 0 4rem;
+}
+.pf-d14c86d0-platform-badge {
+    font-family: var( --font-mono );
+    backdrop-filter: blur(20px);
+    color: var( --text-secondary );
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 16px;
+    background: rgba(26, 29, 36, 0.5);
+}
+.pf-d14c86d0-hero-cta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    row-gap: 1.5rem;
+    column-gap: 1.5rem;
+    margin-top: 3rem;
+}
+.pf-d14c86d0-btn-hero {
+    font-size: 1.1rem;
+    padding: 1.25rem 3rem;
+    border-radius: 16px;
+}
+.pf-d14c86d0-showcase {
+    padding: 8rem 0;
+}
+.pf-d14c86d0-section-title {
+    background-clip: text;
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 3rem;
+    font-weight: 700;
+}
+.pf-d14c86d0-section-subtitle {
+    text-align: center;
+    margin-bottom: 5rem;
+    color: var( --text-secondary );
+    font-size: 1.2rem;
+}
+.pf-d14c86d0-platform-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    row-gap: 2rem;
+    column-gap: 2rem;
+    margin-top: 4rem;
+}
+.pf-d14c86d0-platform-card {
+    overflow-x: hidden;
+    overflow-y: hidden;
+    backdrop-filter: blur(20px);
+    position: relative;
+    padding: 2.5rem;
+    border-radius: 24px;
+    background: rgba(26, 29, 36, 0.4);
+}
+.pf-d14c86d0-platform-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    border-radius: 16px;
+    background: rgba(59, 130, 246, 0.1);
+}
+.pf-d14c86d0-status-badge {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var( --accent-emerald );
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.4rem 1rem;
+    border-width: 1px;
+    border-color: rgba(16, 185, 129, 0.2);
+    border-style: solid;
+    border-radius: 20px;
+    background: rgba(16, 185, 129, 0.1);
+}
+.pf-d14c86d0-features {
+    padding: 8rem 0;
+}
+.pf-d14c86d0-features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 2rem;
+    column-gap: 2rem;
+    margin-top: 4rem;
+}
+.pf-d14c86d0-feature-card {
+    overflow-x: hidden;
+    overflow-y: hidden;
+    backdrop-filter: blur(20px);
+    position: relative;
+    padding: 3rem;
+    border-radius: 24px;
+    background: rgba(26, 29, 36, 0.4);
+}
+.pf-d14c86d0-feature-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 56px;
+    height: 56px;
+    margin-bottom: 1.5rem;
+    box-shadow: var( --shadow-glow-blue );
+    font-size: 1.75rem;
+    border-radius: 14px;
+}
+.pf-d14c86d0-feature-preview {
+    font-family: var( --font-mono );
+    margin-top: 2rem;
+    color: var( --text-muted );
+    font-size: 0.85rem;
+    padding: 2rem;
+    border-radius: 16px;
+    background: rgba(11, 14, 20, 0.6);
+}
+.pf-d14c86d0-stats {
+    text-align: center;
+    padding: 6rem 0;
+}
+.pf-d14c86d0-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    row-gap: 3rem;
+    column-gap: 3rem;
+    margin-top: 4rem;
+}
+.pf-d14c86d0-stat-card {
+    backdrop-filter: blur(20px);
+    padding: 2.5rem 2rem;
+    border-radius: 20px;
+    background: rgba(26, 29, 36, 0.4);
+}
+.pf-d14c86d0-stat-number {
+    background-clip: text;
+    font-family: var( --font-mono );
+    margin-bottom: 0.5rem;
+    font-size: 3.5rem;
+    font-weight: 800;
+}
+.pf-d14c86d0-stat-label {
+    color: var( --text-secondary );
+    font-size: 1rem;
+    font-weight: 500;
+}
+.pf-d14c86d0-cta-section {
+    text-align: center;
+    padding: 8rem 0;
+}
+.pf-d14c86d0-cta-box {
+    overflow-x: hidden;
+    overflow-y: hidden;
+    backdrop-filter: blur(20px);
+    position: relative;
+    padding: 5rem 3rem;
+    border-radius: 32px;
+    background: rgba(26, 29, 36, 0.5);
+}
+.pf-d14c86d0-cta-note {
+    margin-top: 1.5rem;
+    color: var( --text-muted );
+    font-size: 0.9rem;
+}
+.pf-d14c86d0-footer {
+    margin-top: 6rem;
+    padding: 4rem 0 2rem;
+}
+.pf-d14c86d0-footer-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    row-gap: 4rem;
+    column-gap: 4rem;
+    margin-bottom: 3rem;
+}
+.pf-d14c86d0-footer-links {
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.75rem;
+    column-gap: 0.75rem;
+}
+.pf-d14c86d0-social-links {
+    display: flex;
+    row-gap: 1rem;
+    column-gap: 1rem;
+}
+.pf-d14c86d0-social-icon {
+    backdrop-filter: blur(20px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    color: var( --text-secondary );
+    border-radius: 12px;
+    background: rgba(26, 29, 36, 0.6);
+}
+.pf-d14c86d0-footer-bottom {
+    text-align: center;
+    padding-top: 2rem;
+    color: var( --text-muted );
+    font-size: 0.85rem;
+}
+}</style>
+<!--FontAwesome version: 6.7.2--><link rel="stylesheet" href="https://static.paraflowcontent.com/public/css/font-awesome/font-awesome.672.css"><!--Tailwind version: 4.0.17--><script src="https://static.paraflowcontent.com/public/js/tailwind/tailwind.js"></script><!--iconify-icon version: 3.0.0--><script src="https://static.paraflowcontent.com/public/js/iconify/iconify-icon-3.0.0.js"></script></head>
+<body id="11:1" title="landing-page.html" orderindex="80" relativetransform="100, 125" class="w-[390px]">
+
+<div id="11:2" orderindex="80" class="pf-d14c86d0-bg-gradient-orbs">
+<div id="11:3" orderindex="80" class="pf-d14c86d0-orb pf-d14c86d0-orb-1"></div>
+<div id="11:4" orderindex="81" class="pf-d14c86d0-orb pf-d14c86d0-orb-2"></div>
+<div id="11:5" orderindex="82" class="pf-d14c86d0-orb pf-d14c86d0-orb-3"></div>
+</div>
+
+<nav id="11:6" orderindex="81" class="pf-d14c86d0-nav">
+<div id="11:7" orderindex="80" class="pf-d14c86d0-logo">CodeSync</div>
+<ul id="11:8" orderindex="81" class="pf-d14c86d0-nav-links">
+<li id="11:9" orderindex="80"><a id="11:10" orderindex="80" href="#features">Features</a></li>
+<li id="11:11" orderindex="81"><a id="11:12" orderindex="80" href="#platforms">Platforms</a></li>
+<li id="11:13" orderindex="82"><a id="11:14" orderindex="80" href="#leaderboard">Leaderboards</a></li>
+<li id="11:15" orderindex="83"><a id="11:16" orderindex="80" href="#docs">Documentation</a></li>
+</ul>
+<div id="11:17" orderindex="82" class="pf-d14c86d0-nav-cta">
+<a id="11:18" orderindex="80" class="pf-d14c86d0-btn pf-d14c86d0-btn-secondary" href="#demo">View Demo</a>
+<a id="11:19" orderindex="81" class="pf-d14c86d0-btn pf-d14c86d0-btn-primary" href="#login">
+<img id="11:20" orderindex="80" alt="SVG image #0" src="https://static.paraflowcontent.com/public/resource/image/bfa7dbbd-1ecc-4f92-8576-8dd74ad00172.svg" class="w-[20px] h-[20px] max-w-full">
+                <span id="0:1" orderindex="81">Login with Discord</span>
+            </a>
+</div>
+</nav>
+
+<section id="11:21" orderindex="82" class="pf-d14c86d0-hero">
+<div id="11:22" orderindex="80" class="pf-d14c86d0-container">
+<h1 id="11:23" orderindex="80"><span id="0:2" orderindex="80">Your Unified</span><br id="11:24" orderindex="81"><span id="0:3" orderindex="82">Developer Identity</span></h1>
+<p id="11:25" orderindex="81">Aggregate your problem-solving progress across LeetCode, CodeChef, Codeforces, HackerRank, and SmartInterviews in beautiful, gamified dashboards.</p>
+<div id="11:26" orderindex="82" class="pf-d14c86d0-platform-badges">
+<div id="11:27" orderindex="80" class="pf-d14c86d0-platform-badge">LeetCode</div>
+<div id="11:28" orderindex="81" class="pf-d14c86d0-platform-badge">CodeChef</div>
+<div id="11:29" orderindex="82" class="pf-d14c86d0-platform-badge">Codeforces</div>
+<div id="11:30" orderindex="83" class="pf-d14c86d0-platform-badge">HackerRank</div>
+<div id="11:31" orderindex="84" class="pf-d14c86d0-platform-badge">SmartInterviews</div>
+</div>
+<div id="11:32" orderindex="83" class="pf-d14c86d0-hero-cta">
+<a id="11:33" orderindex="80" class="pf-d14c86d0-btn pf-d14c86d0-btn-primary pf-d14c86d0-btn-hero" href="#login">
+<img id="11:34" orderindex="80" alt="SVG image #1" src="https://static.paraflowcontent.com/public/resource/image/6fb8aeaf-d2ba-47e8-9d4b-987c40d4107e.svg" class="w-[24px] h-[24px] max-w-full">
+                    <span id="0:4" orderindex="81">Login with Discord</span>
+                </a>
+<a id="11:35" orderindex="81" class="pf-d14c86d0-btn pf-d14c86d0-btn-secondary pf-d14c86d0-btn-hero" href="#demo">View Demo</a>
+</div>
+</div>
+</section>
+
+<section id="11:36" orderindex="83" class="pf-d14c86d0-showcase">
+<div id="11:37" orderindex="80" class="pf-d14c86d0-container">
+<h2 id="11:38" orderindex="80" class="pf-d14c86d0-section-title">Unify Your Coding Journey</h2>
+<p id="11:39" orderindex="81" class="pf-d14c86d0-section-subtitle">Connect all your competitive programming platforms in one place</p>
+<div id="11:40" orderindex="82" class="pf-d14c86d0-platform-grid">
+<div id="11:41" orderindex="80" class="pf-d14c86d0-platform-card">
+<div id="11:42" orderindex="80" class="pf-d14c86d0-platform-icon">🔷</div>
+<h3 id="11:43" orderindex="81">LeetCode</h3>
+<p id="11:44" orderindex="82">Track problems solved, contest ratings, and submission history from the most popular coding interview platform.</p>
+<span id="11:45" orderindex="83" class="pf-d14c86d0-status-badge">✓ Connected</span>
+</div>
+<div id="11:46" orderindex="81" class="pf-d14c86d0-platform-card">
+<div id="11:47" orderindex="80" class="pf-d14c86d0-platform-icon">🍴</div>
+<h3 id="11:48" orderindex="81">CodeChef</h3>
+<p id="11:49" orderindex="82">Monitor your competitive programming progress with contest performance and rating trends.</p>
+<span id="11:50" orderindex="83" class="pf-d14c86d0-status-badge">✓ Connected</span>
+</div>
+<div id="11:51" orderindex="82" class="pf-d14c86d0-platform-card">
+<div id="11:52" orderindex="80" class="pf-d14c86d0-platform-icon">⚔️</div>
+<h3 id="11:53" orderindex="81">Codeforces</h3>
+<p id="11:54" orderindex="82">Sync your Codeforces achievements, ratings, and problem-solving consistency.</p>
+<span id="11:55" orderindex="83" class="pf-d14c86d0-status-badge">✓ Connected</span>
+</div>
+<div id="11:56" orderindex="83" class="pf-d14c86d0-platform-card">
+<div id="11:57" orderindex="80" class="pf-d14c86d0-platform-icon">💚</div>
+<h3 id="11:58" orderindex="81">HackerRank</h3>
+<p id="11:59" orderindex="82">Aggregate skill certifications, challenges completed, and domain-specific achievements.</p>
+<span id="11:60" orderindex="83" class="pf-d14c86d0-status-badge">✓ Connected</span>
+</div>
+<div id="11:61" orderindex="84" class="pf-d14c86d0-platform-card">
+<div id="11:62" orderindex="80" class="pf-d14c86d0-platform-icon">🧠</div>
+<h3 id="11:63" orderindex="81">SmartInterviews</h3>
+<p id="11:64" orderindex="82">Track structured interview preparation progress and topic-wise problem completion.</p>
+<span id="11:65" orderindex="83" class="pf-d14c86d0-status-badge">✓ Connected</span>
+</div>
+</div>
+</div>
+</section>
+
+<section id="11:66" orderindex="84" class="pf-d14c86d0-features">
+<div id="11:67" orderindex="80" class="pf-d14c86d0-container">
+<h2 id="11:68" orderindex="80" class="pf-d14c86d0-section-title">Built for Competitive Developers</h2>
+<p id="11:69" orderindex="81" class="pf-d14c86d0-section-subtitle">Premium features designed for data-driven programmers</p>
+<div id="11:70" orderindex="82" class="pf-d14c86d0-features-grid">
+<div id="11:71" orderindex="80" class="pf-d14c86d0-feature-card">
+<div id="11:72" orderindex="80" class="pf-d14c86d0-feature-icon">📊</div>
+<h3 id="11:73" orderindex="81">365-Day Contribution Heatmap</h3>
+<p id="11:74" orderindex="82">Visualize your coding consistency with a GitHub-style heatmap showing daily problem-solving activity across all platforms. Track streaks and identify patterns in your learning journey.</p>
+<div id="11:75" orderindex="83" class="pf-d14c86d0-feature-preview">█ █ █ ░ █ █ ░ // 23 Day Streak 🔥</div>
+</div>
+<div id="11:76" orderindex="81" class="pf-d14c86d0-feature-card">
+<div id="11:77" orderindex="80" class="pf-d14c86d0-feature-icon">🏆</div>
+<h3 id="11:78" orderindex="81">Gamified Achievement Badges</h3>
+<p id="11:79" orderindex="82">Earn and showcase badges for milestones like "First Blood", "100 Day Streak", "Problem Master", and platform-specific achievements. Unlock locked badges by hitting targets.</p>
+<div id="11:80" orderindex="83" class="pf-d14c86d0-feature-preview"><span id="0:5" orderindex="80">🥇 Unlocked: Century Solver</span><br id="11:81" orderindex="81"><span id="0:6" orderindex="82">🔒 Progress: 75/100 Hard Problems</span></div>
+</div>
+<div id="11:82" orderindex="82" class="pf-d14c86d0-feature-card">
+<div id="11:83" orderindex="80" class="pf-d14c86d0-feature-icon">👥</div>
+<h3 id="11:84" orderindex="81">Community Leaderboards &amp; Real-Time Progress</h3>
+<p id="11:85" orderindex="82">Compete with your Discord server members on weekly, monthly, and all-time leaderboards. See beautiful visualizations of top performers with podium rankings, and track recent activity across all your connected platforms in a unified feed.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section id="11:86" orderindex="85" class="pf-d14c86d0-stats">
+<div id="11:87" orderindex="80" class="pf-d14c86d0-container">
+<h2 id="11:88" orderindex="80" class="pf-d14c86d0-section-title">Trusted by Developer Communities</h2>
+<div id="11:89" orderindex="81" class="pf-d14c86d0-stats-grid">
+<div id="11:90" orderindex="80" class="pf-d14c86d0-stat-card">
+<div id="11:91" orderindex="80" class="pf-d14c86d0-stat-number">12K+</div>
+<div id="11:92" orderindex="81" class="pf-d14c86d0-stat-label">Active Developers</div>
+</div>
+<div id="11:93" orderindex="81" class="pf-d14c86d0-stat-card">
+<div id="11:94" orderindex="80" class="pf-d14c86d0-stat-number">2.4M+</div>
+<div id="11:95" orderindex="81" class="pf-d14c86d0-stat-label">Problems Tracked</div>
+</div>
+<div id="11:96" orderindex="82" class="pf-d14c86d0-stat-card">
+<div id="11:97" orderindex="80" class="pf-d14c86d0-stat-number">850+</div>
+<div id="11:98" orderindex="81" class="pf-d14c86d0-stat-label">Discord Servers</div>
+</div>
+<div id="11:99" orderindex="83" class="pf-d14c86d0-stat-card">
+<div id="11:100" orderindex="80" class="pf-d14c86d0-stat-number">98%</div>
+<div id="11:101" orderindex="81" class="pf-d14c86d0-stat-label">Daily Active Users</div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="11:102" orderindex="86" class="pf-d14c86d0-cta-section">
+<div id="11:103" orderindex="80" class="pf-d14c86d0-container">
+<div id="11:104" orderindex="80" class="pf-d14c86d0-cta-box">
+<h2 id="11:105" orderindex="80">Start Your Unified Journey Today</h2>
+<p id="11:106" orderindex="81">Join thousands of developers tracking their progress</p>
+<a id="11:107" orderindex="82" class="pf-d14c86d0-btn pf-d14c86d0-btn-primary pf-d14c86d0-btn-hero" href="#login">
+<img id="11:108" orderindex="80" alt="SVG image #2" src="https://static.paraflowcontent.com/public/resource/image/04a99c29-afc5-4904-b410-478e9b807faa.svg" class="w-[24px] h-[24px] max-w-full">
+                    <span id="0:7" orderindex="81">Login with Discord</span>
+                </a>
+<div id="11:109" orderindex="83" class="pf-d14c86d0-cta-note">Free forever. No credit card required.</div>
+</div>
+</div>
+</section>
+
+<footer id="11:110" orderindex="87" class="pf-d14c86d0-footer">
+<div id="11:111" orderindex="80" class="pf-d14c86d0-container">
+<div id="11:112" orderindex="80" class="pf-d14c86d0-footer-content">
+<div id="11:113" orderindex="80" class="footer-brand">
+<h3 id="11:114" orderindex="80">CodeSync</h3>
+<p id="11:115" orderindex="81">Your Unified Developer Identity Platform</p>
+<div id="11:116" orderindex="82" class="pf-d14c86d0-social-links">
+<a id="11:117" orderindex="80" class="pf-d14c86d0-social-icon" href="#">
+<img id="11:118" orderindex="80" alt="SVG image #3" src="https://static.paraflowcontent.com/public/resource/image/e82b307b-06c5-416a-9d37-a855a1180d07.svg" class="w-[20px] h-[20px] max-w-full">
+</a>
+<a id="11:119" orderindex="81" class="pf-d14c86d0-social-icon" href="#">
+<img id="11:120" orderindex="80" alt="SVG image #4" src="https://static.paraflowcontent.com/public/resource/image/a869ae54-bff0-4e84-9133-f4a95c0490e6.svg" class="w-[20px] h-[20px] max-w-full">
+</a>
+<a id="11:121" orderindex="82" class="pf-d14c86d0-social-icon" href="#">
+<img id="11:122" orderindex="80" alt="SVG image #5" src="https://static.paraflowcontent.com/public/resource/image/688879b0-6b49-430b-9d3f-bfce5500c16b.svg" class="w-[20px] h-[20px] max-w-full">
+</a>
+</div>
+</div>
+<div id="11:123" orderindex="81" class="footer-section">
+<h4 id="11:124" orderindex="80">Product</h4>
+<ul id="11:125" orderindex="81" class="pf-d14c86d0-footer-links">
+<li id="11:126" orderindex="80"><a id="11:127" orderindex="80" href="#features">Features</a></li>
+<li id="11:128" orderindex="81"><a id="11:129" orderindex="80" href="#platforms">Platforms</a></li>
+<li id="11:130" orderindex="82"><a id="11:131" orderindex="80" href="#leaderboards">Leaderboards</a></li>
+<li id="11:132" orderindex="83"><a id="11:133" orderindex="80" href="#dashboard">Dashboard</a></li>
+</ul>
+</div>
+<div id="11:134" orderindex="82" class="footer-section">
+<h4 id="11:135" orderindex="80">Resources</h4>
+<ul id="11:136" orderindex="81" class="pf-d14c86d0-footer-links">
+<li id="11:137" orderindex="80"><a id="11:138" orderindex="80" href="#docs">Documentation</a></li>
+<li id="11:139" orderindex="81"><a id="11:140" orderindex="80" href="#api">API Docs</a></li>
+<li id="11:141" orderindex="82"><a id="11:142" orderindex="80" href="#faq">FAQ</a></li>
+<li id="11:143" orderindex="83"><a id="11:144" orderindex="80" href="#changelog">Changelog</a></li>
+</ul>
+</div>
+<div id="11:145" orderindex="83" class="footer-section">
+<h4 id="11:146" orderindex="80">Legal</h4>
+<ul id="11:147" orderindex="81" class="pf-d14c86d0-footer-links">
+<li id="11:148" orderindex="80"><a id="11:149" orderindex="80" href="#privacy">Privacy Policy</a></li>
+<li id="11:150" orderindex="81"><a id="11:151" orderindex="80" href="#terms">Terms of Service</a></li>
+<li id="11:152" orderindex="82"><a id="11:153" orderindex="80" href="#contact">Contact</a></li>
+</ul>
+</div>
+</div>
+<div id="11:154" orderindex="81" class="pf-d14c86d0-footer-bottom">
+<p id="11:155" orderindex="80">© 2026 CodeSync. All rights reserved. Built with ❤️ for developers.</p>
+</div>
+</div>
+</footer>
+
+
+
+</body></html>

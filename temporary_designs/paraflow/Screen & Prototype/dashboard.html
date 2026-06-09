@@ -1,0 +1,606 @@
+<!DOCTYPE html><html><head>
+    <style>@layer theme, base, paraflow, components, utilities;</style><meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    
+    
+    
+    <style id="moxt-styled">@layer paraflow{@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&family=Open+Sans:wght@300;400;500;600;700;800&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Roboto+Condensed:wght@100;200;300;400;500;600;700;800;900&family=Roboto+Mono:wght@100;200;300;400;500;600;700&family=PT+Serif:wght@400;700&family=Arimo:wght@400;500;600;700&family=Raleway:wght@100;200;300;400;500;600;700;800;900&family=Nunito:wght@200;300;400;500;600;700&;800;900&family=Rubik:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&family=Ubuntu:wght@300;400;500;700&family=Merriweather:wght@300;400;500;600;700;800;900&family=Roboto+Slab:wght@100;200;300;400;500;600;700&family=Libre+Baskerville:wght@400;700&family=Inconsolata:wght@200;300;400;500;600;700;800;900&family=Dancing+Script:wght@400;500;600;700&family=Kanit:wght@100;200;300;400;500;600;700;800;900&display=swap');
+.pf-ed8f7456-bg-gradient-orbs {
+    overflow-x: hidden;
+    overflow-y: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+.pf-ed8f7456-orb {
+    filter: blur(120px);
+    opacity: 0.12;
+    position: absolute;
+    border-radius: 50%;
+}
+.pf-ed8f7456-orb-1 {
+    top: -10%;
+    right: 15%;
+    width: 500px;
+    height: 500px;
+}
+.pf-ed8f7456-orb-2 {
+    bottom: -10%;
+    left: -5%;
+    width: 400px;
+    height: 400px;
+}
+.pf-ed8f7456-container {
+    position: relative;
+    max-width: 1600px;
+    z-index: 1;
+    padding: 0 2rem;
+    margin: 0 auto;
+}
+.pf-ed8f7456-nav {
+    backdrop-filter: blur(20px);
+    display: flex;
+    position: sticky;
+    top: 0;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    padding: 1.5rem 2rem;
+    margin: 0 -2rem 2rem;
+    background: rgba(26, 29, 36, 0.3);
+}
+.pf-ed8f7456-logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+.pf-ed8f7456-nav-links {
+    display: flex;
+    row-gap: 2.5rem;
+    column-gap: 2.5rem;
+}
+.pf-ed8f7456-nav-right {
+    display: flex;
+    align-items: center;
+    row-gap: 1.5rem;
+    column-gap: 1.5rem;
+}
+.pf-ed8f7456-notifications-icon {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(26, 29, 36, 0.6);
+}
+.pf-ed8f7456-notification-badge {
+    display: flex;
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    justify-content: center;
+    align-items: center;
+    width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    border-radius: 50%;
+}
+.pf-ed8f7456-user-avatar {
+    width: 40px;
+    height: 40px;
+    box-shadow: var( --shadow-glow-blue );
+    border-radius: 50%;
+}
+.pf-ed8f7456-profile-header {
+    backdrop-filter: blur(20px);
+    display: flex;
+    align-items: center;
+    row-gap: 3rem;
+    column-gap: 3rem;
+    margin-bottom: 2rem;
+    padding: 3rem;
+    border-radius: 24px;
+    background: rgba(26, 29, 36, 0.4);
+}
+.pf-ed8f7456-profile-avatar-large {
+    width: 120px;
+    height: 120px;
+    box-shadow: var( --shadow-glow-blue );
+    border-radius: 50%;
+}
+.pf-ed8f7456-profile-info {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0%;
+}
+.pf-ed8f7456-profile-username {
+    margin-bottom: 0.5rem;
+    font-size: 2.5rem;
+    font-weight: 800;
+}
+.pf-ed8f7456-profile-discriminator {
+    font-family: var( --font-mono );
+    color: var( --text-muted );
+}
+.pf-ed8f7456-profile-stats {
+    display: flex;
+    row-gap: 3rem;
+    column-gap: 3rem;
+    margin-top: 1.5rem;
+}
+.pf-ed8f7456-stat-item {
+    display: flex;
+    flex-direction: column;
+}
+.pf-ed8f7456-stat-value {
+    font-family: var( --font-mono );
+    color: var( --primary-light );
+    font-size: 2rem;
+    font-weight: 800;
+}
+.pf-ed8f7456-stat-label {
+    color: var( --text-secondary );
+    font-size: 0.9rem;
+}
+.pf-ed8f7456-rank-badge {
+    display: inline-block;
+    box-shadow: 0 0 30px rgba(245, 158, 11, 0.4);
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+}
+.pf-ed8f7456-heatmap-section {
+    backdrop-filter: blur(20px);
+    margin-bottom: 2rem;
+    padding: 2.5rem;
+    border-radius: 24px;
+    background: rgba(26, 29, 36, 0.4);
+}
+.pf-ed8f7456-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+.pf-ed8f7456-section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+.pf-ed8f7456-heatmap-grid {
+    display: grid;
+    grid-template-columns: repeat(53, 1fr);
+    row-gap: 4px;
+    column-gap: 4px;
+    margin: 2rem 0;
+}
+.pf-ed8f7456-heatmap-legend {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    row-gap: 0.5rem;
+    column-gap: 0.5rem;
+    margin-top: 1.5rem;
+}
+.pf-ed8f7456-legend-label {
+    color: var( --text-muted );
+    font-size: 0.85rem;
+}
+.pf-ed8f7456-legend-cells {
+    display: flex;
+    row-gap: 3px;
+    column-gap: 3px;
+}
+.pf-ed8f7456-legend-cell {
+    width: 14px;
+    height: 14px;
+    border-radius: 2px;
+}
+.pf-ed8f7456-two-column {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    row-gap: 2rem;
+    column-gap: 2rem;
+    margin-bottom: 2rem;
+}
+.pf-ed8f7456-platforms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    row-gap: 1.5rem;
+    column-gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+.pf-ed8f7456-platform-card {
+    overflow-x: hidden;
+    overflow-y: hidden;
+    backdrop-filter: blur(20px);
+    position: relative;
+    padding: 2rem;
+    border-radius: 20px;
+    background: rgba(26, 29, 36, 0.4);
+}
+.pf-ed8f7456-platform-header {
+    display: flex;
+    align-items: center;
+    row-gap: 1rem;
+    column-gap: 1rem;
+    margin-bottom: 1rem;
+}
+.pf-ed8f7456-platform-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+    border-radius: 10px;
+    background: rgba(59, 130, 246, 0.1);
+}
+.pf-ed8f7456-platform-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+.pf-ed8f7456-platform-username {
+    font-family: var( --font-mono );
+    margin-bottom: 1rem;
+    color: var( --text-secondary );
+    font-size: 0.9rem;
+}
+.pf-ed8f7456-platform-stat {
+    font-family: var( --font-mono );
+    margin-bottom: 0.25rem;
+    color: var( --primary-light );
+    font-size: 2rem;
+    font-weight: 800;
+}
+.pf-ed8f7456-platform-stat-label {
+    color: var( --text-muted );
+    font-size: 0.85rem;
+}
+.pf-ed8f7456-platform-status {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var( --accent-emerald );
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.4rem 0.9rem;
+    border-width: 1px;
+    border-color: rgba(16, 185, 129, 0.2);
+    border-style: solid;
+    border-radius: 20px;
+    background: rgba(16, 185, 129, 0.1);
+}
+.pf-ed8f7456-activity-section {
+    backdrop-filter: blur(20px);
+    padding: 2.5rem;
+    border-radius: 24px;
+    background: rgba(26, 29, 36, 0.4);
+}
+.pf-ed8f7456-activity-item {
+    margin-bottom: 1rem;
+    padding: 1.25rem;
+    border-radius: 12px;
+    background: rgba(11, 14, 20, 0.4);
+}
+.pf-ed8f7456-activity-title {
+    margin-bottom: 0.5rem;
+    color: var( --text-primary );
+    font-weight: 600;
+}
+.pf-ed8f7456-activity-meta {
+    display: flex;
+    row-gap: 1rem;
+    column-gap: 1rem;
+    color: var( --text-muted );
+    font-size: 0.85rem;
+}
+.pf-ed8f7456-difficulty-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+}
+.pf-ed8f7456-difficulty-easy {
+    color: var( --accent-emerald );
+    background: rgba(16, 185, 129, 0.2);
+}
+.pf-ed8f7456-difficulty-medium {
+    color: var( --accent-gold );
+    background: rgba(245, 158, 11, 0.2);
+}
+.pf-ed8f7456-difficulty-hard {
+    color: rgba(239, 68, 68, 1);
+    background: rgba(239, 68, 68, 0.2);
+}
+.pf-ed8f7456-badges-section {
+    backdrop-filter: blur(20px);
+    padding: 2.5rem;
+    border-radius: 24px;
+    background: rgba(26, 29, 36, 0.4);
+}
+.pf-ed8f7456-badges-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 1.5rem;
+    column-gap: 1.5rem;
+    margin-top: 2rem;
+}
+.pf-ed8f7456-badge-card {
+    text-align: center;
+    position: relative;
+    padding: 1.75rem;
+    border-radius: 16px;
+    background: rgba(11, 14, 20, 0.4);
+}
+.pf-ed8f7456-badge-icon {
+    filter: drop-shadow(rgba(245, 158, 11, 0.5) 0 0 20px);
+    margin-bottom: 1rem;
+    font-size: 3rem;
+}
+.pf-ed8f7456-badge-name {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+.pf-ed8f7456-badge-desc {
+    color: var( --text-secondary );
+    font-size: 0.85rem;
+}
+.pf-ed8f7456-badge-progress {
+    margin-top: 1rem;
+}
+.pf-ed8f7456-progress-bar {
+    overflow-x: hidden;
+    overflow-y: hidden;
+    height: 6px;
+    margin-top: 0.5rem;
+    border-radius: 10px;
+    background: rgba(59, 130, 246, 0.2);
+}
+.pf-ed8f7456-progress-fill {
+    height: 100%;
+    box-shadow: 0 0 10px var( --primary-light );
+    border-radius: 10px;
+}
+.pf-ed8f7456-progress-text {
+    font-family: var( --font-mono );
+    margin-top: 0.5rem;
+    color: var( --text-muted );
+    font-size: 0.75rem;
+}
+}</style>
+<!--FontAwesome version: 6.7.2--><link rel="stylesheet" href="https://static.paraflowcontent.com/public/css/font-awesome/font-awesome.672.css"><!--Tailwind version: 4.0.17--><script src="https://static.paraflowcontent.com/public/js/tailwind/tailwind.js"></script><!--iconify-icon version: 3.0.0--><script src="https://static.paraflowcontent.com/public/js/iconify/iconify-icon-3.0.0.js"></script></head>
+<body id="12:1" title="dashboard.html" orderindex="80" relativetransform="530, 125" class="w-[390px]">
+<div id="12:2" orderindex="80" class="pf-ed8f7456-bg-gradient-orbs">
+<div id="12:3" orderindex="80" class="pf-ed8f7456-orb pf-ed8f7456-orb-1"></div>
+<div id="12:4" orderindex="81" class="pf-ed8f7456-orb pf-ed8f7456-orb-2"></div>
+</div>
+<nav id="12:5" orderindex="81" class="pf-ed8f7456-nav">
+<div id="12:6" orderindex="80" class="pf-ed8f7456-logo">CodeSync</div>
+<ul id="12:7" orderindex="81" class="pf-ed8f7456-nav-links">
+<li id="12:8" orderindex="80"><a id="12:9" orderindex="80" class="active" href="#">Dashboard</a></li>
+<li id="12:10" orderindex="81"><a id="12:11" orderindex="80" href="#">Leaderboard</a></li>
+<li id="12:12" orderindex="82"><a id="12:13" orderindex="80" href="#">Settings</a></li>
+</ul>
+<div id="12:14" orderindex="82" class="pf-ed8f7456-nav-right">
+<div id="12:15" orderindex="80" class="pf-ed8f7456-notifications-icon">
+                <span id="12:16" orderindex="81" class="pf-ed8f7456-notification-badge">3</span>
+</div>
+<img id="12:17" orderindex="81" class="pf-ed8f7456-user-avatar" alt="User" src="data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='40' height='40' fill='%233B82F6'/%3E%3Ctext x='50%25' y='50%25' font-size='20' text-anchor='middle' dy='.3em' fill='white'%3EU%3C/text%3E%3C/svg%3E">
+</div>
+</nav>
+<div id="12:18" orderindex="82" class="pf-ed8f7456-container">
+
+<div id="12:19" orderindex="80" class="pf-ed8f7456-profile-header">
+<img id="12:20" orderindex="80" class="pf-ed8f7456-profile-avatar-large" alt="Avatar" src="data:image/svg+xml,%3Csvg width='120' height='120' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='60' cy='60' r='60' fill='%233B82F6'/%3E%3Ctext x='50%25' y='50%25' font-size='48' text-anchor='middle' dy='.3em' fill='white' font-weight='bold'%3EAK%3C/text%3E%3C/svg%3E">
+<div id="12:21" orderindex="81" class="pf-ed8f7456-profile-info">
+<h1 id="12:22" orderindex="80" class="pf-ed8f7456-profile-username">
+                    <span id="12:23" orderindex="81" class="pf-ed8f7456-profile-discriminator">#2847</span>
+</h1>
+<span id="12:24" orderindex="81" class="pf-ed8f7456-rank-badge">🥇 Rank #247 - Gold Tier</span>
+<div id="12:25" orderindex="82" class="pf-ed8f7456-profile-stats">
+<div id="12:26" orderindex="80" class="pf-ed8f7456-stat-item">
+<div id="12:27" orderindex="80" class="pf-ed8f7456-stat-value">1,247</div>
+<div id="12:28" orderindex="81" class="pf-ed8f7456-stat-label">Problems Solved</div>
+</div>
+<div id="12:29" orderindex="81" class="pf-ed8f7456-stat-item">
+<div id="12:30" orderindex="80" class="pf-ed8f7456-stat-value">23</div>
+<div id="12:31" orderindex="81" class="pf-ed8f7456-stat-label">Day Streak 🔥</div>
+</div>
+<div id="12:32" orderindex="82" class="pf-ed8f7456-stat-item">
+<div id="12:33" orderindex="80" class="pf-ed8f7456-stat-value">Top 15%</div>
+<div id="12:34" orderindex="81" class="pf-ed8f7456-stat-label">Global Rank</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="12:35" orderindex="81" class="pf-ed8f7456-heatmap-section">
+<div id="12:36" orderindex="80" class="pf-ed8f7456-section-header">
+<h2 id="12:37" orderindex="80" class="pf-ed8f7456-section-title">365-Day Activity</h2>
+<span id="12:38" orderindex="81" style="color: var( --text-muted ); font-size: 0.9rem;">289 active days • Avg 3.4 problems/day</span>
+</div>
+<div id="12:39" orderindex="81" class="pf-ed8f7456-heatmap-grid">
+
+</div>
+<div id="12:40" orderindex="82" class="pf-ed8f7456-heatmap-legend">
+<span id="12:41" orderindex="80" class="pf-ed8f7456-legend-label">Less</span>
+<div id="12:42" orderindex="81" class="pf-ed8f7456-legend-cells">
+<div id="12:43" orderindex="80" class="pf-ed8f7456-legend-cell level-0"></div>
+<div id="12:44" orderindex="81" class="pf-ed8f7456-legend-cell level-1"></div>
+<div id="12:45" orderindex="82" class="pf-ed8f7456-legend-cell level-2"></div>
+<div id="12:46" orderindex="83" class="pf-ed8f7456-legend-cell level-3"></div>
+<div id="12:47" orderindex="84" class="pf-ed8f7456-legend-cell level-4"></div>
+</div>
+<span id="12:48" orderindex="82" class="pf-ed8f7456-legend-label">More</span>
+</div>
+</div>
+
+<div id="12:49" orderindex="82" class="mb-8">
+<h2 id="12:50" orderindex="80" style="font-size: 1.75rem;" class="mb-6">Connected Platforms</h2>
+<div id="12:51" orderindex="81" class="pf-ed8f7456-platforms-grid">
+<div id="12:52" orderindex="80" class="pf-ed8f7456-platform-card">
+<div id="12:53" orderindex="80" class="pf-ed8f7456-platform-header">
+<div id="12:54" orderindex="80" class="pf-ed8f7456-platform-logo">🔷</div>
+<div id="12:55" orderindex="81" class="pf-ed8f7456-platform-name">LeetCode</div>
+</div>
+<div id="12:56" orderindex="81" class="pf-ed8f7456-platform-username">@alexkumar_dev</div>
+<div id="12:57" orderindex="82" class="pf-ed8f7456-platform-stat">487</div>
+<div id="12:58" orderindex="83" class="pf-ed8f7456-platform-stat-label">Problems Solved</div>
+<span id="12:59" orderindex="84" class="pf-ed8f7456-platform-status">✓ Connected • 2h ago</span>
+</div>
+<div id="12:60" orderindex="81" class="pf-ed8f7456-platform-card">
+<div id="12:61" orderindex="80" class="pf-ed8f7456-platform-header">
+<div id="12:62" orderindex="80" class="pf-ed8f7456-platform-logo">🍴</div>
+<div id="12:63" orderindex="81" class="pf-ed8f7456-platform-name">CodeChef</div>
+</div>
+<div id="12:64" orderindex="81" class="pf-ed8f7456-platform-username">@alex_kumar</div>
+<div id="12:65" orderindex="82" class="pf-ed8f7456-platform-stat">312</div>
+<div id="12:66" orderindex="83" class="pf-ed8f7456-platform-stat-label">Problems Solved</div>
+<span id="12:67" orderindex="84" class="pf-ed8f7456-platform-status">✓ Connected • 5h ago</span>
+</div>
+<div id="12:68" orderindex="82" class="pf-ed8f7456-platform-card">
+<div id="12:69" orderindex="80" class="pf-ed8f7456-platform-header">
+<div id="12:70" orderindex="80" class="pf-ed8f7456-platform-logo">⚔️</div>
+<div id="12:71" orderindex="81" class="pf-ed8f7456-platform-name">Codeforces</div>
+</div>
+<div id="12:72" orderindex="81" class="pf-ed8f7456-platform-username">@alexk</div>
+<div id="12:73" orderindex="82" class="pf-ed8f7456-platform-stat">198</div>
+<div id="12:74" orderindex="83" class="pf-ed8f7456-platform-stat-label">Problems Solved</div>
+<span id="12:75" orderindex="84" class="pf-ed8f7456-platform-status">✓ Connected • 1d ago</span>
+</div>
+<div id="12:76" orderindex="83" class="pf-ed8f7456-platform-card">
+<div id="12:77" orderindex="80" class="pf-ed8f7456-platform-header">
+<div id="12:78" orderindex="80" class="pf-ed8f7456-platform-logo">💚</div>
+<div id="12:79" orderindex="81" class="pf-ed8f7456-platform-name">HackerRank</div>
+</div>
+<div id="12:80" orderindex="81" class="pf-ed8f7456-platform-username">@alex_kumar_dev</div>
+<div id="12:81" orderindex="82" class="pf-ed8f7456-platform-stat">156</div>
+<div id="12:82" orderindex="83" class="pf-ed8f7456-platform-stat-label">Problems Solved</div>
+<span id="12:83" orderindex="84" class="pf-ed8f7456-platform-status">✓ Connected • 3h ago</span>
+</div>
+<div id="12:84" orderindex="84" class="pf-ed8f7456-platform-card">
+<div id="12:85" orderindex="80" class="pf-ed8f7456-platform-header">
+<div id="12:86" orderindex="80" class="pf-ed8f7456-platform-logo">🧠</div>
+<div id="12:87" orderindex="81" class="pf-ed8f7456-platform-name">SmartInterviews</div>
+</div>
+<div id="12:88" orderindex="81" class="pf-ed8f7456-platform-username">@alex.kumar</div>
+<div id="12:89" orderindex="82" class="pf-ed8f7456-platform-stat">94</div>
+<div id="12:90" orderindex="83" class="pf-ed8f7456-platform-stat-label">Problems Solved</div>
+<span id="12:91" orderindex="84" class="pf-ed8f7456-platform-status">✓ Connected • 12h ago</span>
+</div>
+</div>
+</div>
+
+<div id="12:92" orderindex="83" class="pf-ed8f7456-two-column">
+
+<div id="12:93" orderindex="80" class="pf-ed8f7456-activity-section">
+<h2 id="12:94" orderindex="80" class="pf-ed8f7456-section-title">Recent Activity</h2>
+<div id="12:95" orderindex="81" class="mt-8">
+<div id="12:96" orderindex="80" class="pf-ed8f7456-activity-item">
+<div id="12:97" orderindex="80" class="pf-ed8f7456-activity-title">Two Sum IV - Input is a BST</div>
+<div id="12:98" orderindex="81" class="pf-ed8f7456-activity-meta">
+<span id="12:99" orderindex="80">🔷 LeetCode</span>
+<span id="12:100" orderindex="81" class="pf-ed8f7456-difficulty-badge pf-ed8f7456-difficulty-easy">Easy</span>
+<span id="12:101" orderindex="82">2 hours ago</span>
+</div>
+</div>
+<div id="12:102" orderindex="81" class="pf-ed8f7456-activity-item">
+<div id="12:103" orderindex="80" class="pf-ed8f7456-activity-title">Maximum Subarray Sum</div>
+<div id="12:104" orderindex="81" class="pf-ed8f7456-activity-meta">
+<span id="12:105" orderindex="80">⚔️ Codeforces</span>
+<span id="12:106" orderindex="81" class="pf-ed8f7456-difficulty-badge pf-ed8f7456-difficulty-medium">Medium</span>
+<span id="12:107" orderindex="82">5 hours ago</span>
+</div>
+</div>
+<div id="12:108" orderindex="82" class="pf-ed8f7456-activity-item">
+<div id="12:109" orderindex="80" class="pf-ed8f7456-activity-title">Longest Palindromic Substring</div>
+<div id="12:110" orderindex="81" class="pf-ed8f7456-activity-meta">
+<span id="12:111" orderindex="80">🍴 CodeChef</span>
+<span id="12:112" orderindex="81" class="pf-ed8f7456-difficulty-badge pf-ed8f7456-difficulty-medium">Medium</span>
+<span id="12:113" orderindex="82">1 day ago</span>
+</div>
+</div>
+<div id="12:114" orderindex="83" class="pf-ed8f7456-activity-item">
+<div id="12:115" orderindex="80" class="pf-ed8f7456-activity-title">Binary Tree Maximum Path Sum</div>
+<div id="12:116" orderindex="81" class="pf-ed8f7456-activity-meta">
+<span id="12:117" orderindex="80">💚 HackerRank</span>
+<span id="12:118" orderindex="81" class="pf-ed8f7456-difficulty-badge pf-ed8f7456-difficulty-hard">Hard</span>
+<span id="12:119" orderindex="82">1 day ago</span>
+</div>
+</div>
+<div id="12:120" orderindex="84" class="pf-ed8f7456-activity-item">
+<div id="12:121" orderindex="80" class="pf-ed8f7456-activity-title">Merge K Sorted Lists</div>
+<div id="12:122" orderindex="81" class="pf-ed8f7456-activity-meta">
+<span id="12:123" orderindex="80">🔷 LeetCode</span>
+<span id="12:124" orderindex="81" class="pf-ed8f7456-difficulty-badge pf-ed8f7456-difficulty-hard">Hard</span>
+<span id="12:125" orderindex="82">2 days ago</span>
+</div>
+</div>
+</div>
+</div>
+
+<div id="12:126" orderindex="81" class="pf-ed8f7456-badges-section">
+<h2 id="12:127" orderindex="80" class="pf-ed8f7456-section-title">Achievements</h2>
+<div id="12:128" orderindex="81" class="pf-ed8f7456-badges-grid">
+<div id="12:129" orderindex="80" class="pf-ed8f7456-badge-card unlocked">
+<div id="12:130" orderindex="80" class="pf-ed8f7456-badge-icon">🥇</div>
+<div id="12:131" orderindex="81" class="pf-ed8f7456-badge-name">First Blood</div>
+<div id="12:132" orderindex="82" class="pf-ed8f7456-badge-desc">Solved your first problem</div>
+</div>
+<div id="12:133" orderindex="81" class="pf-ed8f7456-badge-card unlocked">
+<div id="12:134" orderindex="80" class="pf-ed8f7456-badge-icon">🔥</div>
+<div id="12:135" orderindex="81" class="pf-ed8f7456-badge-name">On Fire</div>
+<div id="12:136" orderindex="82" class="pf-ed8f7456-badge-desc">20+ day streak</div>
+</div>
+<div id="12:137" orderindex="82" class="pf-ed8f7456-badge-card locked">
+<div id="12:138" orderindex="80" class="pf-ed8f7456-badge-icon">💯</div>
+<div id="12:139" orderindex="81" class="pf-ed8f7456-badge-name">Century</div>
+<div id="12:140" orderindex="82" class="pf-ed8f7456-badge-desc">Solve 100 problems</div>
+<div id="12:141" orderindex="83" class="pf-ed8f7456-badge-progress">
+<div id="12:142" orderindex="80" class="pf-ed8f7456-progress-bar">
+<div id="12:143" orderindex="80" class="pf-ed8f7456-progress-fill" style="width: 75%;"></div>
+</div>
+<div id="12:144" orderindex="81" class="pf-ed8f7456-progress-text">75/100 problems</div>
+</div>
+</div>
+<div id="12:145" orderindex="83" class="pf-ed8f7456-badge-card locked">
+<div id="12:146" orderindex="80" class="pf-ed8f7456-badge-icon">⚡</div>
+<div id="12:147" orderindex="81" class="pf-ed8f7456-badge-name">Speed Demon</div>
+<div id="12:148" orderindex="82" class="pf-ed8f7456-badge-desc">Solve 10 problems in 1 day</div>
+<div id="12:149" orderindex="83" class="pf-ed8f7456-badge-progress">
+<div id="12:150" orderindex="80" class="pf-ed8f7456-progress-bar">
+<div id="12:151" orderindex="80" class="pf-ed8f7456-progress-fill" style="width: 40%;"></div>
+</div>
+<div id="12:152" orderindex="81" class="pf-ed8f7456-progress-text">4/10 problems</div>
+</div>
+</div>
+<div id="12:153" orderindex="84" class="pf-ed8f7456-badge-card unlocked">
+<div id="12:154" orderindex="80" class="pf-ed8f7456-badge-icon">🌟</div>
+<div id="12:155" orderindex="81" class="pf-ed8f7456-badge-name">Consistency</div>
+<div id="12:156" orderindex="82" class="pf-ed8f7456-badge-desc">Active for 30 days</div>
+</div>
+<div id="12:157" orderindex="85" class="pf-ed8f7456-badge-card locked">
+<div id="12:158" orderindex="80" class="pf-ed8f7456-badge-icon">👑</div>
+<div id="12:159" orderindex="81" class="pf-ed8f7456-badge-name">Problem Master</div>
+<div id="12:160" orderindex="82" class="pf-ed8f7456-badge-desc">Solve 1000 problems</div>
+<div id="12:161" orderindex="83" class="pf-ed8f7456-badge-progress">
+<div id="12:162" orderindex="80" class="pf-ed8f7456-progress-bar">
+<div id="12:163" orderindex="80" class="pf-ed8f7456-progress-fill" style="width: 24%;"></div>
+</div>
+<div id="12:164" orderindex="81" class="pf-ed8f7456-progress-text">247/1000 problems</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+
+</body></html>

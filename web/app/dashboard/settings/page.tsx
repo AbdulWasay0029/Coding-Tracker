@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { User, Globe, Palette, Shield, Save, ArrowRight } from 'lucide-react';
 import { useSession } from 'next-auth/react';
+import SettingsPlatformsManager from './SettingsPlatformsManager';
 
 export default function SettingsHub() {
     const { data: session } = useSession();
@@ -104,57 +105,7 @@ export default function SettingsHub() {
                                 <h2 className="text-xl font-bold text-white/90 mb-2">Connected Platforms</h2>
                                 <p className="text-sm text-white/50 mb-8">Link your coding accounts to automatically sync your stats to your profile.</p>
 
-                                <div className="space-y-4">
-                                    {/* LeetCode Form */}
-                                    <div className="p-6 bg-[#0B0E14] border border-white/5 rounded-2xl hover:border-white/10 transition-colors group">
-                                        <div className="flex items-center justify-between mb-4">
-                                            <div className="flex items-center gap-3">
-                                                <div className="p-2.5 bg-[#F59E0B]/10 rounded-xl group-hover:bg-[#F59E0B]/20 transition-colors">
-                                                    <Globe className="w-6 h-6 text-[#F59E0B]" />
-                                                </div>
-                                                <div>
-                                                    <h3 className="text-lg font-bold text-white/90">LeetCode</h3>
-                                                    <p className="text-xs text-white/50 font-mono uppercase tracking-wider">Not connected</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="flex gap-3">
-                                            <input 
-                                                type="text" 
-                                                placeholder="LeetCode Username"
-                                                className="flex-1 bg-[#1A1D24] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#F59E0B]"
-                                            />
-                                            <button className="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-sm font-bold text-white transition-colors">
-                                                Connect
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    {/* Codeforces Form */}
-                                    <div className="p-6 bg-[#0B0E14] border border-white/5 rounded-2xl hover:border-white/10 transition-colors group">
-                                        <div className="flex items-center justify-between mb-4">
-                                            <div className="flex items-center gap-3">
-                                                <div className="p-2.5 bg-[#EF4444]/10 rounded-xl group-hover:bg-[#EF4444]/20 transition-colors">
-                                                    <Globe className="w-6 h-6 text-[#EF4444]" />
-                                                </div>
-                                                <div>
-                                                    <h3 className="text-lg font-bold text-white/90">Codeforces</h3>
-                                                    <p className="text-xs text-white/50 font-mono uppercase tracking-wider">Not connected</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="flex gap-3">
-                                            <input 
-                                                type="text" 
-                                                placeholder="Codeforces Handle"
-                                                className="flex-1 bg-[#1A1D24] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#EF4444]"
-                                            />
-                                            <button className="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-sm font-bold text-white transition-colors">
-                                                Connect
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+                                <SettingsPlatformsManager />
                             </div>
                         </div>
                     )}

@@ -1,0 +1,164 @@
+# Leaderboard
+A social ranking interface that displays community competition data with creative data visualization, celebrating top performers with distinct visual treatments and enabling server-filtered comparisons.
+
+Layout Hierarchy:
+- Header (Full-width, fixed/sticky)
+  - Top Navigation Bar
+- Main Content Container (Centered, max-width constrained)
+  - Leaderboard Controls Section
+  - Top 3 Podium Section
+  - Ranking Table Section
+
+## Top Navigation Bar
+- CodeSync logo (clickable, returns to dashboard)
+- Navigation links: Dashboard, Leaderboard (active state), Settings
+- Right side elements:
+  - Notifications icon with badge counter
+  - User avatar (small, circular) with dropdown trigger
+  - Dropdown menu items: Profile, Settings, Documentation, Logout
+
+## Leaderboard Controls Section
+- Section heading: "Community Leaderboard"
+- Server selection dropdown:
+  - Dropdown trigger button: "Select Server" with current server name and server icon
+  - Dropdown menu displaying:
+    - Server 1: Icon + Name + Member count
+    - Server 2: Icon + Name + Member count
+    - Server 3: Icon + Name + Member count
+    - [Additional servers]
+    - "All Servers" option (global leaderboard)
+- Time period tabs/filter:
+  - Tab option: "Weekly" (active state)
+  - Tab option: "Monthly"
+  - Tab option: "All-Time"
+  - Each tab has underline accent glow when active
+- Additional filters (optional):
+  - Search bar: "Search developers..."
+  - Platform filter: "All Platforms" dropdown
+  - Sort options: "Problems Solved", "Rank Change", "Streak"
+- Stats summary bar:
+  - Total participants count
+  - Total problems solved this period
+  - Average problems per user
+  - Displayed in glassmorphic pill containers with neon accents
+
+## Top 3 Podium Section
+- Elevated display with distinctive visual hierarchy (2nd, 1st, 3rd arrangement)
+- Rank 1 (Center, Largest):
+  - Podium height: Tallest
+  - Gold accent glow (#F59E0B) with animated shimmer effect
+  - Large Discord avatar (circular, glowing gold border, elevated shadow)
+  - Crown icon above avatar with glow
+  - Username (bold, large) with discriminator
+  - Rank badge: "1st" with gold styling
+  - Problems solved (7-day): Large number with animated count-up
+  - Top platform indicator: Platform icon/logo with name
+  - Profile stats: Total problems, streak count, rank change indicator (arrow up/down)
+  - "View Profile" button with hover glow
+  - Background: Glassmorphic card with intense gold border glow and gradient overlay
+- Rank 2 (Left, Medium):
+  - Podium height: Medium
+  - Silver accent glow (#94A3B8) with subtle shimmer
+  - Large Discord avatar (circular, glowing silver border)
+  - Silver medal icon above avatar
+  - Username with discriminator
+  - Rank badge: "2nd" with silver styling
+  - Problems solved (7-day): Number with count-up animation
+  - Top platform indicator
+  - Profile stats (same as Rank 1)
+  - "View Profile" button
+  - Background: Glassmorphic card with silver border glow
+- Rank 3 (Right, Medium):
+  - Podium height: Medium
+  - Bronze accent glow (#D97706) with subtle shimmer
+  - Large Discord avatar (circular, glowing bronze border)
+  - Bronze medal icon above avatar
+  - Username with discriminator
+  - Rank badge: "3rd" with bronze styling
+  - Problems solved (7-day): Number with count-up animation
+  - Top platform indicator
+  - Profile stats (same as Rank 1)
+  - "View Profile" button
+  - Background: Glassmorphic card with bronze border glow
+- Podium background effects:
+  - Spotlight/gradient rays emanating from podium
+  - Confetti or particle effects (subtle, animated)
+  - Depth layering with shadows creating elevation hierarchy
+
+## Ranking Table Section
+- Section heading: "Full Rankings" (optional, can be implicit)
+- Table structure optimized for data visualization (not boring grid):
+  - Column headers with sort indicators:
+    - Rank (narrow column, right-aligned)
+    - Developer (wide column, left-aligned)
+    - Problems Solved (Last 7 Days) (medium column, center-aligned)
+    - Top Platform (medium column, center-aligned)
+    - Rank Change (narrow column, center-aligned)
+  - Table header: Glassmorphic background with bottom border glow
+- Ranking rows (starting from Rank 4):
+  - Row for Rank 4:
+    - Rank number: "4" (medium font size)
+    - Developer cell:
+      - Discord avatar (small, circular)
+      - Username with discriminator
+    - Problems solved: Number with neon accent color
+    - Top platform: Platform icon + name
+    - Rank change: Arrow icon (up/down/neutral) with color coding (green/red/gray)
+    - Row background: Subtle glassmorphic with border
+    - Hover effect: Elevated shadow, glowing border, slight background brighten
+  - Row for Rank 5:
+    - (Same structure as Rank 4)
+  - Row for Rank 6:
+    - (Same structure as Rank 4)
+  - [Rows continue for additional ranks]
+  - Current user's row (highlighted):
+    - Special background glow with electric blue accent
+    - Bold username styling
+    - Animated "You" badge/indicator
+    - Enhanced border glow
+    - Sticky positioning option (keeps user visible while scrolling)
+- Alternating row styling:
+  - Even rows: Slightly lighter background
+  - Odd rows: Slightly darker background
+  - Smooth gradient transitions between rows
+- Rank milestones (optional):
+  - Every 10th rank: Subtle divider line with rank milestone label (e.g., "Top 10", "Top 20")
+- Pagination or infinite scroll:
+  - Load more button: "Load Next 20" with glassmorphic styling and hover glow
+  - Or: Infinite scroll with loading skeleton at bottom
+  - Total count indicator: "Showing 1-50 of 247 developers"
+
+## Empty States
+- No leaderboard data available:
+  - Illustration or icon (empty leaderboard graphic)
+  - Heading: "No Rankings Available"
+  - Subtext: "Be the first to compete! Connect your platforms and start solving problems."
+  - CTA button: "Go to Dashboard"
+- No results from search/filter:
+  - Icon (search/filter graphic)
+  - Heading: "No Developers Found"
+  - Subtext: "Try adjusting your filters or search term"
+  - CTA button: "Clear Filters"
+
+## Additional UI Elements
+- Loading states:
+  - Skeleton screens for podium and table rows
+  - Animated gradient shimmer effect during load
+- Rank change indicators:
+  - Arrow up (green): Rank improved
+  - Arrow down (red): Rank declined
+  - Horizontal line (gray): No change
+  - Number showing position change (e.g., "+5", "-3")
+- Micro-animations:
+  - Podium cards scale and glow on hover
+  - Table rows lift and glow on hover
+  - Numbers animate/count up on initial load
+  - Smooth transitions for tab switches and filter changes
+- Responsive design:
+  - Desktop: Full multi-column table layout with podium
+  - Tablet: Condensed table columns, maintained podium
+  - Mobile: Card-based layout instead of table, stacked podium (1st, 2nd, 3rd vertically)
+- Accessibility:
+  - Keyboard navigation for table rows
+  - ARIA labels for rank indicators
+  - Focus states with visible glowing outlines

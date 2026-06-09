@@ -163,44 +163,45 @@ export async function BadgesSection({ userId }: { userId: string }) {
     ];
 
     return (
-        <section className="mt-8">
-            <div className="mb-6 animate-reveal stagger-1 flex items-center justify-between">
+        <section className="glass-subtle rounded-2xl p-6 md:p-8 flex flex-col h-full gap-6">
+            <div className="flex items-center justify-between border-b border-white/5 pb-4">
                 <div>
-                    <h2 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
-                        <Flame className="w-6 h-6 text-primary" /> Profile Badges
+                    <h2 className="text-xl font-semibold text-white/95 flex items-center gap-2">
+                        <Award className="w-5 h-5 text-[#60A5FA]" /> Achievements
                     </h2>
-                    <p className="text-text-secondary text-sm mt-1">Earn exclusive badges as you level up.</p>
                 </div>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 animate-reveal stagger-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4 overflow-y-auto custom-scrollbar flex-1 pr-2">
                 {badges.map(badge => (
                     <div 
                         key={badge.id}
-                        className={`relative rounded-xl p-5 overflow-hidden transition-all duration-300 ${
+                        className={`relative rounded-xl p-5 overflow-hidden transition-all duration-300 flex items-center gap-4 ${
                             badge.unlocked 
-                                ? `bg-surface border border-white/10 ${badge.glow} hover:-translate-y-1` 
-                                : 'bg-[#05070A] border border-border opacity-50 grayscale hover:grayscale-0'
+                                ? `bg-[#1A1D24]/60 backdrop-blur-md border border-white/10 ${badge.glow} hover:-translate-y-1 hover:border-white/20` 
+                                : 'bg-[#0B0E14]/40 border border-white/5 opacity-60 grayscale hover:grayscale-[50%]'
                         }`}
                     >
                         {badge.unlocked && (
                             <div className="absolute top-2 right-2">
-                                <CheckCircle2 className="w-4 h-4 text-primary" />
+                                <CheckCircle2 className="w-4 h-4 text-[#10B981]" />
                             </div>
                         )}
                         
-                        <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${badge.color} flex items-center justify-center mb-4 shadow-lg`}>
+                        <div className={`w-12 h-12 flex-shrink-0 rounded-full bg-gradient-to-br ${badge.color} flex items-center justify-center shadow-lg`}>
                             {badge.icon}
                         </div>
                         
-                        <h3 className="text-sm font-bold text-white mb-1">{badge.name}</h3>
-                        <p className="text-text-tertiary text-xs leading-tight">{badge.description}</p>
-                        
-                        {!badge.unlocked && (
-                            <div className="mt-4 text-[10px] font-mono text-text-secondary bg-black/50 py-0.5 px-1.5 rounded w-fit">
-                                🔒 Locked
-                            </div>
-                        )}
+                        <div className="flex flex-col flex-1">
+                            <h3 className="text-sm font-bold text-white/95 mb-0.5">{badge.name}</h3>
+                            <p className="text-white/50 text-[11px] leading-snug">{badge.description}</p>
+                            
+                            {!badge.unlocked && (
+                                <div className="mt-2 text-[10px] font-mono text-white/30 bg-black/50 py-0.5 px-1.5 rounded w-fit border border-white/5">
+                                    🔒 Locked
+                                </div>
+                            )}
+                        </div>
                     </div>
                 ))}
             </div>

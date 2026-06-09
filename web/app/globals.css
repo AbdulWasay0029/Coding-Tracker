@@ -1,37 +1,60 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #0B0E14; /* Deep Space Black */
-  --color-surface: #111620; /* Slightly lighter for cards */
-  --color-border: #1E2532; /* Flat border color */
-  --color-primary: #00F0FF; /* Neon Cyan */
-  --color-secondary: #39FF14; /* Toxic Green */
+  --color-primary-base: #3B82F6;
+  --color-primary-lighter: #60A5FA;
+  --color-primary-darker: #2563EB;
   
-  --color-text-primary: #FFFFFF;
-  --color-text-secondary: #8B949E;
-  --color-text-tertiary: #6E7681;
+  --color-success-default: #10B981;
+  --color-warning-default: #F59E0B;
+  --color-error-default: #EF4444;
 
-  --color-success: #39FF14;
-  --color-warning: #FFD700;
-  --color-danger: #FF3366;
+  --color-accent-purple: #A78BFA;
+  --color-accent-pink: #F472B6;
+  --color-accent-orange: #FB923C;
+
+  --font-mono: 'JetBrains Mono', 'Menlo', 'Monaco', 'Courier New', monospace;
 }
 
 @layer base {
   :root {
-    --background: #0B0E14;
-    --foreground: #FFFFFF;
+    --background: #05070A;
+    --foreground: rgba(255, 255, 255, 0.95);
   }
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: 'Inter', 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Stark, minimal scrollbar */
+/* Glassmorphism Utilities */
+.glass-subtle {
+  box-shadow: inset 4px 0px 8px -3px rgba(255, 255, 255, 0.03), inset -4px 0px 8px -3px rgba(255, 255, 255, 0.03), 0 8px 32px -8px rgba(59, 130, 246, 0.15);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-strong {
+  box-shadow: inset 8px 0px 16px -8px rgba(255, 255, 255, 0.06), inset -8px 0px 16px -8px rgba(255, 255, 255, 0.06), inset -2px 0px 3px -1px rgba(255, 255, 255, 0.04), inset 2px 0px 3px -1px rgba(255, 255, 255, 0.04), 0 12px 40px -10px rgba(59, 130, 246, 0.25);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-inset-subtle {
+  box-shadow: inset 3px 3px 8px -3px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.glass-inset-strong {
+  box-shadow: inset 4px 4px 10px -4px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -40,33 +63,15 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1E1E24;
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #2D2D35;
-}
-
-.custom-scrollbar::-webkit-scrollbar {
-  height: 6px;
-}
-
-/* Clean UI utility classes */
-.classic-card {
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .btn-interactive {
-  transition: all 100ms ease;
+  transition: all 200ms ease;
   touch-action: manipulation;
   cursor: pointer;
-}
-
-.leaderboard-row {
-  transition: background-color 150ms ease;
-}
-.leaderboard-row:hover {
-  background-color: var(--color-surface);
 }

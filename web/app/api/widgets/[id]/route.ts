@@ -3,9 +3,10 @@ import { prisma } from '../../../../lib/prisma';
 
 export async function GET(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
-    const id = params.id;
+    const resolvedParams = await params;
+    const id = resolvedParams.id;
     // The id will end in .svg, e.g. 481554233817300993.svg
     const discordUserId = id.replace('.svg', '');
 

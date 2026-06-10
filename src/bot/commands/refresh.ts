@@ -14,6 +14,22 @@ export async function handleRefresh(interaction: ChatInputCommandInteraction) {
     await interaction.deferReply({ ephemeral: true });
 
     try {
+        const guildId = interaction.guild.id;
+
+        // 1. Enforce 1-Per-Day Rate Limit Shared with Web Dashboard
+        const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+        const recentSync = await prisma.analyticsEvent.findFirst({
+            where: {
+                command: 'server_force_sync',
+                metadata: guildId,
+                createdAt: { gte: twentyFourHoursAgo }
+            }
+        });
+
+        if (recentSync) {
+            return interaction.editReply('❌ This server has already been force-synced in the last 24 hours. Please wait until tomorrow.');
+        }
+
         const { startTimestamp, endTimestamp, dateStr } = getTimestampsForDate('today');
         
         const guildMembers = await interaction.guild.members.fetch();
@@ -49,6 +65,15 @@ export async function handleRefresh(interaction: ChatInputCommandInteraction) {
             .addFields({ name: '📊 Today\'s Impact', value: `Found **${totalLinks}** problems solved today by **${studentsWithLinks}** active students.` })
             .setColor(0x10B981) // Premium Toxic Green
             .setFooter({ text: 'CodeSync • Server Admin Actions' });
+
+        // Record the sync event to enforce the 1-per-day limit across bot and web
+        await prisma.analyticsEvent.create({
+            data: {
+                discordUserId: interaction.user.id,
+                command: 'server_force_sync',
+                metadata: guildId
+            }
+        });
 
         await interaction.editReply({ embeds: [embed] });
 

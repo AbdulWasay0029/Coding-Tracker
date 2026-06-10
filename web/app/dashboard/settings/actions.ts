@@ -90,7 +90,7 @@ export async function forceSyncServer(guildId: string) {
     const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
     const recentSync = await prisma.analyticsEvent.findFirst({
         where: {
-            command: 'web_force_sync',
+            command: 'server_force_sync',
             metadata: guildId,
             createdAt: { gte: twentyFourHoursAgo }
         }
@@ -127,7 +127,7 @@ export async function forceSyncServer(guildId: string) {
     await prisma.analyticsEvent.create({
         data: {
             discordUserId: session.user.id,
-            command: 'web_force_sync',
+            command: 'server_force_sync',
             metadata: guildId
         }
     });

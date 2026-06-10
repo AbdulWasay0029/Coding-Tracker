@@ -1,92 +1,119 @@
 'use client';
 
 import Link from 'next/link';
-import { Terminal, Globe, Code2, ArrowRight, Bot } from 'lucide-react';
+import { ArrowRight, Bot, RefreshCw, BarChart2, Trophy, CheckCircle2, ChevronRight, ChevronLeft, Github, Twitter, Disc } from 'lucide-react';
 import Image from 'next/image';
 import { useSession, signIn } from 'next-auth/react';
 
 export default function Home() {
     const { data: session } = useSession();
     return (
-        <main className="min-h-screen flex flex-col overflow-hidden relative">
-            {/* Massive Glowing Gradient Mesh Background */}
-            <div className="absolute top-0 left-0 w-full h-[800px] pointer-events-none overflow-hidden z-0">
-                <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[80%] bg-[#3B82F6] opacity-[0.08] blur-[150px] rounded-full" />
-                <div className="absolute top-[10%] right-[-10%] w-[50%] h-[60%] bg-[#10B981] opacity-[0.06] blur-[120px] rounded-full" />
-                <div className="absolute bottom-[-20%] left-[20%] w-[40%] h-[50%] bg-[#A78BFA] opacity-[0.05] blur-[100px] rounded-full" />
-            </div>
-
+        <main className="min-h-screen flex flex-col bg-[#05070A] overflow-x-hidden font-sans">
+            
             {/* Hero Section */}
-            <div className="flex-1 flex flex-col lg:flex-row items-center justify-between px-4 sm:px-6 lg:px-8 max-w-[1440px] w-full mx-auto pt-20 md:pt-32 pb-16 relative z-10 gap-16 lg:gap-8">
-                
-                <div className="space-y-8 lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left">
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1A1D24]/60 backdrop-blur-md border border-white/5 text-sm font-medium text-[#60A5FA] mb-2 shadow-[0_0_15px_rgba(59,130,246,0.15)] animate-reveal stagger-1">
-                        <span className="w-2 h-2 rounded-full bg-[#3B82F6] animate-pulse shadow-[0_0_8px_#3B82F6]" />
-                        CodeSync v2.0 Live
-                    </div>
+            <div className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 px-4 sm:px-6 lg:px-8 max-w-[1440px] w-full mx-auto">
+                <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-8">
                     
-                    <h1 className="text-5xl sm:text-6xl lg:text-[5rem] font-bold tracking-tight leading-[1.05] animate-reveal stagger-2">
-                        <span className="text-white/95">Your Unified </span>
-                        <br className="hidden lg:block" />
-                        <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#60A5FA] to-[#A78BFA]">Coding Profile.</span>
-                    </h1>
-                    
-                    <p className="text-lg md:text-xl text-white/70 max-w-xl font-normal animate-reveal stagger-3">
-                        Track, sync, and showcase your problem-solving progress across LeetCode, Codeforces, HackerRank, and more in one premium, gamified dashboard.
-                    </p>
-                    
-                    <div className="pt-6 flex flex-col sm:flex-row items-center gap-4 animate-reveal stagger-4 w-full sm:w-auto">
-                        {!session ? (
-                            <button 
-                                onClick={() => signIn('discord', { callbackUrl: '/dashboard' })}
-                                className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-[#3B82F6]/90 backdrop-blur-md border border-white/10 hover:shadow-[0_4px_24px_-4px_rgba(96,165,250,0.4)] transition-all duration-300 text-white/95 font-medium text-lg"
+                    {/* Hero Text (Left) */}
+                    <div className="flex-1 flex flex-col items-center text-center lg:items-start lg:text-left z-10">
+                        {/* Badge */}
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#1A1D24] border border-[#2A2E37] text-xs font-medium text-[#8B9BB4] mb-8 animate-reveal">
+                            <span className="w-2 h-2 rounded-full bg-[#3B82F6]" />
+                            CodeSync v2.0 is live
+                        </div>
+                        
+                        {/* Headline */}
+                        <h1 className="text-5xl sm:text-6xl lg:text-[4.5rem] font-bold tracking-tight leading-[1.1] mb-6 animate-reveal stagger-1">
+                            <span className="text-white">Your Unified </span>
+                            <br className="hidden lg:block" />
+                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#A78BFA] to-[#60A5FA]">Coding Profile.</span>
+                        </h1>
+                        
+                        {/* Subtitle */}
+                        <p className="text-[#8B9BB4] text-lg max-w-[500px] leading-relaxed mb-10 animate-reveal stagger-2">
+                            Track, sync, and showcase your problem solving progress across LeetCode, Codeforces, HackerRank, and more in one premium, gamified dashboard.
+                        </p>
+                        
+                        {/* Buttons */}
+                        <div className="flex flex-col sm:flex-row items-center gap-4 mb-16 animate-reveal stagger-3 w-full sm:w-auto">
+                            {!session ? (
+                                <button 
+                                    onClick={() => signIn('discord', { callbackUrl: '/dashboard' })}
+                                    className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] transition-colors text-white font-medium text-[15px]"
+                                >
+                                    Get Started <ArrowRight className="w-4 h-4" />
+                                </button>
+                            ) : (
+                                <Link 
+                                    href="/dashboard" 
+                                    className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] transition-colors text-white font-medium text-[15px]"
+                                >
+                                    Go to Dashboard <ArrowRight className="w-4 h-4" />
+                                </Link>
+                            )}
+                            <a 
+                                href="https://discord.com/oauth2/authorize?client_id=1478104744391344359&permissions=8&integration_type=0&scope=bot+applications.commands" 
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-transparent border border-[#2A2E37] hover:bg-[#1A1D24] hover:border-[#3A3F4A] transition-colors text-[#D1D5DB] font-medium text-[15px]"
                             >
-                                Login with Discord <ArrowRight className="w-5 h-5" />
-                            </button>
-                        ) : (
-                            <Link 
-                                href="/dashboard" 
-                                className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-[#3B82F6]/90 backdrop-blur-md border border-white/10 hover:shadow-[0_4px_24px_-4px_rgba(96,165,250,0.4)] transition-all duration-300 text-white/95 font-medium text-lg"
-                            >
-                                Go to Dashboard <ArrowRight className="w-5 h-5" />
-                            </Link>
-                        )}
-                        <a 
-                            href="https://discord.com/oauth2/authorize?client_id=1478104744391344359&permissions=8&integration_type=0&scope=bot+applications.commands" 
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-[#1A1D24]/60 backdrop-blur-md border border-white/5 hover:border-[#60A5FA]/30 hover:shadow-[0_4px_16px_-4px_rgba(96,165,250,0.2)] transition-all duration-300 text-white/90 font-medium text-lg"
-                        >
-                            <Bot className="w-5 h-5" />
-                            Add Bot
-                        </a>
-                    </div>
-                </div>
+                                <Bot className="w-4 h-4" />
+                                Add Bot
+                            </a>
+                        </div>
 
-                {/* Floating Mockup (Right Side) */}
-                <div className="lg:w-1/2 relative w-full aspect-[4/3] flex items-center justify-center animate-reveal stagger-5" style={{ perspective: '2000px' }}>
-                    <div 
-                        className="relative w-full max-w-[700px] h-full rounded-2xl overflow-hidden border border-white/10 bg-[#0B0E14]/80 backdrop-blur-2xl shadow-[0_20px_60px_-10px_rgba(59,130,246,0.3)] transition-transform duration-1000 ease-out hover:rotate-0"
-                        style={{ transform: 'rotateY(-15deg) rotateX(10deg) rotateZ(-2deg)' }}
-                    >
-                        {/* Fake Browser Bar */}
-                        <div className="h-10 w-full bg-[#1A1D24]/80 border-b border-white/5 flex items-center px-4 gap-2">
-                            <div className="flex gap-1.5">
-                                <div className="w-3 h-3 rounded-full bg-[#EF4444]" />
-                                <div className="w-3 h-3 rounded-full bg-[#F59E0B]" />
-                                <div className="w-3 h-3 rounded-full bg-[#10B981]" />
+                        {/* Stats Row */}
+                        <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-12 gap-y-6 animate-reveal stagger-4">
+                            <div className="flex items-center gap-3">
+                                <div className="text-[#60A5FA]">
+                                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                                </div>
+                                <div className="flex flex-col text-left">
+                                    <span className="text-white font-bold text-lg leading-none mb-1">150K+</span>
+                                    <span className="text-[#8B9BB4] text-xs">Developers</span>
+                                </div>
                             </div>
-                            <div className="mx-auto bg-black/30 w-1/2 h-6 rounded-md border border-white/5 flex items-center px-3">
-                                <span className="text-[10px] text-white/30 font-mono">codesync.app/dashboard</span>
+                            <div className="flex items-center gap-3">
+                                <div className="text-[#60A5FA]">
+                                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+                                </div>
+                                <div className="flex flex-col text-left">
+                                    <span className="text-white font-bold text-lg leading-none mb-1">10+</span>
+                                    <span className="text-[#8B9BB4] text-xs">Platforms</span>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <div className="text-[#F59E0B]">
+                                    <Trophy className="w-6 h-6" />
+                                </div>
+                                <div className="flex flex-col text-left">
+                                    <span className="text-white font-bold text-lg leading-none mb-1">1M+</span>
+                                    <span className="text-[#8B9BB4] text-xs">Problems Solved</span>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <div className="text-[#60A5FA]">
+                                    <RefreshCw className="w-6 h-6" />
+                                </div>
+                                <div className="flex flex-col text-left">
+                                    <span className="text-white font-bold text-lg leading-none mb-1">Real-time</span>
+                                    <span className="text-[#8B9BB4] text-xs">Sync</span>
+                                </div>
                             </div>
                         </div>
-                        {/* Mockup Image */}
-                        <div className="relative w-full h-[calc(100%-40px)] overflow-hidden bg-[#05070A]">
+                    </div>
+
+                    {/* Hero Mockup (Right) */}
+                    <div className="flex-1 relative w-full lg:w-1/2 flex justify-center lg:justify-end animate-reveal stagger-5">
+                        <div className="relative w-full max-w-[800px] aspect-[4/3] transform transition-transform duration-700 hover:scale-[1.02]">
+                            {/* Decorative Background Lines */}
+                            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none rounded-2xl z-0"></div>
+                            
                             <Image 
                                 src="/hero-mockup.png" 
-                                alt="CodeSync Dashboard Mockup" 
+                                alt="CodeSync Dashboard" 
                                 fill
-                                className="object-cover opacity-90 hover:opacity-100 transition-opacity"
+                                className="object-cover rounded-2xl shadow-2xl z-10"
                                 priority
                             />
                         </div>
@@ -94,123 +121,232 @@ export default function Home() {
                 </div>
             </div>
 
-            {/* Platform Strip */}
-            <div className="border-y border-white/5 bg-[#0B0E14]/50 backdrop-blur-md relative z-10">
-                <div className="max-w-[1440px] mx-auto px-4 py-8 flex flex-wrap items-center justify-center gap-12 md:gap-24 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
-                    <div className="flex items-center gap-3">
-                        <Code2 className="w-8 h-8" /> <span className="text-xl font-bold font-mono">LeetCode</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                        <Terminal className="w-8 h-8" /> <span className="text-xl font-bold font-mono">Codeforces</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                        <Globe className="w-8 h-8" /> <span className="text-xl font-bold font-mono">HackerRank</span>
-                    </div>
-                </div>
-            </div>
-
-            {/* Social Proof Strip */}
-            <div className="py-16 relative z-10 bg-[#05070A]/80 backdrop-blur-sm">
-                <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-center gap-12 md:gap-32">
-                    <div className="flex flex-col items-center gap-2">
-                        <span className="text-4xl font-black text-white drop-shadow-[0_0_15px_rgba(96,165,250,0.5)]">5+</span>
-                        <span className="text-xs font-mono text-[#60A5FA] uppercase tracking-widest">Platforms Synced</span>
-                    </div>
-                    <div className="hidden md:block w-px h-16 bg-white/10"></div>
-                    <div className="flex flex-col items-center gap-2">
-                        <span className="text-4xl font-black text-white drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]">100%</span>
-                        <span className="text-xs font-mono text-[#10B981] uppercase tracking-widest">Automated Tracking</span>
-                    </div>
-                    <div className="hidden md:block w-px h-16 bg-white/10"></div>
-                    <div className="flex flex-col items-center gap-2">
-                        <span className="text-4xl font-black text-white drop-shadow-[0_0_15px_rgba(167,139,250,0.5)]">24/7</span>
-                        <span className="text-xs font-mono text-[#A78BFA] uppercase tracking-widest">Real-time Updates</span>
+            {/* Trusted By Section */}
+            <div className="border-t border-[#1A1D24] py-12 bg-[#05070A]">
+                <div className="max-w-7xl mx-auto px-4 text-center">
+                    <p className="text-[11px] font-bold tracking-[0.2em] text-[#8B9BB4] uppercase mb-8">Trusted By Developers From</p>
+                    <div className="flex flex-wrap items-center justify-center gap-12 md:gap-20 opacity-60">
+                        {/* Text logos substituting for SVGs to match the aesthetic */}
+                        <div className="text-xl font-bold font-sans tracking-tight text-white">Google</div>
+                        <div className="flex items-center gap-2"><div className="w-4 h-4 bg-white grid grid-cols-2 gap-[1px] p-[1px]"><div className="bg-[#05070A]"></div><div className="bg-[#05070A]"></div><div className="bg-[#05070A]"></div><div className="bg-[#05070A]"></div></div><span className="text-xl font-semibold font-sans text-white">Microsoft</span></div>
+                        <div className="text-xl font-bold font-sans tracking-tight text-white">amazon</div>
+                        <div className="text-xl font-bold font-sans text-white flex items-center gap-1"><span className="text-red-500 font-serif font-black">A</span> Adobe</div>
+                        <div className="text-xl font-black font-sans tracking-tighter text-red-600">NETFLIX</div>
+                        <div className="text-xl font-bold font-sans tracking-tight text-white flex items-center gap-1"><div className="w-5 h-5 rounded-full bg-[#1DB954]"></div>Spotify</div>
+                        <div className="text-xl font-bold font-sans tracking-tight text-[#FF5A5F]">airbnb</div>
                     </div>
                 </div>
             </div>
 
-            {/* Core Features Grid */}
-            <div id="features" className="py-32 relative z-10 bg-[#0B0E14]">
+            {/* Powerful Features Section */}
+            <div className="py-24 bg-[#0B0E14]">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-20 animate-reveal stagger-2">
-                        <h2 className="text-4xl md:text-5xl font-bold text-white/95">Built for the Community</h2>
-                        <p className="mt-6 text-white/50 text-lg max-w-2xl mx-auto leading-relaxed">Everything a computer science club, bootcamp, or friend group needs to keep each other motivated and accountable.</p>
-                    </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <div className="glass-subtle p-8 rounded-2xl hover:border-[#60A5FA]/30 hover:shadow-[0_8px_32px_-8px_rgba(96,165,250,0.2)] transition-all duration-300 group animate-reveal stagger-3 flex flex-col items-start text-left relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-[#60A5FA] opacity-0 group-hover:opacity-10 blur-[50px] rounded-full transition-opacity duration-500" />
-                            <div className="p-4 bg-[#1A1D24] border border-white/5 rounded-xl mb-6 group-hover:border-[#60A5FA]/30 transition-colors shadow-lg">
-                                <Terminal className="w-7 h-7 text-[#60A5FA]" />
-                            </div>
-                            <h3 className="text-xl font-bold text-white/95 mb-4 tracking-tight group-hover:text-[#60A5FA] transition-colors">Zero-Friction Tracking</h3>
-                            <p className="text-white/50 leading-relaxed text-sm md:text-base">
-                                Link your accounts once and you're done. CodeSync runs silently in the background, automatically fetching your solved problems every single day.
-                            </p>
+                    <div className="text-center max-w-2xl mx-auto mb-16 animate-reveal">
+                        <div className="inline-flex items-center px-3 py-1 rounded-full bg-[#1A1D24] border border-[#2A2E37] text-[11px] font-bold tracking-[0.1em] text-[#60A5FA] uppercase mb-6">
+                            Powerful Features
                         </div>
-                        
-                        <div className="glass-subtle p-8 rounded-2xl hover:border-[#10B981]/30 hover:shadow-[0_8px_32px_-8px_rgba(16,185,129,0.2)] transition-all duration-300 group animate-reveal stagger-4 flex flex-col items-start text-left relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-[#10B981] opacity-0 group-hover:opacity-10 blur-[50px] rounded-full transition-opacity duration-500" />
-                            <div className="p-4 bg-[#1A1D24] border border-white/5 rounded-xl mb-6 group-hover:border-[#10B981]/30 transition-colors shadow-lg">
-                                <Code2 className="w-7 h-7 text-[#10B981]" />
+                        <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Everything you need to level up</h2>
+                        <p className="text-[#8B9BB4] text-lg">All-in-one platform to track, analyze, and improve your coding journey.</p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-reveal stagger-2">
+                        {/* Feature 1 */}
+                        <div className="bg-[#111318] border border-[#1A1D24] p-8 rounded-2xl hover:border-[#2A2E37] transition-colors flex flex-col items-start">
+                            <div className="w-12 h-12 rounded-xl bg-[#2563EB]/10 border border-[#2563EB]/20 flex items-center justify-center mb-6">
+                                <RefreshCw className="w-6 h-6 text-[#60A5FA]" />
                             </div>
-                            <h3 className="text-xl font-bold text-white/95 mb-4 tracking-tight group-hover:text-[#10B981] transition-colors">Server Leaderboards</h3>
-                            <p className="text-white/50 leading-relaxed text-sm md:text-base">
-                                Turn coding into a healthy competition. The leaderboard ranks members in your Discord server based on how many problems they solved this week.
+                            <h3 className="text-xl font-bold text-white mb-3">Real-time Sync</h3>
+                            <p className="text-[#8B9BB4] leading-relaxed mb-6 flex-1">
+                                Automatically sync your progress from multiple platforms in real-time.
                             </p>
+                            <Link href="/features" className="text-[#60A5FA] font-medium text-sm flex items-center gap-1 hover:text-[#93C5FD] transition-colors">
+                                Learn more <ArrowRight className="w-4 h-4" />
+                            </Link>
                         </div>
-                        
-                        <div className="glass-subtle p-8 rounded-2xl hover:border-[#A78BFA]/30 hover:shadow-[0_8px_32px_-8px_rgba(167,139,250,0.2)] transition-all duration-300 group animate-reveal stagger-5 flex flex-col items-start text-left relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-[#A78BFA] opacity-0 group-hover:opacity-10 blur-[50px] rounded-full transition-opacity duration-500" />
-                            <div className="p-4 bg-[#1A1D24] border border-white/5 rounded-xl mb-6 group-hover:border-[#A78BFA]/30 transition-colors shadow-lg">
-                                <Globe className="w-7 h-7 text-[#A78BFA]" />
+
+                        {/* Feature 2 */}
+                        <div className="bg-[#111318] border border-[#1A1D24] p-8 rounded-2xl hover:border-[#2A2E37] transition-colors flex flex-col items-start">
+                            <div className="w-12 h-12 rounded-xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 flex items-center justify-center mb-6">
+                                <BarChart2 className="w-6 h-6 text-[#A78BFA]" />
                             </div>
-                            <h3 className="text-xl font-bold text-white/95 mb-4 tracking-tight group-hover:text-[#A78BFA] transition-colors">Multi-Platform Sync</h3>
-                            <p className="text-white/50 leading-relaxed text-sm md:text-base">
-                                Why choose one platform? We natively support LeetCode, Codeforces, HackerRank, CodeChef, and SmartInterviews, aggregating them into a single profile.
+                            <h3 className="text-xl font-bold text-white mb-3">Advanced Analytics</h3>
+                            <p className="text-[#8B9BB4] leading-relaxed mb-6 flex-1">
+                                Deep insights into your performance, trends, and problem-solving skills.
                             </p>
+                            <Link href="/features" className="text-[#A78BFA] font-medium text-sm flex items-center gap-1 hover:text-[#C4B5FD] transition-colors">
+                                Learn more <ArrowRight className="w-4 h-4" />
+                            </Link>
+                        </div>
+
+                        {/* Feature 3 */}
+                        <div className="bg-[#111318] border border-[#1A1D24] p-8 rounded-2xl hover:border-[#2A2E37] transition-colors flex flex-col items-start">
+                            <div className="w-12 h-12 rounded-xl bg-[#10B981]/10 border border-[#10B981]/20 flex items-center justify-center mb-6">
+                                <Trophy className="w-6 h-6 text-[#34D399]" />
+                            </div>
+                            <h3 className="text-xl font-bold text-white mb-3">Leaderboards</h3>
+                            <p className="text-[#8B9BB4] leading-relaxed mb-6 flex-1">
+                                Compete with developers worldwide and climb the global rankings.
+                            </p>
+                            <Link href="/features" className="text-[#34D399] font-medium text-sm flex items-center gap-1 hover:text-[#6EE7B7] transition-colors">
+                                Learn more <ArrowRight className="w-4 h-4" />
+                            </Link>
+                        </div>
+
+                        {/* Feature 4 */}
+                        <div className="bg-[#111318] border border-[#1A1D24] p-8 rounded-2xl hover:border-[#2A2E37] transition-colors flex flex-col items-start">
+                            <div className="w-12 h-12 rounded-xl bg-[#F59E0B]/10 border border-[#F59E0B]/20 flex items-center justify-center mb-6">
+                                <Bot className="w-6 h-6 text-[#FBBF24]" />
+                            </div>
+                            <h3 className="text-xl font-bold text-white mb-3">Smart Bots</h3>
+                            <p className="text-[#8B9BB4] leading-relaxed mb-6 flex-1">
+                                Add our bot to your server and get instant updates and notifications.
+                            </p>
+                            <Link href="/features" className="text-[#FBBF24] font-medium text-sm flex items-center gap-1 hover:text-[#FCD34D] transition-colors">
+                                Learn more <ArrowRight className="w-4 h-4" />
+                            </Link>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* FAQ Section */}
-            <div id="community" className="bg-[#05070A] py-32 border-t border-white/5 relative z-10">
-                <div className="max-w-4xl mx-auto px-4">
-                    <div className="text-center mb-16 animate-reveal stagger-2">
-                        <h2 className="text-3xl md:text-4xl font-bold text-white/95">Community FAQ</h2>
-                    </div>
-                    <div className="divide-y divide-white/10 border-y border-white/10 animate-reveal stagger-3">
-                        <div className="py-8 flex flex-col gap-3 group">
-                            <h3 className="text-lg font-bold text-white/90 group-hover:text-white transition-colors">Do I need to manually update my stats?</h3>
-                            <p className="text-white/50 leading-relaxed">No. Once your accounts are linked via the dashboard or bot commands, CodeSync automatically scrapes your progress multiple times a day.</p>
+            {/* Bottom CTA & Testimonial Section */}
+            <div className="py-24 bg-[#05070A] border-t border-[#1A1D24]">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-reveal">
+                        
+                        {/* Testimonial Card */}
+                        <div className="bg-[#111318] border border-[#1A1D24] rounded-2xl p-10 flex flex-col justify-between">
+                            <div>
+                                <span className="text-[#2563EB] text-6xl font-serif leading-none">"</span>
+                                <p className="text-xl text-white font-medium leading-relaxed mt-2">
+                                    CodeSync <span className="italic text-[#8B9BB4]">changed the way I track my progress.</span> The analytics and insights help me focus on what matters most.
+                                </p>
+                            </div>
+                            <div className="flex items-center justify-between mt-12">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 bg-[#2A2E37] rounded-full flex items-center justify-center text-white font-bold overflow-hidden">
+                                        {/* Fallback to generic avatar if image fails */}
+                                        AS
+                                    </div>
+                                    <div>
+                                        <h4 className="text-white font-bold text-sm">Arjun Sharma</h4>
+                                        <p className="text-[#8B9BB4] text-sm">SDE at Google</p>
+                                    </div>
+                                </div>
+                                <div className="flex gap-2">
+                                    <button className="w-10 h-10 rounded-full bg-[#1A1D24] border border-[#2A2E37] flex items-center justify-center text-[#8B9BB4] hover:text-white transition-colors">
+                                        <ChevronLeft className="w-5 h-5" />
+                                    </button>
+                                    <button className="w-10 h-10 rounded-full bg-[#1A1D24] border border-[#2A2E37] flex items-center justify-center text-[#8B9BB4] hover:text-white transition-colors">
+                                        <ChevronRight className="w-5 h-5" />
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <div className="py-8 flex flex-col gap-3 group">
-                            <h3 className="text-lg font-bold text-white/90 group-hover:text-white transition-colors">Is it free to use?</h3>
-                            <p className="text-white/50 leading-relaxed">Absolutely. CodeSync is built to support developer communities without any paywalls or hidden limits.</p>
+
+                        {/* CTA Card */}
+                        <div className="bg-[#111318] border border-[#1A1D24] rounded-2xl p-10 flex flex-col justify-center">
+                            <h2 className="text-3xl font-bold text-white mb-4">
+                                Ready to boost <br />
+                                your <span className="text-[#8B5CF6]">coding journey?</span>
+                            </h2>
+                            <p className="text-[#8B9BB4] mb-8">
+                                Join thousands of developers who are already leveling up with CodeSync.
+                            </p>
+                            
+                            <button 
+                                onClick={() => signIn('discord', { callbackUrl: '/dashboard' })}
+                                className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] transition-colors text-white font-medium text-[15px] w-full sm:w-max mb-6"
+                            >
+                                Get Started for Free <ArrowRight className="w-4 h-4" />
+                            </button>
+
+                            <div className="flex flex-wrap items-center gap-6 text-[13px] text-[#8B9BB4]">
+                                <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#10B981]" /> Free forever</div>
+                                <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#10B981]" /> No credit card required</div>
+                                <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#10B981]" /> Setup in 2 minutes</div>
+                            </div>
                         </div>
-                        <div className="py-8 flex flex-col gap-3 group">
-                            <h3 className="text-lg font-bold text-white/90 group-hover:text-white transition-colors">How do I add it to my server?</h3>
-                            <p className="text-white/50 leading-relaxed">Simply click the "Add Bot" button at the top, select your server, and authorize the bot. You can then use the <code className="text-[#60A5FA] bg-[#3B82F6]/10 px-1.5 py-0.5 rounded font-mono text-sm">/set-channel</code> command to specify where daily leaderboards should be posted.</p>
-                        </div>
+
                     </div>
                 </div>
             </div>
-            
-            {/* CTA Section */}
-            <div className="py-32 relative z-10 bg-[#0B0E14] border-t border-white/5 text-center overflow-hidden">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[800px] h-[300px] bg-[#3B82F6] opacity-[0.05] blur-[100px] rounded-full pointer-events-none" />
-                <div className="max-w-3xl mx-auto px-4 flex flex-col items-center animate-reveal stagger-2 relative z-10">
-                    <h2 className="text-4xl md:text-5xl font-bold text-white/95 mb-6">Ready to start tracking?</h2>
-                    <p className="text-lg text-white/50 mb-10 max-w-xl mx-auto leading-relaxed">Join the competitive programming revolution and keep your server motivated.</p>
-                    <Link 
-                        href={session ? "/dashboard" : "/api/auth/signin"} 
-                        className="inline-flex items-center justify-center px-10 py-5 text-lg font-bold text-[#0B0E14] bg-[#60A5FA] rounded-xl hover:bg-[#93C5FD] shadow-[0_0_30px_rgba(96,165,250,0.3)] transition-all duration-300 group"
-                    >
-                        {session ? "Go to Dashboard" : "Get Started Now"} <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                    </Link>
+
+            {/* Footer */}
+            <footer className="border-t border-[#1A1D24] bg-[#05070A] pt-16 pb-8">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8 mb-16">
+                        
+                        {/* Brand Column */}
+                        <div className="lg:col-span-2">
+                            <div className="flex items-center gap-2 mb-6">
+                                {/* Use Logo if available, otherwise Text */}
+                                <div className="w-8 h-8 rounded bg-[#2563EB] flex items-center justify-center">
+                                    <Terminal className="w-5 h-5 text-white" />
+                                </div>
+                                <span className="text-xl font-bold text-white">CodeSync</span>
+                            </div>
+                            <p className="text-[#8B9BB4] text-sm max-w-xs mb-6 leading-relaxed">
+                                Your unified coding profile and analytics dashboard.
+                            </p>
+                            <div className="flex items-center gap-4 text-[#8B9BB4]">
+                                <a href="https://github.com/AbdulWasay0029/Coding-Tracker" className="hover:text-white transition-colors"><Github className="w-5 h-5" /></a>
+                                <a href="#" className="hover:text-white transition-colors"><Twitter className="w-5 h-5" /></a>
+                                <a href="https://discord.gg/qfhKfnJCau" className="hover:text-white transition-colors"><Disc className="w-5 h-5" /></a>
+                            </div>
+                        </div>
+
+                        {/* Product Column */}
+                        <div>
+                            <h4 className="text-white text-[11px] font-bold tracking-widest uppercase mb-6">Product</h4>
+                            <ul className="space-y-4">
+                                <li><Link href="#features" className="text-[#8B9BB4] hover:text-white text-sm transition-colors">Features</Link></li>
+                                <li><Link href="#" className="text-[#8B9BB4] hover:text-white text-sm transition-colors">Integrations</Link></li>
+                                <li><Link href="#" className="text-[#8B9BB4] hover:text-white text-sm transition-colors">Pricing</Link></li>
+                                <li><Link href="#" className="text-[#8B9BB4] hover:text-white text-sm transition-colors">Changelog</Link></li>
+                            </ul>
+                        </div>
+
+                        {/* Resources Column */}
+                        <div>
+                            <h4 className="text-white text-[11px] font-bold tracking-widest uppercase mb-6">Resources</h4>
+                            <ul className="space-y-4">
+                                <li><Link href="/docs" className="text-[#8B9BB4] hover:text-white text-sm transition-colors">Documentation</Link></li>
+                                <li><Link href="/docs" className="text-[#8B9BB4] hover:text-white text-sm transition-colors">API Reference</Link></li>
+                                <li><Link href="/docs" className="text-[#8B9BB4] hover:text-white text-sm transition-colors">Guides</Link></li>
+                                <li><Link href="#" className="text-[#8B9BB4] hover:text-white text-sm transition-colors">Blog</Link></li>
+                            </ul>
+                        </div>
+
+                        {/* Company Column */}
+                        <div>
+                            <h4 className="text-white text-[11px] font-bold tracking-widest uppercase mb-6">Company</h4>
+                            <ul className="space-y-4 mb-8">
+                                <li><Link href="#" className="text-[#8B9BB4] hover:text-white text-sm transition-colors">About</Link></li>
+                                <li><Link href="#" className="text-[#8B9BB4] hover:text-white text-sm transition-colors">Contact</Link></li>
+                                <li><Link href="/legal/privacy" className="text-[#8B9BB4] hover:text-white text-sm transition-colors">Privacy Policy</Link></li>
+                                <li><Link href="/legal/terms" className="text-[#8B9BB4] hover:text-white text-sm transition-colors">Terms of Service</Link></li>
+                            </ul>
+                            
+                            <h4 className="text-white text-[11px] font-bold tracking-widest uppercase mb-4">Newsletter</h4>
+                            <p className="text-[#8B9BB4] text-xs mb-3">Stay updated with the latest features and coding insights.</p>
+                            <div className="flex bg-[#111318] border border-[#2A2E37] rounded-lg overflow-hidden focus-within:border-[#60A5FA] transition-colors">
+                                <input type="email" placeholder="Enter your email" className="bg-transparent text-sm text-white px-3 py-2 outline-none w-full placeholder:text-[#4B5563]" />
+                                <button className="px-3 flex items-center justify-center text-[#8B9BB4] hover:text-white bg-[#1A1D24] border-l border-[#2A2E37] transition-colors">
+                                    <ArrowRight className="w-4 h-4" />
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div className="border-t border-[#1A1D24] pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+                        <p className="text-[#4B5563] text-sm">© 2026 CodeSync. All rights reserved.</p>
+                    </div>
                 </div>
-            </div>
+            </footer>
+
         </main>
     );
 }

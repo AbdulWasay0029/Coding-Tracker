@@ -102,7 +102,7 @@ export default function SettingsPlatformsManager() {
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || 'Failed to update profile');
             
-            setProfiles(profiles.map(p => p.id === id ? { ...p, username: data.username } : p));
+            setProfiles(profiles.map(p => p.id === id ? { ...p, username: data.username, hasToken: data.hasToken } : p));
             setEditingId(null);
         } catch (err: any) {
             setError(err.message);

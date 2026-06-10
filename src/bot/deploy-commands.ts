@@ -69,6 +69,14 @@ const commands = [
             .setRequired(false)),
 
     new SlashCommandBuilder()
+        .setName('compare')
+        .setDescription('Compare your coding stats against another grinder')
+        .addUserOption(o => o
+            .setName('user')
+            .setDescription('The opponent you want to compare yourself against')
+            .setRequired(true)),
+
+    new SlashCommandBuilder()
         .setName('check')
         .setDescription('Fetch your solved problems today/yesterday')
         .addStringOption(o => o

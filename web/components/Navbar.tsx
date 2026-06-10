@@ -29,12 +29,9 @@ export function Navbar() {
                     {/* Left: Brand & Main Links */}
                     <div className="flex items-center gap-8">
                         <Link href="/" className="flex flex-shrink-0 items-center gap-3 group">
-                            <div className="relative w-8 h-8 flex items-center justify-center overflow-hidden rounded-md transition-transform group-hover:scale-105">
-                                <Image src="/logo_new_navbar.png" alt="CodeSync Logo" fill className="object-contain" />
+                            <div className="relative w-36 h-10 flex items-center justify-start overflow-hidden transition-transform group-hover:scale-105">
+                                <Image src="/logo_new_navbar.png" alt="CodeSync Logo" fill className="object-contain object-left" />
                             </div>
-                            <span className="font-bold text-xl tracking-tight text-white transition-colors">
-                                Code<span className="text-[#60A5FA]">Sync</span>
-                            </span>
                         </Link>
                         
                         {/* Desktop Navigation */}

@@ -8,6 +8,7 @@ type Profile = {
     platform: string;
     username: string;
     token?: string | null;
+    hasToken?: boolean;
 };
 
 export function ProfileManager({ initialProfiles }: { initialProfiles: Profile[] }) {

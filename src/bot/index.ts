@@ -43,7 +43,7 @@ const client = new Client({
 
 import { ActivityType } from 'discord.js';
 
-client.once('ready', () => {
+client.once('clientReady', () => {
     console.log(`✅ Bot online as ${client.user?.tag}`);
     client.user?.setPresence({
         activities: [{ name: '/help | Tracking your grind', type: ActivityType.Playing }],

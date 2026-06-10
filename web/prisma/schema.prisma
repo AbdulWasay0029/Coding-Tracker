@@ -21,6 +21,14 @@ model UserProfile {
   @@unique([discordUserId, platform, username])
 }
 
+// Global user settings
+model UserSettings {
+  discordUserId String   @id
+  isPublic      Boolean  @default(true)
+  updatedAt     DateTime @updatedAt
+}
+
+
 // Tracks solved problems per user to avoid re-posting duplicates
 model SolvedProblem {
   id            String   @id @default(uuid())
@@ -53,4 +61,17 @@ model AnalyticsEvent {
   command       String   // e.g., "check", "add-profile", "copy-links", "github-tracker"
   metadata      String?  // Any extra info as JSON string
   createdAt     DateTime @default(now())
+}
+
+// Background Job Queue for the scraping engine
+model ScrapeJob {
+  id            String   @id @default(uuid())
+  discordUserId String
+  startTimestamp Int
+  endTimestamp   Int
+  status        String   @default("PENDING") // PENDING, PROCESSING, COMPLETED, FAILED
+  error         String?
+  retries       Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }

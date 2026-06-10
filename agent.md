@@ -19,12 +19,19 @@
   - `/refresh` (Admin force-sync for the current server)
   - `/list-profiles` (View linked accounts)
   - `/stats` (All-time Gamer Card for a user)
-  - `/badges` (Displays gamification badges synced exactly with web/app/dashboard/badges/page.tsx logic)
+  - `/badges` (Displays gamification badges synced exactly with web dashboard logic)
+  - `/compare` (Competitive VS card for two users)
   - `/help`
 - *Note: Setup and profile management slash commands are deprecated and redirect to the Web Dashboard.*
 
+## ☁️ Deployment & Environment
+- **Heavon Cloud Deployments**: The production environment involves compiling the project via `tsc` into the `dist` directory and uploading ONLY the contents of `dist` to the cloud. Because of this, **never use `__dirname`** for resolving paths (especially `.env` files). Always use `process.cwd()` (e.g. `dotenv.config({ path: path.resolve(process.cwd(), '.env') })`) to ensure relative paths don't break between the `src` and `dist` environments.
+- **Discord Command Scope**: Registering slash commands globally (`Routes.applicationCommands`) takes 1-2 hours to propagate across Discord's CDN. Always deploy new commands instantly to the test server using Guild scope (`Routes.applicationGuildCommands`).
+- **Rate Limiting Engine**: Any rate-limits (like the "1 per day" Force Sync) should utilize the unified `AnalyticsEvent` table (e.g. tracking `command: 'server_force_sync'`) to ensure that rate limits are shared seamlessly across both the Web Dashboard and Discord Bot.
+
 ## 📋 Behavioral Guidelines
 - **No Fake Features**: If an announcement hypes a feature (like "Badges"), ensure it is 100% physically implemented in the backend/frontend logic before trying to expose it to the bot. If it's fake, either build the engine fully or drop it entirely.
+- **Continuous Learning**: Put anything you just learned into this file immediately to make it a habit.
 - **Project History**: Always keep `PROJECT_HISTORY.md` and `STORY.md` updated with the latest major feature additions, aesthetic overhauls, and bug fixes so the timeline of CodeSync is preserved.
 - **Tool Discipline**: Always prioritize the most specific tools available (e.g. `view_file`, `grep_search`, `replace_file_content`) over generic terminal commands.
 

@@ -214,12 +214,20 @@ export function AdminClient({ guilds }: { guilds: any[] }) {
                                         disabled={loading}
                                         onClick={async () => {
                                             if (confirm('Are you sure? This will scrape data for all users in your server and may take a few minutes.')) {
-                                                alert('Force Sync initiated in the background! Please wait a few minutes for the leaderboard to update.');
+                                                setLoading(true);
+                                                try {
+                                                    const { forceSyncServer } = require('./actions');
+                                                    const res = await forceSyncServer(selectedGuild);
+                                                    alert(`✅ Sync initiated in the background for ${res.count} members! Please wait a few minutes for the leaderboard to update.`);
+                                                } catch (err: any) {
+                                                    alert(`❌ ${err.message}`);
+                                                }
+                                                setLoading(false);
                                             }
                                         }}
-                                        className="px-4 py-2 bg-background border border-primary text-primary hover:bg-primary/10 rounded font-medium text-sm transition-all whitespace-nowrap"
+                                        className="px-4 py-2 bg-background border border-primary text-primary hover:bg-primary/10 rounded font-medium text-sm transition-all whitespace-nowrap disabled:opacity-50"
                                     >
-                                        Force Sync (Beta)
+                                        {loading ? 'Syncing...' : 'Force Sync (Beta)'}
                                     </button>
                                 </div>
 

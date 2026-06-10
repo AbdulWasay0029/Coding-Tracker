@@ -14,10 +14,14 @@ export async function handleExportReport(interaction: ChatInputCommandInteractio
     await interaction.deferReply({ ephemeral: true });
 
     try {
-        // Get aggregate data for all time for all tracked users
-        // This avoids Discord API rate limits by querying our own DB instead of fetching 1000+ guild members
+        const guildMembers = await interaction.guild.members.fetch();
+        const guildMemberIds = Array.from(guildMembers.keys());
+
         const aggregateData = await prisma.solvedProblem.groupBy({
             by: ['discordUserId'],
+            where: {
+                discordUserId: { in: guildMemberIds }
+            },
             _count: {
                 problemId: true
             },

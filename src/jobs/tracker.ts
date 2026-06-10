@@ -69,7 +69,7 @@ export async function runTrackerForUser(
 
     const results = await Promise.all(fetchPromises);
 
-    const globalUpsertPromises: Promise<any>[] = [];
+    const globalUpsertTasks: (() => Promise<any>)[] = [];
     
     for (const { profile, submissions, error } of results) {
         if (error) {
@@ -97,8 +97,8 @@ export async function runTrackerForUser(
             const dateStr = istDate.toISOString().split('T')[0];
             const uniqueProblemId = `${sub.titleSlug}-${dateStr}`;
 
-            // Cluster all DB writes into a single global array
-            globalUpsertPromises.push(
+            // Cluster all DB writes into a sequential task queue to prevent connection pool exhaustion
+            globalUpsertTasks.push(() => 
                 prisma.solvedProblem.upsert({
                     where: {
                         discordUserId_platform_problemId: {
@@ -132,9 +132,13 @@ export async function runTrackerForUser(
         }
     }
 
-    // FIRE EVERYTHING AT ONCE. O(N) database latency -> O(1)
-    if (globalUpsertPromises.length > 0) {
-        await Promise.allSettled(globalUpsertPromises);
+    // Execute sequentially to protect the Prisma connection pool!
+    for (const task of globalUpsertTasks) {
+        try {
+            await task();
+        } catch (err: any) {
+            console.error('[Tracker] Upsert failed:', err.message);
+        }
     }
 
     return { links: flatLinks, groupedLinks, errors };

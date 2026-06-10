@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Trash2, Plus, Edit2, X, Check, Link as LinkIcon } from 'lucide-react';
+import { Trash2, Plus, Edit2, X, Check, Link as LinkIcon, HelpCircle } from 'lucide-react';
 
 type Profile = {
     id: string;
@@ -19,6 +19,7 @@ export default function SettingsPlatformsManager() {
     const [actionId, setActionId] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [initLoading, setInitLoading] = useState(true);
+    const [isHelpOpen, setIsHelpOpen] = useState(false);
 
     const [form, setForm] = useState({
         platform: 'LEETCODE',
@@ -177,7 +178,16 @@ export default function SettingsPlatformsManager() {
 
                         {form.platform === 'SMARTINTERVIEWS' && (
                             <div className="space-y-1.5">
-                                <label className="text-sm font-medium text-white/70">Authentication Token</label>
+                                <div className="flex items-center justify-between">
+                                    <label className="text-sm font-medium text-white/70">Authentication Token</label>
+                                    <button 
+                                        type="button" 
+                                        onClick={() => setIsHelpOpen(true)}
+                                        className="text-[#60A5FA] hover:text-[#3B82F6] transition-colors flex items-center gap-1 text-xs"
+                                    >
+                                        <HelpCircle className="w-4 h-4" /> How to get token?
+                                    </button>
+                                </div>
                                 <input 
                                     type="text"
                                     value={form.token}
@@ -243,7 +253,17 @@ export default function SettingsPlatformsManager() {
                                         className="w-full bg-[#0B0E14] border border-white/10 text-white text-sm rounded-lg px-3 py-2 focus:border-[#60A5FA] outline-none placeholder:text-white/30"
                                     />
                                     {p.platform === 'SMARTINTERVIEWS' && (
-                                        <div className="flex flex-col gap-1">
+                                        <div className="flex flex-col gap-1.5">
+                                            <div className="flex items-center justify-between px-1">
+                                                <span className="text-xs font-medium text-white/50 uppercase tracking-wider">Token</span>
+                                                <button 
+                                                    type="button" 
+                                                    onClick={() => setIsHelpOpen(true)}
+                                                    className="text-[#60A5FA] hover:text-[#3B82F6] transition-colors flex items-center gap-1 text-xs"
+                                                >
+                                                    <HelpCircle className="w-3.5 h-3.5" /> How to get?
+                                                </button>
+                                            </div>
                                             <input 
                                                 type="text"
                                                 value={editForm.token}
@@ -308,6 +328,46 @@ export default function SettingsPlatformsManager() {
                     </div>
                 )}
             </div>
+            {/* Help Modal */}
+            {isHelpOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                    <div className="bg-[#1A1D24] border border-white/10 rounded-xl max-w-md w-full overflow-hidden shadow-2xl">
+                        <div className="flex items-center justify-between p-4 border-b border-white/5">
+                            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                                <HelpCircle className="w-5 h-5 text-[#60A5FA]" />
+                                How to get your Token
+                            </h3>
+                            <button onClick={() => setIsHelpOpen(false)} className="text-white/50 hover:text-white transition-colors">
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
+                        <div className="p-5 space-y-4 text-sm text-white/80">
+                            <p>SmartInterviews requires a temporary session token to fetch your solved problems.</p>
+                            <ol className="list-decimal pl-5 space-y-2">
+                                <li>Go to <a href="https://hive.smartinterviews.in" target="_blank" rel="noopener noreferrer" className="text-[#60A5FA] hover:underline">hive.smartinterviews.in</a> and log in.</li>
+                                <li>Right-click anywhere and select <strong>Inspect</strong> (or press F12) to open Developer Tools.</li>
+                                <li>Go to the <strong>Network</strong> tab at the top.</li>
+                                <li>Refresh the page.</li>
+                                <li>Click on any request on the left side (like <code>profile</code> or <code>allUserSubmissions</code>).</li>
+                                <li>On the right panel, scroll down to <strong>Request Headers</strong>.</li>
+                                <li>Look for <code>Authorization: Token eyJ...</code>.</li>
+                                <li>Copy that entire long string (starting with <code>eyJ...</code>) and paste it here!</li>
+                            </ol>
+                            <div className="bg-yellow-500/10 border border-yellow-500/20 text-yellow-500/90 p-3 rounded-lg text-xs mt-4">
+                                ⚠️ Note: For security reasons, SmartInterviews automatically expires these tokens after a while. If CodeSync reports your token is expired, just repeat these steps to get a fresh one!
+                            </div>
+                        </div>
+                        <div className="p-4 border-t border-white/5 bg-[#0B0E14] flex justify-end">
+                            <button 
+                                onClick={() => setIsHelpOpen(false)}
+                                className="px-4 py-2 bg-[#60A5FA] text-[#0B0E14] font-bold rounded-lg hover:bg-[#3B82F6] transition-colors"
+                            >
+                                Got it!
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

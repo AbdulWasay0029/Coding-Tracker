@@ -53,7 +53,7 @@ export default async function DashboardPage() {
     return (
         <main className="max-w-[1200px] mx-auto px-4 sm:px-6 py-12 flex flex-col gap-8">
             {/* Massive Profile Header Section */}
-            <div className="glass-strong rounded-3xl p-8 md:p-12 relative overflow-hidden flex flex-col md:flex-row items-center md:items-start gap-8 border-[#3B82F6]/20 shadow-[0_12px_40px_-10px_rgba(59,130,246,0.15)] animate-reveal mb-2">
+            <div className="glass-strong rounded-3xl p-8 md:p-12 relative overflow-hidden flex flex-col md:flex-row items-center md:items-start gap-8 border-[#3B82F6]/20 animate-reveal mb-2">
                 {/* Background atmospheric glow */}
                 <div className="absolute top-0 right-0 w-full h-full pointer-events-none overflow-hidden rounded-3xl">
                     <div className="absolute top-[-50%] right-[-10%] w-[60%] h-[150%] bg-[#3B82F6] opacity-10 blur-[100px] rounded-full" />
@@ -62,9 +62,9 @@ export default async function DashboardPage() {
                 <div className="relative z-10">
                     <div className="absolute inset-0 bg-[#3B82F6] rounded-full blur-xl opacity-30 animate-pulse" />
                     {discordUser.avatar ? (
-                        <Image src={discordUser.avatar} alt="Avatar" width={140} height={140} className="rounded-full relative z-10 border-4 border-[#3B82F6]/50 shadow-[0_0_30px_rgba(59,130,246,0.4)] bg-[#0B0E14] object-cover" />
+                        <Image src={discordUser.avatar} alt="Avatar" width={140} height={140} className="rounded-full relative z-10 border-4 border-[#3B82F6]/50 bg-[#0B0E14] object-cover" />
                     ) : (
-                        <div className="w-[140px] h-[140px] rounded-full relative z-10 border-4 border-[#3B82F6]/50 shadow-[0_0_30px_rgba(59,130,246,0.4)] bg-[#1A1D24] flex items-center justify-center text-5xl font-bold text-white/80">
+                        <div className="w-[140px] h-[140px] rounded-full relative z-10 border-4 border-[#3B82F6]/50 bg-[#1A1D24] flex items-center justify-center text-5xl font-bold text-white/80">
                             {discordUser.username.charAt(0)}
                         </div>
                     )}
@@ -72,7 +72,7 @@ export default async function DashboardPage() {
 
                 <div className="relative z-10 flex flex-col items-center md:items-start flex-1 text-center md:text-left">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#3B82F6]/10 border border-[#3B82F6]/30 text-xs font-mono text-[#60A5FA] mb-4">
-                        <span className="w-2 h-2 rounded-full bg-[#3B82F6] shadow-[0_0_8px_#3B82F6] animate-pulse" />
+                        <span className="w-2 h-2 rounded-full bg-[#3B82F6] animate-pulse" />
                         CodeSync Active
                     </div>
                     <h1 className="text-4xl md:text-5xl font-bold text-white/95 tracking-tight mb-6">{discordUser.username}</h1>
@@ -92,7 +92,7 @@ export default async function DashboardPage() {
                                 <Zap className="w-5 h-5 text-[#10B981]" />
                             </div>
                             <div className="flex flex-col">
-                                <span className="font-mono text-2xl font-black text-[#10B981] drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]">Top 5%</span>
+                                <span className="font-mono text-2xl font-black text-[#10B981]">Top 5%</span>
                                 <span className="text-xs text-white/50 uppercase tracking-widest font-mono">Global Rank</span>
                             </div>
                         </div>

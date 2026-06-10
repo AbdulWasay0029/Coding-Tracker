@@ -31,17 +31,17 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Glassmorphism Utilities */
+/* Sleek, Linear-style Utilities (Replaced Glassmorphism) */
 .glass-subtle {
-  box-shadow: inset 4px 0px 8px -3px rgba(255, 255, 255, 0.03), inset -4px 0px 8px -3px rgba(255, 255, 255, 0.03), 0 8px 32px -8px rgba(59, 130, 246, 0.15);
-  backdrop-filter: blur(12px);
+  background-color: #0B0E14;
   border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .glass-strong {
-  box-shadow: inset 8px 0px 16px -8px rgba(255, 255, 255, 0.06), inset -8px 0px 16px -8px rgba(255, 255, 255, 0.06), inset -2px 0px 3px -1px rgba(255, 255, 255, 0.04), inset 2px 0px 3px -1px rgba(255, 255, 255, 0.04), 0 12px 40px -10px rgba(59, 130, 246, 0.25);
-  backdrop-filter: blur(20px);
+  background-color: #111318;
   border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
 .glass-inset-subtle {

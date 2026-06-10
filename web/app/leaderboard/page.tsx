@@ -160,7 +160,7 @@ export default async function LeaderboardPage({ searchParams }: { searchParams: 
                             
                             {/* Rank 2 - Silver */}
                             {top3[1] && (
-                                <div className="glass-strong rounded-2xl p-6 flex flex-col items-center w-full md:w-[260px] h-[300px] relative border-[#94A3B8]/20 shadow-[0_8px_32px_-8px_rgba(148,163,184,0.15)] order-2 md:order-1 transform transition hover:-translate-y-2">
+                                <div className="glass-strong rounded-2xl p-6 flex flex-col items-center w-full md:w-[260px] h-[300px] relative border-[#94A3B8]/20 order-2 md:order-1 transform transition hover:-translate-y-2">
                                     <div className="absolute -top-12">
                                         <div className="relative">
                                             <div className="absolute -inset-2 bg-[#94A3B8] opacity-20 blur-lg rounded-full" />
@@ -176,7 +176,7 @@ export default async function LeaderboardPage({ searchParams }: { searchParams: 
                                         <h3 className="text-lg font-bold text-white/95 truncate">{top3[1].username}</h3>
                                         <div className="mt-4 flex flex-col items-center">
                                             <span className="text-xs text-white/50 uppercase tracking-widest font-mono mb-1">Solved</span>
-                                            <span className="font-mono text-4xl font-black text-[#94A3B8] drop-shadow-[0_0_10px_rgba(148,163,184,0.3)]">{top3[1].problems}</span>
+                                            <span className="font-mono text-4xl font-black text-[#94A3B8]">{top3[1].problems}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -184,10 +184,10 @@ export default async function LeaderboardPage({ searchParams }: { searchParams: 
 
                             {/* Rank 1 - Gold */}
                             {top3[0] && (
-                                <div className="glass-strong rounded-2xl p-8 flex flex-col items-center w-full md:w-[300px] h-[360px] relative border-[#F59E0B]/30 shadow-[0_12px_40px_-10px_rgba(245,158,11,0.25)] order-1 md:order-2 transform transition hover:-translate-y-2 z-10">
+                                <div className="glass-strong rounded-2xl p-8 flex flex-col items-center w-full md:w-[300px] h-[360px] relative border-[#F59E0B]/30 order-1 md:order-2 transform transition hover:-translate-y-2 z-10">
                                     <div className="absolute -top-16">
                                         <div className="relative">
-                                            <div className="absolute -top-6 left-1/2 -translate-x-1/2 text-4xl animate-bounce z-30 drop-shadow-[0_0_15px_rgba(245,158,11,0.5)]">👑</div>
+                                            <div className="absolute -top-6 left-1/2 -translate-x-1/2 text-4xl animate-bounce z-30">👑</div>
                                             <div className="absolute -inset-3 bg-[#F59E0B] opacity-30 blur-xl rounded-full" />
                                             {top3[0].avatar ? (
                                                 <Image src={top3[0].avatar} alt="Avatar" width={100} height={100} className="rounded-full border-4 border-[#F59E0B] relative z-10 bg-[#0B0E14]" />
@@ -201,7 +201,7 @@ export default async function LeaderboardPage({ searchParams }: { searchParams: 
                                         <h3 className="text-xl font-bold text-white/95 truncate">{top3[0].username}</h3>
                                         <div className="mt-6 flex flex-col items-center">
                                             <span className="text-xs text-[#F59E0B]/70 uppercase tracking-widest font-mono mb-1">Solved</span>
-                                            <span className="font-mono text-5xl font-black text-[#F59E0B] drop-shadow-[0_0_15px_rgba(245,158,11,0.5)]">{top3[0].problems}</span>
+                                            <span className="font-mono text-5xl font-black text-[#F59E0B]">{top3[0].problems}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -209,7 +209,7 @@ export default async function LeaderboardPage({ searchParams }: { searchParams: 
 
                             {/* Rank 3 - Bronze */}
                             {top3[2] && (
-                                <div className="glass-strong rounded-2xl p-6 flex flex-col items-center w-full md:w-[260px] h-[280px] relative border-[#D97706]/20 shadow-[0_8px_32px_-8px_rgba(217,119,6,0.15)] order-3 transform transition hover:-translate-y-2">
+                                <div className="glass-strong rounded-2xl p-6 flex flex-col items-center w-full md:w-[260px] h-[280px] relative border-[#D97706]/20 order-3 transform transition hover:-translate-y-2">
                                     <div className="absolute -top-12">
                                         <div className="relative">
                                             <div className="absolute -inset-2 bg-[#D97706] opacity-20 blur-lg rounded-full" />
@@ -225,7 +225,7 @@ export default async function LeaderboardPage({ searchParams }: { searchParams: 
                                         <h3 className="text-lg font-bold text-white/95 truncate">{top3[2].username}</h3>
                                         <div className="mt-4 flex flex-col items-center">
                                             <span className="text-xs text-white/50 uppercase tracking-widest font-mono mb-1">Solved</span>
-                                            <span className="font-mono text-4xl font-black text-[#D97706] drop-shadow-[0_0_10px_rgba(217,119,6,0.3)]">{top3[2].problems}</span>
+                                            <span className="font-mono text-4xl font-black text-[#D97706]">{top3[2].problems}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -245,8 +245,8 @@ export default async function LeaderboardPage({ searchParams }: { searchParams: 
                             {rest.map((user: any) => (
                                 <div 
                                     key={user.id} 
-                                    className={`glass-subtle rounded-xl p-4 flex items-center gap-4 transition-all duration-300 hover:bg-[#1A1D24]/80 hover:border-[#60A5FA]/30 hover:shadow-[0_4px_24px_-4px_rgba(96,165,250,0.15)] group ${
-                                        session?.user?.id === user.id ? 'border-[#3B82F6]/50 shadow-[0_0_20px_rgba(59,130,246,0.15)] bg-[#3B82F6]/5' : ''
+                                    className={`glass-subtle rounded-xl p-4 flex items-center gap-4 transition-all duration-300 hover:bg-[#1A1D24]/80 hover:border-[#60A5FA]/30 group ${
+                                        session?.user?.id === user.id ? 'border-[#3B82F6]/50 bg-[#3B82F6]/5' : ''
                                     }`}
                                 >
                                     <div className="w-16 text-center font-mono text-white/50 font-bold group-hover:text-white/80">
@@ -268,7 +268,7 @@ export default async function LeaderboardPage({ searchParams }: { searchParams: 
                                         </div>
                                     </div>
                                     <div className="w-32 text-right">
-                                        <span className="font-mono text-2xl font-black text-[#10B981] drop-shadow-[0_0_8px_rgba(16,185,129,0.3)] group-hover:text-[#34D399] transition-colors">
+                                        <span className="font-mono text-2xl font-black text-[#10B981] group-hover:text-[#34D399] transition-colors">
                                             {user.problems}
                                         </span>
                                     </div>

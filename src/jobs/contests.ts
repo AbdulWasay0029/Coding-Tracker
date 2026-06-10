@@ -31,7 +31,6 @@ const THUMBNAILS = {
 };
 
 const notified60 = new Set<string>();
-const notified10 = new Set<string>();
 
 function generateStaticContests(): Contest[] {
     const now = Date.now();
@@ -153,7 +152,7 @@ async function broadcastWeeklyDigest(client: Client) {
     await sendToAllConfiguredChannels(client, { embeds: [embed] });
 }
 
-async function broadcastReminder(client: Client, contest: Contest, timeLimit: 60 | 10) {
+async function broadcastReminder(client: Client, contest: Contest) {
     const embed = new EmbedBuilder()
         .setTitle(`🚀 ${contest.name} is starting soon!`)
         .setDescription(`**[Click here to join the contest](${contest.url})**\n\nThe contest begins <t:${Math.floor(contest.startTimeMs / 1000)}:R>. Good luck!`)
@@ -196,13 +195,7 @@ async function checkContestsTick(client: Client) {
         // 60-min reminder (trigger if between 50 and 65 mins)
         if (diffMins <= 65 && diffMins > 45 && !notified60.has(c.id)) {
             notified60.add(c.id);
-            await broadcastReminder(client, c, 60);
-        }
-        
-        // 10-min reminder (trigger if between 5 and 15 mins)
-        if (diffMins <= 15 && diffMins > 0 && !notified10.has(c.id)) {
-            notified10.add(c.id);
-            await broadcastReminder(client, c, 10);
+            await broadcastReminder(client, c);
         }
     }
 }

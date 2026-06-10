@@ -29,8 +29,8 @@ export function Navbar() {
                     {/* Left: Brand & Main Links */}
                     <div className="flex items-center gap-8">
                         <Link href="/" className="flex flex-shrink-0 items-center gap-3 group">
-                            <div className="relative w-48 h-16 flex items-center justify-start transition-transform group-hover:scale-105">
-                                <Image src="/logo_new_navbar.png" alt="CodeSync Logo" fill className="object-contain object-left scale-125 ml-2" />
+                            <div className="relative w-32 h-16 flex items-center justify-start transition-transform group-hover:scale-105">
+                                <Image src="/logo_new_navbar.png" alt="CodeSync Logo" fill className="object-contain object-left" />
                             </div>
                         </Link>
                         

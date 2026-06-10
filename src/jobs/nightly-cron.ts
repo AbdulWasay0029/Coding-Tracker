@@ -145,20 +145,24 @@ export function initNightlyScheduler(client: Client) {
             hour12: false
         }).format(now); // example: "22:00"
 
-        // Find all servers that want a report AT THIS EXACT MINUTE
-        const configs = await prisma.guildConfig.findMany({
-            where: { 
-                reminderChannelId: { not: null },
-                reminderTime: istTime
-            }
-        });
+        try {
+            // Find all servers that want a report AT THIS EXACT MINUTE
+            const configs = await prisma.guildConfig.findMany({
+                where: { 
+                    reminderChannelId: { not: null },
+                    reminderTime: istTime
+                }
+            });
 
-        if (configs.length > 0) {
-            console.log(`[Nightly Reports] Triggering reports for ${configs.length} server(s) configured for ${istTime} IST.`);
-            for (const config of configs) {
-                // We don't await this so multiple servers can process concurrently (within reason)
-                processGuildNightlyReport(client, config).catch(e => console.error(e));
+            if (configs.length > 0) {
+                console.log(`[Nightly Reports] Triggering reports for ${configs.length} server(s) configured for ${istTime} IST.`);
+                for (const config of configs) {
+                    // We don't await this so multiple servers can process concurrently (within reason)
+                    processGuildNightlyReport(client, config).catch(e => console.error(e));
+                }
             }
+        } catch (dbError: any) {
+            console.error(`[Nightly Reports] Transient database error while checking schedule at ${istTime}:`, dbError.message);
         }
     });
 

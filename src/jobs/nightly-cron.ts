@@ -3,26 +3,7 @@ import { Client, TextChannel } from 'discord.js';
 import { prisma } from '../core/prisma';
 import { runTrackerForUser, getTimestampsForDate } from './tracker';
 
-// ─── Post to Discord Channel (chunked to respect 2000 char limit) ────────────
-
-async function postToDiscordChannel(channel: TextChannel, content: string): Promise<void> {
-    const chunks: string[] = [];
-    let current = '';
-
-    for (const line of content.split('\n')) {
-        if (current.length + line.length + 1 > 1900) {
-            chunks.push(current.trim());
-            current = '';
-        }
-        current += line + '\n';
-    }
-    if (current.trim()) chunks.push(current.trim());
-
-    for (const chunk of chunks) {
-        await channel.send({ content: chunk });
-        await new Promise(r => setTimeout(r, 500));
-    }
-}
+import { EmbedBuilder } from 'discord.js';
 
 // ─── Core Scraping Logic ──────────────────────────────────────────────────
 
@@ -52,19 +33,32 @@ async function processGuildNightlyReport(client: Client, config: any) {
         const { startTimestamp, endTimestamp, dateStr: label } = getTimestampsForDate('today');
         const fetchStartTimestamp = startTimestamp - (86400 * 2); // 2 days before today (3 days total)
 
-        const lines: string[] = [];
-        lines.push(`📅 **Daily Links — ${label}**\n`);
+        const embeds: EmbedBuilder[] = [];
+        let currentEmbed = new EmbedBuilder()
+            .setColor('#10B981')
+            .setTitle(`📅 Daily Progress Report — ${label}`)
+            .setDescription("Here is the summary of today's coding progress for the server. Keep up the great work! 🔥");
 
-        let guildLinks = 0;
-        let guildStudents = 0;
+        let fieldCount = 0;
+        let totalSolved = 0;
+        let totalActive = 0;
+        const activeMentions: string[] = [];
 
         for (const { discordUserId } of trackedUsers) {
             // Scrape data only for this user
             const result = await runTrackerForUser(discordUserId, startTimestamp, endTimestamp, fetchStartTimestamp);
             
             if (result.links.length > 0) {
-                const userLines: string[] = [];
-                for (const [platform, urls] of Object.entries(result.groupedLinks)) {
+                totalActive++;
+                totalSolved += result.links.length;
+                activeMentions.push(`<@${discordUserId}>`);
+                
+                const member = members.get(discordUserId);
+                const displayName = member ? member.displayName : 'Student';
+                
+                let fieldValue = '';
+                
+                for (const [platform, problems] of Object.entries(result.groupedLinks)) {
                     const emoji = platform === 'LEETCODE' ? '🟡' :
                                   platform === 'CODEFORCES' ? '🔵' :
                                   platform === 'CODECHEF' ? '🟤' :
@@ -73,31 +67,61 @@ async function processGuildNightlyReport(client: Client, config: any) {
                     const name = platform === 'SMARTINTERVIEWS' ? 'SmartInterviews' :
                                  platform.charAt(0) + platform.slice(1).toLowerCase();
 
-                    userLines.push(`  ${emoji} **${name}**:\n    ${(urls as any[]).map(l => `<${l.url}>`).join('\n    ')}`);
+                    const linksStr = problems.map(p => `• **${p.title}**\n  <${p.url}>`).join('\n');
+                    fieldValue += `${emoji} **${name}** (${problems.length}): ${linksStr}\n`;
                 }
-
-                lines.push(`👤 <@${discordUserId}>`);
-                lines.push(...userLines);
                 
                 if (result.errors && result.errors.length > 0) {
-                    lines.push(`  -# ⚠️ Errors: ${result.errors.join(', ')}`);
+                    fieldValue += `\n*⚠️ Errors: ${result.errors.join(', ')}*`;
                 }
                 
-                lines.push('');
+                if (fieldValue.length > 1024) {
+                    fieldValue = fieldValue.slice(0, 1020) + '...';
+                }
                 
-                guildLinks += result.links.length;
-                guildStudents++;
+                currentEmbed.addFields({
+                    name: `👤 ${displayName} (${result.links.length} solved)`,
+                    value: fieldValue,
+                    inline: false
+                });
+                
+                fieldCount++;
+                
+                if (fieldCount === 25) {
+                    embeds.push(currentEmbed);
+                    currentEmbed = new EmbedBuilder().setColor('#10B981');
+                    fieldCount = 0;
+                }
             }
             await new Promise(r => setTimeout(r, 600)); // Rate limit buffer
         }
 
-        if (guildStudents > 0) {
-            lines.push(`\n✅ ${guildStudents} student(s) · ${guildLinks} problem(s) solved today`);
-            const message = lines.join('\n');
-            await postToDiscordChannel(channel, message);
+        if (fieldCount > 0) {
+            embeds.push(currentEmbed);
+        }
+
+        if (embeds.length > 0) {
+            embeds[embeds.length - 1].setFooter({
+                text: `✅ ${totalActive} student(s) active · ${totalSolved} problem(s) solved today`
+            });
+            
+            const chunks: EmbedBuilder[][] = [];
+            for (let i = 0; i < embeds.length; i += 10) {
+                chunks.push(embeds.slice(i, i + 10));
+            }
+
+            for (let i = 0; i < chunks.length; i++) {
+                // Only put mentions on the first message chunk so we don't spam 
+                const contentText = i === 0 ? activeMentions.join(' ') : undefined;
+                await channel.send({ content: contentText, embeds: chunks[i] });
+                await new Promise(r => setTimeout(r, 500));
+            }
         } else {
-            lines.push('📭 No problems solved today by anyone in the server. Get coding! 💪');
-            await postToDiscordChannel(channel, lines.join('\n'));
+            const emptyEmbed = new EmbedBuilder()
+                .setColor('#EF4444')
+                .setTitle(`📅 Daily Progress Report — ${label}`)
+                .setDescription("📭 No problems solved today by anyone in the server. Let's get back on the grind tomorrow! 💪");
+            await channel.send({ embeds: [emptyEmbed] });
         }
 
     } catch (err) {

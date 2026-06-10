@@ -60,7 +60,12 @@ export async function POST(req: Request) {
             }
         });
 
-        return NextResponse.json(profile, { status: 201 });
+        return NextResponse.json({
+            id: profile.id,
+            platform: profile.platform,
+            username: profile.username,
+            hasToken: !!profile.token
+        }, { status: 201 });
     } catch (error: any) {
         if (error.code === 'P2002') {
             return NextResponse.json({ error: 'Profile already exists for this platform and username.' }, { status: 400 });

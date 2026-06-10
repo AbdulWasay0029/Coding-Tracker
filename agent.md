@@ -4,8 +4,7 @@
 ## 🎨 Design & Aesthetic Rules
 - **Aesthetic Core**: CodeSync is a premium, high-performance tracking engine. We use a strict "gamified glassmorphism" aesthetic with vibrant accents against a dark/sleek background.
 - **Discord Bot Colors**:
-  - Success / Primary: **Premium Toxic Green** (`#10B981` / `0x10B981`)
-  - Neutral / Information: **CodeSync Blue** (`#3B82F6` / `0x3B82F6`)
+  - Primary Brand Colors: **CodeSync Blue** (`#3B82F6` / `0x3B82F6`) & **Premium Toxic Green** (`#10B981` / `0x10B981`)
   - Warning / Empty: **Red** (`#EF4444` / `0xEF4444`)
 - **Hierarchy**: Do NOT clutter Discord Embeds. Main stats and success messages go into large Embed Fields. Minor warnings (like API fetch failures) must be pushed gracefully to the **Embed Footer** to maintain the success aesthetic.
 - **Utility First**: Always keep raw URLs explicitly visible and easily copyable for Auto-Reports, do not hide them completely behind markdown hyperlink text.
@@ -20,6 +19,7 @@
   - `/refresh` (Admin force-sync for the current server)
   - `/list-profiles` (View linked accounts)
   - `/stats` (All-time Gamer Card for a user)
+  - `/badges` (Displays gamification badges synced exactly with web/app/dashboard/badges/page.tsx logic)
   - `/help`
 - *Note: Setup and profile management slash commands are deprecated and redirect to the Web Dashboard.*
 

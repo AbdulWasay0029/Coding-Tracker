@@ -15,6 +15,7 @@ import { handleSetup } from './commands/setup';
 import { handleLeaderboard } from './commands/leaderboard';
 import { handleExportReport } from './commands/export-report';
 import { handleStats } from './commands/stats';
+import { handleBadges } from './commands/badges';
 import { handleRefresh } from './commands/refresh';
 import { initContestScheduler } from '../jobs/contests';
 import { initNightlyScheduler } from '../jobs/nightly-cron';
@@ -79,6 +80,7 @@ client.on('interactionCreate', async (interaction: Interaction) => {
                 case 'export-report': await handleExportReport(interaction); break;
                 case 'refresh': await handleRefresh(interaction); break;
                 case 'stats': await handleStats(interaction); break;
+                case 'badges': await handleBadges(interaction); break;
             }
         } else if (interaction.isButton()) {
             if (interaction.customId.startsWith('recheck:')) {

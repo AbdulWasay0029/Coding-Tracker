@@ -61,6 +61,14 @@ const commands = [
             .setRequired(false)),
 
     new SlashCommandBuilder()
+        .setName('badges')
+        .setDescription('View your unlocked CodeSync Gamification badges')
+        .addUserOption(o => o
+            .setName('user')
+            .setDescription('The user to view badges for (leave blank for yourself)')
+            .setRequired(false)),
+
+    new SlashCommandBuilder()
         .setName('check')
         .setDescription('Fetch your solved problems today/yesterday')
         .addStringOption(o => o

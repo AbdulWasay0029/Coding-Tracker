@@ -173,6 +173,28 @@ export default function Home() {
                     </div>
                 </div>
             </div>
+            {/* FAQ Section */}
+            <div id="community" className="bg-[#05070A] py-32 border-t border-white/5 relative z-10">
+                <div className="max-w-4xl mx-auto px-4">
+                    <div className="text-center mb-16 animate-reveal stagger-2">
+                        <h2 className="text-3xl md:text-4xl font-bold text-white/95">Community FAQ</h2>
+                    </div>
+                    <div className="divide-y divide-white/10 border-y border-white/10 animate-reveal stagger-3">
+                        <div className="py-8 flex flex-col gap-3 group">
+                            <h3 className="text-lg font-bold text-white/90 group-hover:text-white transition-colors">Do I need to manually update my stats?</h3>
+                            <p className="text-white/50 leading-relaxed">No. Once your accounts are linked via the dashboard or bot commands, CodeSync automatically scrapes your progress multiple times a day.</p>
+                        </div>
+                        <div className="py-8 flex flex-col gap-3 group">
+                            <h3 className="text-lg font-bold text-white/90 group-hover:text-white transition-colors">Is it free to use?</h3>
+                            <p className="text-white/50 leading-relaxed">Absolutely. CodeSync is built to support developer communities without any paywalls or hidden limits.</p>
+                        </div>
+                        <div className="py-8 flex flex-col gap-3 group">
+                            <h3 className="text-lg font-bold text-white/90 group-hover:text-white transition-colors">How do I add it to my server?</h3>
+                            <p className="text-white/50 leading-relaxed">Simply click the "Add Bot" button at the top, select your server, and authorize the bot. You can then use the <code className="text-[#60A5FA] bg-[#3B82F6]/10 px-1.5 py-0.5 rounded font-mono text-sm">/set-channel</code> command to specify where daily leaderboards should be posted.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             {/* CTA Section */}
             <div className="py-32 relative z-10 bg-[#0B0E14] border-t border-white/5 overflow-hidden">

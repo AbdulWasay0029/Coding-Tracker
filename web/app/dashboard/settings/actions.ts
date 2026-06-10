@@ -132,23 +132,29 @@ export async function forceSyncServer(guildId: string) {
         }
     });
 
-    // 5. Fire and Forget: Import runTrackerForUser and sync in the background so we don't timeout the Next.js request
-    const { runTrackerForUser, getTimestampsForDate } = require('../../../../src/jobs/tracker');
-    const { startTimestamp, endTimestamp } = getTimestampsForDate('today');
-    const fetchStartTimestamp = startTimestamp - (86400 * 2); // Pull last 3 days to heal data
+    // 5. Fire and Forget: Queue the jobs in the database for the Discord bot to pick up
+    const now = new Date();
+    // Quick UTC-based approximation of today's start/end for the queue
+    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const startTimestamp = Math.floor(startOfDay.getTime() / 1000);
+    const endTimestamp = startTimestamp + 86399; // +23:59:59
 
-    // Execute background sync without awaiting
-    (async () => {
-        try {
-            for (const { discordUserId } of trackedUsers) {
-                await runTrackerForUser(discordUserId, startTimestamp, endTimestamp, fetchStartTimestamp);
-                await new Promise(r => setTimeout(r, 600)); // Rate limit buffer
-            }
-            console.log(`[Web Sync] Successfully completed background force sync for guild ${guildId}`);
-        } catch (err) {
-            console.error(`[Web Sync] Background sync failed for guild ${guildId}:`, err);
-        }
-    })();
+    const jobs = trackedUsers.map(u => ({
+        discordUserId: u.discordUserId,
+        startTimestamp: startTimestamp,
+        endTimestamp: endTimestamp
+    }));
+
+    // Insert jobs into the queue safely
+    try {
+        await prisma.scrapeJob.createMany({
+            data: jobs,
+            skipDuplicates: true
+        });
+        console.log(`[Web Sync] Successfully queued ${jobs.length} sync jobs for guild ${guildId}`);
+    } catch (err) {
+        console.error(`[Web Sync] Failed to queue jobs for guild ${guildId}:`, err);
+    }
 
     return { success: true, count: trackedUsers.length };
 }

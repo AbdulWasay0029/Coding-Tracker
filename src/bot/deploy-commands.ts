@@ -53,6 +53,14 @@ const commands = [
         .setDescription('Show your tracked platforms'),
 
     new SlashCommandBuilder()
+        .setName('stats')
+        .setDescription('View an all-time Gamer Card for yourself or another student')
+        .addUserOption(o => o
+            .setName('user')
+            .setDescription('The user to view stats for (leave blank for yourself)')
+            .setRequired(false)),
+
+    new SlashCommandBuilder()
         .setName('check')
         .setDescription('Fetch your solved problems today/yesterday')
         .addStringOption(o => o

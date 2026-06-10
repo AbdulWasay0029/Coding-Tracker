@@ -68,3 +68,10 @@ CodeSync evolved beyond just tracking past performances; it began anticipating t
 
 ### Phase 8: Enterprise Architecture & User Apps (CodeSync v4)
 As CodeSync transitioned from a successful MVP to a scalable product, the backend was completely restructured into an enterprise-grade modular architecture. Discord's new "User Installable Apps" feature was fully embraced, allowing users to install CodeSync directly to their personal accounts and take their slash commands anywhere. The onboarding flow was rewritten to feature zero-friction Direct Messaging, and a fully gamified Contribution Graph was deployed to the Web Dashboard alongside a powerful Server Admin Portal.
+
+### Phase 9: Settings Hub & UX Overhaul (June 2026)
+*Refining the visual identity and centralizing user controls.*
+
+As feature bloat threatened the user experience, the entire web dashboard was restructured using modern "Paraflow" dark-mode aesthetics. The fragmented pages were unified into a single, powerful Settings Hub with URL-persisted tabs for Profiles, Privacy, Admin configurations, and Documentation.
+
+To support gamification, a dedicated Badges page was implemented, tying directly into the backend `solvedAt` timestamps to dynamically award users for 7-day streaks, total solved milestones, and late-night coding sessions. Privacy controls were also expanded, introducing a `UserSettings` database model to allow developers to toggle their leaderboard visibility securely. The focus shifted entirely to making the platform feel like a premium, polished enterprise product.

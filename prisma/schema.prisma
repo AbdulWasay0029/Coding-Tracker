@@ -21,6 +21,14 @@ model UserProfile {
   @@unique([discordUserId, platform, username])
 }
 
+// Global user settings
+model UserSettings {
+  discordUserId String   @id
+  isPublic      Boolean  @default(true)
+  updatedAt     DateTime @updatedAt
+}
+
+
 // Tracks solved problems per user to avoid re-posting duplicates
 model SolvedProblem {
   id            String   @id @default(uuid())

@@ -22,12 +22,15 @@ export async function handleLeaderboard(interaction: ChatInputCommandInteraction
 
         const startOfWeekUTC = new Date(startOfWeekIST.getTime() - istOffset);
 
-        // Perform a global aggregate query to get the top 10 solvers this week.
-        // This naturally captures everyone tracked by the bot and avoids Discord Gateway rate limits.
+        // Fetch all members in the current Discord server to prevent global data leaks
+        const guildMembers = await interaction.guild.members.fetch();
+        const guildMemberIds = Array.from(guildMembers.keys());
+
         const leaderboardData = await prisma.solvedProblem.groupBy({
             by: ['discordUserId'],
             where: {
-                solvedAt: { gte: startOfWeekUTC }
+                solvedAt: { gte: startOfWeekUTC },
+                discordUserId: { in: guildMemberIds }
             },
             _count: {
                 problemId: true
@@ -53,10 +56,10 @@ export async function handleLeaderboard(interaction: ChatInputCommandInteraction
         });
 
         const embed = new EmbedBuilder()
-            .setTitle(`🏆 Global Leaderboard (This Week)`)
+            .setTitle(`🏆 Server Leaderboard (This Week)`)
             .setDescription(description)
-            .setColor(0x39FF14) // CodeSync Toxic Green
-            .setFooter({ text: 'CodeSync • View full ranks on the Web Dashboard' });
+            .setColor(0x10B981) // Premium Toxic Green
+            .setFooter({ text: 'CodeSync • View your full stats on the Web Dashboard' });
 
         await interaction.editReply({ embeds: [embed] });
 

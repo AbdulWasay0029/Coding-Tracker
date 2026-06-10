@@ -67,7 +67,7 @@ async function processGuildNightlyReport(client: Client, config: any) {
                     const name = platform === 'SMARTINTERVIEWS' ? 'SmartInterviews' :
                                  platform.charAt(0) + platform.slice(1).toLowerCase();
 
-                    const linksStr = problems.map(p => `• **${p.title}**\n  <${p.url}>`).join('\n');
+                    const linksStr = problems.map(p => `<${p.url}>`).join('\n');
                     fieldValue += `${emoji} **${name}** (${problems.length}): ${linksStr}\n`;
                 }
                 

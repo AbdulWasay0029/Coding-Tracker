@@ -87,10 +87,12 @@ async function runAndReply(
         const emptyEmbed = new EmbedBuilder()
             .setTitle(`📅 ${dateStr} Report`)
             .setDescription(`No problems solved ${isToday ? 'yet today' : 'on this date'}. Keep grinding!`)
-            .setColor(0x00F0FF); // CodeSync Cyan
+            .setColor(0x3B82F6); // CodeSync Blue
 
         if (result.errors && result.errors.length > 0) {
-            emptyEmbed.addFields({ name: '⚠️ Sync Warnings', value: result.errors.join('\n') });
+            emptyEmbed.setFooter({ text: `⚠️ Some platforms couldn't be synced: ${result.errors.join(', ')}` });
+        } else {
+            emptyEmbed.setFooter({ text: 'CodeSync • Verified Tracker' });
         }
 
         await reply({ embeds: [emptyEmbed], components: [row] });
@@ -101,11 +103,10 @@ async function runAndReply(
     const [yyyy, mm, dd] = dateStr.split('-');
     const displayDate = `${dd}/${mm}/${yyyy}`;
 
-    // Format grouped links for Embed
     const embed = new EmbedBuilder()
         .setTitle(`📅 ${displayDate} Report`)
         .setDescription(`**${result.links.length}** problem(s) solved!`)
-        .setColor(0x39FF14); // CodeSync Toxic Green
+        .setColor(0x10B981); // Premium Toxic Green
 
     for (const [platform, items] of Object.entries(result.groupedLinks)) {
         const name = PLATFORM_NAMES[platform] || platform;
@@ -120,7 +121,9 @@ async function runAndReply(
     }
 
     if (result.errors && result.errors.length > 0) {
-        embed.addFields({ name: '⚠️ Sync Warnings', value: result.errors.join('\n') });
+        embed.setFooter({ text: `⚠️ Some platforms couldn't be synced: ${result.errors.join(', ')}` });
+    } else {
+        embed.setFooter({ text: 'CodeSync • All platforms synced successfully' });
     }
 
     await reply({ embeds: [embed], components: [row] });

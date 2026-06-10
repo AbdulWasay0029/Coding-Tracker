@@ -222,13 +222,16 @@ export function ProfileManager({ initialProfiles }: { initialProfiles: Profile[]
                                         className="w-full bg-[#05070A] border border-border text-white text-sm rounded-md px-3 py-2 focus:border-primary focus:ring-1 focus:ring-primary outline-none placeholder:text-text-secondary/50"
                                     />
                                     {p.platform === 'SMARTINTERVIEWS' && (
-                                        <input 
-                                            type="text"
-                                            value={editForm.token}
-                                            onChange={(e) => setEditForm({...editForm, token: e.target.value})}
-                                            placeholder="SmartInterviews Token (Optional)"
-                                            className="w-full bg-[#05070A] border border-border text-white text-sm rounded-md px-3 py-2 focus:border-primary focus:ring-1 focus:ring-primary outline-none placeholder:text-text-secondary/50"
-                                        />
+                                        <div className="flex flex-col gap-1">
+                                            <input 
+                                                type="text"
+                                                value={editForm.token}
+                                                onChange={(e) => setEditForm({...editForm, token: e.target.value})}
+                                                placeholder={p.hasToken ? "SmartInterviews Token (Saved - leave blank to keep)" : "SmartInterviews Token (Required)"}
+                                                className="w-full bg-[#05070A] border border-border text-white text-sm rounded-md px-3 py-2 focus:border-primary focus:ring-1 focus:ring-primary outline-none placeholder:text-text-secondary/50"
+                                            />
+                                            {p.hasToken && <span className="text-xs text-success ml-1">✅ Token is securely saved</span>}
+                                        </div>
                                     )}
                                 </div>
                             </form>

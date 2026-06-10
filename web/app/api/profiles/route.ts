@@ -11,15 +11,23 @@ export async function GET(req: Request) {
     }
 
     try {
-        const profiles = await prisma.userProfile.findMany({
+        const rawProfiles = await prisma.userProfile.findMany({
             where: { discordUserId: session.user.id },
             select: {
                 id: true,
                 platform: true,
                 username: true,
-                // Do not return token for security
+                token: true
             }
         });
+        
+        const profiles = rawProfiles.map(p => ({
+            id: p.id,
+            platform: p.platform,
+            username: p.username,
+            hasToken: !!p.token
+        }));
+        
         return NextResponse.json(profiles);
     } catch (error: any) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
@@ -120,7 +128,7 @@ export async function PUT(req: Request) {
             where: { id },
             data: {
                 username: username.trim(),
-                token: token ? encrypt(token.trim()) : null
+                token: token ? encrypt(token.trim()) : profile.token
             }
         });
 

@@ -242,13 +242,16 @@ export default function SettingsPlatformsManager() {
                                         className="w-full bg-[#0B0E14] border border-white/10 text-white text-sm rounded-lg px-3 py-2 focus:border-[#60A5FA] outline-none placeholder:text-white/30"
                                     />
                                     {p.platform === 'SMARTINTERVIEWS' && (
-                                        <input 
-                                            type="text"
-                                            value={editForm.token}
-                                            onChange={(e) => setEditForm({...editForm, token: e.target.value})}
-                                            placeholder="SmartInterviews Token (Optional)"
-                                            className="w-full bg-[#0B0E14] border border-white/10 text-white text-sm rounded-lg px-3 py-2 focus:border-[#60A5FA] outline-none placeholder:text-white/30"
-                                        />
+                                        <div className="flex flex-col gap-1">
+                                            <input 
+                                                type="text"
+                                                value={editForm.token}
+                                                onChange={(e) => setEditForm({...editForm, token: e.target.value})}
+                                                placeholder={p.hasToken ? "SmartInterviews Token (Saved - leave blank to keep)" : "SmartInterviews Token (Required)"}
+                                                className="w-full bg-[#0B0E14] border border-white/10 text-white text-sm rounded-lg px-3 py-2 focus:border-[#60A5FA] outline-none placeholder:text-white/30"
+                                            />
+                                            {p.hasToken && <span className="text-xs text-[#10B981] ml-1">✅ Token is securely saved</span>}
+                                        </div>
                                     )}
                                 </div>
                             </form>

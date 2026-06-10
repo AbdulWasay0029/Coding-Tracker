@@ -29,7 +29,7 @@ export function decrypt(text: string): string {
         decrypted += decipher.final('utf8');
         return decrypted;
     } catch(e) {
-        console.error('Decryption failed for token (probably changed ENCRYPTION_KEY or unencrypted before update).', e);
+        console.warn('[Encryption] Returning unencrypted fallback for token.');
         return text;
     }
 }

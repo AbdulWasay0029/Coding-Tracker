@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import { User, Globe, Palette, Shield, Save, ArrowRight } from 'lucide-react';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import SettingsPlatformsManager from './SettingsPlatformsManager';
 import { AdminClient } from './AdminClient';
 import WidgetsClient from './widgets/WidgetsClient';
 import DocsClient from './docs/DocsClient';
-import { FileText, Code2, Server } from 'lucide-react';
+import { FileText, Code2, Server, LogOut } from 'lucide-react';
 
 export default function SettingsHub({ session: serverSession, adminGuilds }: { session: any, adminGuilds: any[] }) {
     const { data: clientSession } = useSession();
@@ -94,6 +94,15 @@ export default function SettingsHub({ session: serverSession, adminGuilds }: { s
                                 </button>
                             );
                         })}
+                        
+                        <div className="h-px w-full bg-white/5 my-2"></div>
+                        <button
+                            onClick={() => signOut()}
+                            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-[#EF4444]/70 hover:bg-[#EF4444]/10 hover:text-[#EF4444] border border-transparent transition-all duration-300"
+                        >
+                            <LogOut className="w-5 h-5" />
+                            Log Out
+                        </button>
                     </div>
                 </div>
 

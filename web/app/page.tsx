@@ -80,38 +80,15 @@ export default function Home() {
                                 <span className="text-[10px] text-white/30 font-mono">codesync.app/dashboard</span>
                             </div>
                         </div>
-                        {/* Mockup Image - using existing bot-showcase or a placeholder for now */}
-                        <div className="relative w-full h-[calc(100%-40px)] p-6 flex flex-col gap-4 overflow-hidden">
-                            {/* Fake Dashboard Header */}
-                            <div className="w-full h-24 rounded-xl bg-[#1A1D24]/60 border border-white/5 flex items-center px-6 gap-4">
-                                <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-[#3B82F6] to-[#A78BFA] p-0.5">
-                                    <div className="w-full h-full rounded-full bg-[#05070A]" />
-                                </div>
-                                <div className="space-y-2 flex-1">
-                                    <div className="w-1/3 h-4 bg-white/10 rounded" />
-                                    <div className="w-1/4 h-3 bg-white/5 rounded" />
-                                </div>
-                                <div className="w-20 h-10 rounded-lg bg-[#10B981]/20 border border-[#10B981]/30" />
-                            </div>
-                            {/* Fake Grid */}
-                            <div className="flex gap-4 h-full">
-                                <div className="w-2/3 h-full rounded-xl bg-[#1A1D24]/60 border border-white/5 p-4 flex flex-col gap-3">
-                                    <div className="w-1/4 h-4 bg-white/10 rounded mb-2" />
-                                    <div className="grid grid-cols-7 gap-1 flex-1">
-                                        {Array.from({length: 35}).map((_, i) => (
-                                            <div key={i} className={`rounded-sm ${i % 7 === 0 ? 'bg-[#3B82F6]/50' : i % 5 === 0 ? 'bg-[#10B981]/50' : 'bg-white/5'}`} />
-                                        ))}
-                                    </div>
-                                </div>
-                                <div className="w-1/3 h-full rounded-xl bg-[#1A1D24]/60 border border-white/5 p-4 flex flex-col gap-3">
-                                    <div className="w-1/2 h-4 bg-white/10 rounded mb-2" />
-                                    <div className="flex-1 space-y-2">
-                                        <div className="w-full h-8 bg-white/5 rounded" />
-                                        <div className="w-full h-8 bg-white/5 rounded" />
-                                        <div className="w-full h-8 bg-white/5 rounded" />
-                                    </div>
-                                </div>
-                            </div>
+                        {/* Mockup Image */}
+                        <div className="relative w-full h-[calc(100%-40px)] overflow-hidden bg-[#05070A]">
+                            <Image 
+                                src="/hero-mockup.png" 
+                                alt="CodeSync Dashboard Mockup" 
+                                fill
+                                className="object-cover opacity-90 hover:opacity-100 transition-opacity"
+                                priority
+                            />
                         </div>
                     </div>
                 </div>

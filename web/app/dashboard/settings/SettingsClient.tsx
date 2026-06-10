@@ -15,15 +15,40 @@ export default function SettingsHub({ session: serverSession, adminGuilds }: { s
     const session = clientSession || serverSession;
     const searchParams = useSearchParams();
     const router = useRouter();
-    const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'account');
+    const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'platforms');
+    const [isPublic, setIsPublic] = useState(true);
+    const [isLoadingPrivacy, setIsLoadingPrivacy] = useState(true);
 
     useEffect(() => {
         const tab = searchParams.get('tab');
         if (tab) setActiveTab(tab);
+        
+        // Fetch privacy settings
+        fetch('/api/settings').then(res => res.json()).then(data => {
+            setIsPublic(data.isPublic !== false); // default true
+            setIsLoadingPrivacy(false);
+        }).catch(err => {
+            console.error('Failed to load settings:', err);
+            setIsLoadingPrivacy(false);
+        });
     }, [searchParams]);
 
+    const togglePrivacy = async () => {
+        const newValue = !isPublic;
+        setIsPublic(newValue);
+        try {
+            await fetch('/api/settings', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ isPublic: newValue })
+            });
+        } catch (error) {
+            console.error('Failed to update privacy settings', error);
+            setIsPublic(!newValue); // revert on failure
+        }
+    };
+
     const tabs = [
-        { id: 'account', label: 'Account Profile', icon: User },
         { id: 'platforms', label: 'Connected Platforms', icon: Globe },
         { id: 'appearance', label: 'Appearance', icon: Palette },
         { id: 'security', label: 'Security & Privacy', icon: Shield },
@@ -74,49 +99,6 @@ export default function SettingsHub({ session: serverSession, adminGuilds }: { s
 
                 {/* Main Content Area */}
                 <div className="flex-1 animate-reveal stagger-2">
-                    {activeTab === 'account' && (
-                        <div className="space-y-6">
-                            <div className="glass-subtle rounded-2xl p-8">
-                                <h2 className="text-xl font-bold text-white/90 mb-6">Public Profile</h2>
-                                
-                                <div className="flex items-center gap-6 mb-8">
-                                    <div className="w-20 h-20 rounded-full bg-[#1A1D24] border border-[#60A5FA]/30 flex items-center justify-center text-2xl font-bold text-[#60A5FA] shadow-[0_0_15px_rgba(96,165,250,0.1)]">
-                                        {session?.user?.name?.charAt(0) || 'U'}
-                                    </div>
-                                    <div>
-                                        <button className="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-sm font-medium text-white transition-colors">
-                                            Change Avatar
-                                        </button>
-                                        <p className="text-xs text-white/40 mt-2 font-mono uppercase tracking-wider">JPG, GIF or PNG. Max size of 800K</p>
-                                    </div>
-                                </div>
-
-                                <div className="space-y-6">
-                                    <div>
-                                        <label className="block text-sm font-bold text-white/70 mb-2">Display Name</label>
-                                        <input 
-                                            type="text" 
-                                            defaultValue={session?.user?.name || ''}
-                                            className="w-full bg-[#0B0E14] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#60A5FA] focus:ring-1 focus:ring-[#60A5FA] transition-all"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-bold text-white/70 mb-2">Bio</label>
-                                        <textarea 
-                                            rows={3}
-                                            placeholder="Tell us a little bit about yourself..."
-                                            className="w-full bg-[#0B0E14] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#60A5FA] focus:ring-1 focus:ring-[#60A5FA] transition-all resize-none"
-                                        />
-                                    </div>
-                                    <div className="pt-6 border-t border-white/5 flex justify-end">
-                                        <button className="flex items-center gap-2 px-6 py-3 bg-[#60A5FA] hover:bg-[#3B82F6] text-[#0B0E14] font-bold rounded-xl transition-all duration-300 shadow-[0_0_20px_rgba(96,165,250,0.3)] hover:scale-105 hover:shadow-[0_0_30px_rgba(96,165,250,0.4)]">
-                                            <Save className="w-5 h-5" /> Save Changes
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
 
                     {activeTab === 'platforms' && (
                         <div className="space-y-6">
@@ -167,19 +149,14 @@ export default function SettingsHub({ session: serverSession, adminGuilds }: { s
                                             <p className="text-sm text-white/50 mt-1">Allow your stats to be shown on global rankings.</p>
                                         </div>
                                         <label className="relative inline-flex items-center cursor-pointer">
-                                            <input type="checkbox" className="sr-only peer" defaultChecked />
-                                            <div className="w-14 h-7 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-[#10B981] shadow-[inset_0_2px_4px_rgba(0,0,0,0.3)]"></div>
-                                        </label>
-                                    </div>
-
-                                    <div className="flex items-center justify-between p-6 bg-[#0B0E14] border border-white/5 rounded-2xl hover:border-white/10 transition-colors">
-                                        <div>
-                                            <h3 className="font-bold text-white/90">Discord DM Notifications</h3>
-                                            <p className="text-sm text-white/50 mt-1">Receive direct messages for daily streak summaries.</p>
-                                        </div>
-                                        <label className="relative inline-flex items-center cursor-pointer">
-                                            <input type="checkbox" className="sr-only peer" />
-                                            <div className="w-14 h-7 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-[#10B981] shadow-[inset_0_2px_4px_rgba(0,0,0,0.3)]"></div>
+                                            <input 
+                                                type="checkbox" 
+                                                className="sr-only peer" 
+                                                checked={isPublic}
+                                                onChange={togglePrivacy}
+                                                disabled={isLoadingPrivacy}
+                                            />
+                                            <div className="w-14 h-7 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-[#10B981] shadow-[inset_0_2px_4px_rgba(0,0,0,0.3)] disabled:opacity-50"></div>
                                         </label>
                                     </div>
                                 </div>

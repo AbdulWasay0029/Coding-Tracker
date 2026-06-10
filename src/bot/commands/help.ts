@@ -4,7 +4,7 @@ export async function handleHelp(interaction: ChatInputCommandInteraction) {
     const embed = new EmbedBuilder()
         .setTitle('🚀 CodeSync Platform Engine')
         .setDescription('Track your coding progress instantly across LeetCode, Codeforces, CodeChef, HackerRank & SmartInterviews.')
-        .setColor(0x00F0FF) // CodeSync Cyan
+        .setColor(0x10B981) // Premium Toxic Green
         .addFields(
             {
                 name: '🔍 Check Progress',

@@ -30,7 +30,7 @@ export async function handleListProfiles(interaction: ChatInputCommandInteractio
     const embed = new EmbedBuilder()
         .setTitle('🔗 Your Linked Profiles')
         .setDescription('Here are the coding platforms currently synced to your account:')
-        .setColor(0x00F0FF);
+        .setColor(0x10B981); // Premium Toxic Green
 
     for (const p of profiles) {
         const emoji = PLATFORM_EMOJI[p.platform] ?? '⚪';

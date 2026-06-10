@@ -30,7 +30,7 @@ export function Navbar() {
                     <div className="flex items-center gap-8">
                         <Link href="/" className="flex flex-shrink-0 items-center gap-3 group">
                             <div className="relative w-8 h-8 flex items-center justify-center overflow-hidden rounded-md transition-transform group-hover:scale-105">
-                                <Image src="/logo.png" alt="CodeSync Logo" fill className="object-contain" />
+                                <Image src="/logo_new_navbar.png" alt="CodeSync Logo" fill className="object-contain" />
                             </div>
                             <span className="font-bold text-xl tracking-tight text-white transition-colors">
                                 Code<span className="text-[#60A5FA]">Sync</span>

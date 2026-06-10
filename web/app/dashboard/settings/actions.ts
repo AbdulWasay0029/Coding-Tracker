@@ -133,7 +133,7 @@ export async function forceSyncServer(guildId: string) {
     });
 
     // 5. Fire and Forget: Import runTrackerForUser and sync in the background so we don't timeout the Next.js request
-    const { runTrackerForUser, getTimestampsForDate } = require('../../../../../../src/jobs/tracker');
+    const { runTrackerForUser, getTimestampsForDate } = require('../../../../src/jobs/tracker');
     const { startTimestamp, endTimestamp } = getTimestampsForDate('today');
     const fetchStartTimestamp = startTimestamp - (86400 * 2); // Pull last 3 days to heal data
 

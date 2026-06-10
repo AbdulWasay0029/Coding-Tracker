@@ -8,7 +8,7 @@ import { REST, Routes, SlashCommandBuilder } from 'discord.js';
 import dotenv from 'dotenv';
 import path from 'path';
 
-dotenv.config({ path: path.resolve(__dirname, '../.env') });
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 const PLATFORM_CHOICES = [
     { name: 'LeetCode', value: 'LEETCODE' },

@@ -2,7 +2,7 @@ import { Client, GatewayIntentBits, Interaction, EmbedBuilder, TextChannel } fro
 import dotenv from 'dotenv';
 import path from 'path';
 
-dotenv.config({ path: path.resolve(__dirname, '../.env') });
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 import { prisma } from '../core/prisma';
 import { handleAddProfile } from './commands/add-profile';

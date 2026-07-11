@@ -66,10 +66,10 @@ export default function Home() {
                 </div>
 
                 {/* Floating Mockup (Right Side) */}
-                <div className="lg:w-1/2 relative w-full aspect-[4/3] flex items-center justify-center animate-reveal stagger-5 z-10" style={{ perspective: '2000px' }}>
+                <div className="lg:w-1/2 relative w-full aspect-[4/3] flex items-center justify-center animate-reveal stagger-5 z-10" style={{ perspective: '3000px' }}>
                     <div 
-                        className="relative w-full max-w-[700px] h-full rounded-2xl overflow-hidden border border-white/10 bg-[#0B0E14]/80 backdrop-blur-2xl shadow-[0_20px_60px_-10px_rgba(59,130,246,0.3)] transition-transform duration-1000 ease-out hover:rotate-0"
-                        style={{ transform: 'rotateY(-15deg) rotateX(10deg) rotateZ(-2deg)' }}
+                        className="relative w-full max-w-[700px] h-full rounded-2xl overflow-hidden border border-white/10 bg-[#0B0E14]/80 backdrop-blur-2xl shadow-[0_20px_60px_-10px_rgba(59,130,246,0.3)] transition-all duration-700 ease-out hover:rotate-0 hover:scale-[1.01]"
+                        style={{ transform: 'rotateY(-6deg) rotateX(3deg) rotateZ(0deg)' }}
                     >
                         {/* Fake Browser Bar */}
                         <div className="h-10 w-full bg-[#1A1D24]/80 border-b border-white/5 flex items-center px-4 gap-2">

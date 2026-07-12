@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { getGuildChannels, getGuildRoles, getGuildConfig, updateGuildConfig } from './actions';
 import { Settings, Save, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { GuildRosterManager } from './GuildRosterManager';
 
 export function AdminClient({ guilds }: { guilds: any[] }) {
     const [selectedGuild, setSelectedGuild] = useState<string | null>(null);
@@ -230,6 +231,8 @@ export function AdminClient({ guilds }: { guilds: any[] }) {
                                         {loading ? 'Syncing...' : 'Force Sync (Beta)'}
                                     </button>
                                 </div>
+
+                                <GuildRosterManager guildId={selectedGuild} />
 
                                 <div className="pt-6 border-t border-border mt-8 flex justify-end">
                                     <button 

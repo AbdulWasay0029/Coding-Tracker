@@ -47,7 +47,7 @@ export function Footer() {
                     <div>
                         <h4 className="text-white text-[11px] font-bold tracking-widest uppercase mb-6">Resources</h4>
                         <ul className="space-y-4">
-                            <li><Link href="/docs" className="text-[#8B9BB4] hover:text-white text-sm transition-colors">Documentation</Link></li>
+                            <li><a href="https://github.com/AbdulWasay0029/Coding-Tracker" target="_blank" rel="noopener noreferrer" className="text-[#8B9BB4] hover:text-white text-sm transition-colors">Documentation</a></li>
                             <li>
                                 <a href="https://discord.com/oauth2/authorize?client_id=1478104744391344359&permissions=8&integration_type=0&scope=bot+applications.commands" className="text-[#8B9BB4] hover:text-[#5865F2] text-sm transition-colors flex items-center gap-1">
                                     Invite Bot

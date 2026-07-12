@@ -75,3 +75,22 @@ model ScrapeJob {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }
+
+// ==========================================
+// ADDITIVE ONLY: SERVER ROSTER & DEFAULTERS
+// ==========================================
+model GuildRosterMember {
+  id            String   @id @default(uuid())
+  guildId       String   // Scoped to the existing Discord Server (GuildConfig)
+  rollNumber    String   // e.g., "24R01A0501"
+  name          String   // e.g., "Abdul Wasay"
+  identifier    String   // The raw CSV value (email or Discord username/ID)
+  discordUserId String?  // Optional match to existing UserProfile/SolvedProblem records
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([guildId, rollNumber])
+  @@index([guildId])
+  @@index([discordUserId])
+}

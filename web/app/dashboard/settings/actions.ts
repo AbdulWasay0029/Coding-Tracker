@@ -158,3 +158,186 @@ export async function forceSyncServer(guildId: string) {
 
     return { success: true, count: trackedUsers.length };
 }
+
+// ==========================================
+// ADDITIVE ONLY: ROSTER & ACCOUNTABILITY ACTIONS
+// ==========================================
+
+export interface RosterAccountabilityRow {
+    id: string;
+    rollNumber: string;
+    name: string;
+    identifier: string;
+    discordUserId: string | null;
+    platforms: string[];
+    solvedToday: boolean;
+    status: 'UNLINKED' | 'INACTIVE' | 'ACTIVE';
+}
+
+export async function importGuildRoster(guildId: string, rows: { rollNumber: string; name: string; identifier: string }[]) {
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user?.id) throw new Error('Unauthorized');
+
+    let importedCount = 0;
+    let unlinkedCount = 0;
+
+    for (const row of rows) {
+        const roll = row.rollNumber?.trim();
+        const name = row.name?.trim() || 'Student';
+        const identifier = row.identifier?.trim() || '';
+
+        if (!roll) continue;
+
+        // Try to map identifier to an existing discordUserId
+        let matchedDiscordUserId: string | null = null;
+        if (identifier) {
+            // Check if identifier is already a direct Discord snowflake ID
+            if (/^\d{17,20}$/.test(identifier)) {
+                matchedDiscordUserId = identifier;
+            } else {
+                // Check if identifier matches any UserProfile username
+                const profileMatch = await prisma.userProfile.findFirst({
+                    where: {
+                        username: {
+                            equals: identifier,
+                            mode: 'insensitive'
+                        }
+                    },
+                    select: { discordUserId: true }
+                });
+                if (profileMatch) {
+                    matchedDiscordUserId = profileMatch.discordUserId;
+                }
+            }
+        }
+
+        if (!matchedDiscordUserId) {
+            unlinkedCount++;
+        }
+
+        await prisma.guildRosterMember.upsert({
+            where: {
+                guildId_rollNumber: {
+                    guildId,
+                    rollNumber: roll
+                }
+            },
+            update: {
+                name,
+                identifier,
+                discordUserId: matchedDiscordUserId
+            },
+            create: {
+                guildId,
+                rollNumber: roll,
+                name,
+                identifier,
+                discordUserId: matchedDiscordUserId
+            }
+        });
+
+        importedCount++;
+    }
+
+    return { success: true, importedCount, unlinkedCount };
+}
+
+export async function getGuildRosterAccountability(guildId: string): Promise<RosterAccountabilityRow[]> {
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user?.id) throw new Error('Unauthorized');
+
+    const roster = await prisma.guildRosterMember.findMany({
+        where: { guildId },
+        orderBy: { rollNumber: 'asc' }
+    });
+
+    if (roster.length === 0) return [];
+
+    const linkedDiscordIds = roster
+        .map(r => r.discordUserId)
+        .filter((id): id is string => id !== null && id !== undefined);
+
+    const platformsMap = new Map<string, Set<string>>();
+    const solvedTodaySet = new Set<string>();
+
+    if (linkedDiscordIds.length > 0) {
+        // 1. Fetch connected platform profiles
+        const profiles = await prisma.userProfile.findMany({
+            where: { discordUserId: { in: linkedDiscordIds } },
+            select: { discordUserId: true, platform: true }
+        });
+
+        for (const p of profiles) {
+            if (!platformsMap.has(p.discordUserId)) {
+                platformsMap.set(p.discordUserId, new Set());
+            }
+            platformsMap.get(p.discordUserId)!.add(p.platform);
+        }
+
+        // 2. Fetch today's solves (IST aligned)
+        const istOffset = 5.5 * 60 * 60 * 1000;
+        const nowIst = new Date(Date.now() + istOffset);
+        const todayIstStr = nowIst.toISOString().split('T')[0];
+        const todayStartUtc = new Date(`${todayIstStr}T00:00:00.000Z`);
+        const todayStartIstDate = new Date(todayStartUtc.getTime() - istOffset);
+
+        const todaySolves = await prisma.solvedProblem.findMany({
+            where: {
+                discordUserId: { in: linkedDiscordIds },
+                solvedAt: { gte: todayStartIstDate }
+            },
+            select: { discordUserId: true }
+        });
+
+        for (const s of todaySolves) {
+            solvedTodaySet.add(s.discordUserId);
+        }
+    }
+
+    // Build output rows
+    const rows: RosterAccountabilityRow[] = roster.map(r => {
+        const discordId = r.discordUserId;
+        const platforms = discordId ? Array.from(platformsMap.get(discordId) || []) : [];
+        const solvedToday = discordId ? solvedTodaySet.has(discordId) : false;
+
+        let status: 'UNLINKED' | 'INACTIVE' | 'ACTIVE' = 'UNLINKED';
+        if (discordId && platforms.length > 0) {
+            status = solvedToday ? 'ACTIVE' : 'INACTIVE';
+        } else if (discordId) {
+            status = 'INACTIVE';
+        }
+
+        return {
+            id: r.id,
+            rollNumber: r.rollNumber,
+            name: r.name,
+            identifier: r.identifier,
+            discordUserId: r.discordUserId,
+            platforms,
+            solvedToday,
+            status
+        };
+    });
+
+    // Sort: UNLINKED first, then INACTIVE, then ACTIVE
+    rows.sort((a, b) => {
+        const order = { UNLINKED: 0, INACTIVE: 1, ACTIVE: 2 };
+        if (order[a.status] !== order[b.status]) {
+            return order[a.status] - order[b.status];
+        }
+        return a.rollNumber.localeCompare(b.rollNumber);
+    });
+
+    return rows;
+}
+
+export async function removeGuildRosterMember(id: string) {
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user?.id) throw new Error('Unauthorized');
+
+    await prisma.guildRosterMember.delete({
+        where: { id }
+    });
+
+    return { success: true };
+}

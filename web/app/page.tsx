@@ -39,12 +39,22 @@ export default function Home() {
                     
                     <div className="pt-2 flex flex-col sm:flex-row items-center gap-4 animate-reveal stagger-4 w-full sm:w-auto">
                         {!session ? (
-                            <button 
-                                onClick={() => signIn('discord', { callbackUrl: '/dashboard' })}
-                                className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] transition-colors text-white font-medium text-lg shadow-[0_0_30px_rgba(37,99,235,0.3)]"
-                            >
-                                Login with Discord <ArrowRight className="w-5 h-5" />
-                            </button>
+                            <>
+                                <button 
+                                    onClick={() => signIn('discord', { callbackUrl: '/dashboard' })}
+                                    className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] transition-colors text-white font-medium text-lg shadow-[0_0_30px_rgba(37,99,235,0.3)]"
+                                >
+                                    Login with Discord <ArrowRight className="w-5 h-5" />
+                                </button>
+                                {process.env.NODE_ENV === 'development' && (
+                                    <button 
+                                        onClick={() => signIn('dev-bypass', { callbackUrl: '/dashboard/settings' })}
+                                        className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-[#10B981] hover:bg-[#059669] transition-colors text-white font-bold text-base shadow-[0_0_20px_rgba(16,185,129,0.3)] animate-pulse"
+                                    >
+                                        ⚡ Dev Bypass Login (Instant Test)
+                                    </button>
+                                )}
+                            </>
                         ) : (
                             <Link 
                                 href="/dashboard" 
@@ -123,8 +133,8 @@ export default function Home() {
                     </div>
                     <div className="hidden md:block w-px h-16 bg-white/10"></div>
                     <div className="flex flex-col items-center gap-2">
-                        <span className="text-4xl font-black text-white drop-shadow-[0_0_15px_rgba(167,139,250,0.5)]">24/7</span>
-                        <span className="text-xs font-mono text-[#A78BFA] uppercase tracking-widest">Real-time Updates</span>
+                        <span className="text-4xl font-black text-white drop-shadow-[0_0_15px_rgba(167,139,250,0.5)]">365-Day</span>
+                        <span className="text-xs font-mono text-[#A78BFA] uppercase tracking-widest">Stateful Backfill</span>
                     </div>
                 </div>
             </div>
@@ -133,23 +143,34 @@ export default function Home() {
             <div id="features" className="py-32 relative z-10 bg-[#05070A]">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-20 animate-reveal stagger-2">
-                        <h2 className="text-4xl md:text-5xl font-bold text-white/95">Built for the Community</h2>
-                        <p className="mt-6 text-white/50 text-lg max-w-2xl mx-auto leading-relaxed">Everything a computer science club, bootcamp, or friend group needs to keep each other motivated and accountable.</p>
+                        <h2 className="text-4xl md:text-5xl font-bold text-white/95">Built for the Community & Institutions</h2>
+                        <p className="mt-6 text-white/50 text-lg max-w-2xl mx-auto leading-relaxed">Everything a computer science club, bootcamp, university cohort, or friend group needs to keep each other motivated and accountable.</p>
                     </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <div className="glass-subtle p-8 rounded-2xl hover:border-[#60A5FA]/30 hover:shadow-[0_8px_32px_-8px_rgba(96,165,250,0.2)] transition-all duration-300 group animate-reveal stagger-3 flex flex-col items-start text-left relative overflow-hidden">
+                        <div className="glass-subtle p-8 rounded-2xl hover:border-[#F59E0B]/30 hover:shadow-[0_8px_32px_-8px_rgba(245,158,11,0.2)] transition-all duration-300 group animate-reveal stagger-3 flex flex-col items-start text-left relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-[#F59E0B] opacity-0 group-hover:opacity-10 blur-[50px] rounded-full transition-opacity duration-500" />
+                            <div className="p-4 bg-[#1A1D24] border border-white/5 rounded-xl mb-6 group-hover:border-[#F59E0B]/30 transition-colors shadow-lg">
+                                <CheckCircle2 className="w-7 h-7 text-[#F59E0B]" />
+                            </div>
+                            <h3 className="text-xl font-bold text-white/95 mb-4 tracking-tight group-hover:text-[#F59E0B] transition-colors">CSV Roster Accountability</h3>
+                            <p className="text-white/50 leading-relaxed text-sm md:text-base">
+                                Institutional admins can upload student roll-number CSV rosters directly in the admin portal, tracking exact problem counts and identifying defaulters in real-time.
+                            </p>
+                        </div>
+
+                        <div className="glass-subtle p-8 rounded-2xl hover:border-[#60A5FA]/30 hover:shadow-[0_8px_32px_-8px_rgba(96,165,250,0.2)] transition-all duration-300 group animate-reveal stagger-4 flex flex-col items-start text-left relative overflow-hidden">
                             <div className="absolute top-0 right-0 w-32 h-32 bg-[#60A5FA] opacity-0 group-hover:opacity-10 blur-[50px] rounded-full transition-opacity duration-500" />
                             <div className="p-4 bg-[#1A1D24] border border-white/5 rounded-xl mb-6 group-hover:border-[#60A5FA]/30 transition-colors shadow-lg">
                                 <Terminal className="w-7 h-7 text-[#60A5FA]" />
                             </div>
                             <h3 className="text-xl font-bold text-white/95 mb-4 tracking-tight group-hover:text-[#60A5FA] transition-colors">Zero-Friction Tracking</h3>
                             <p className="text-white/50 leading-relaxed text-sm md:text-base">
-                                Link your accounts once and you're done. CodeSync runs silently in the background, automatically fetching your solved problems every single day.
+                                Link your accounts once and you're done. CodeSync runs silently in the background, automatically fetching your solved problems and caching explored days.
                             </p>
                         </div>
                         
-                        <div className="glass-subtle p-8 rounded-2xl hover:border-[#10B981]/30 hover:shadow-[0_8px_32px_-8px_rgba(16,185,129,0.2)] transition-all duration-300 group animate-reveal stagger-4 flex flex-col items-start text-left relative overflow-hidden">
+                        <div className="glass-subtle p-8 rounded-2xl hover:border-[#10B981]/30 hover:shadow-[0_8px_32px_-8px_rgba(16,185,129,0.2)] transition-all duration-300 group animate-reveal stagger-5 flex flex-col items-start text-left relative overflow-hidden">
                             <div className="absolute top-0 right-0 w-32 h-32 bg-[#10B981] opacity-0 group-hover:opacity-10 blur-[50px] rounded-full transition-opacity duration-500" />
                             <div className="p-4 bg-[#1A1D24] border border-white/5 rounded-xl mb-6 group-hover:border-[#10B981]/30 transition-colors shadow-lg">
                                 <Code2 className="w-7 h-7 text-[#10B981]" />
@@ -157,17 +178,6 @@ export default function Home() {
                             <h3 className="text-xl font-bold text-white/95 mb-4 tracking-tight group-hover:text-[#10B981] transition-colors">Server Leaderboards</h3>
                             <p className="text-white/50 leading-relaxed text-sm md:text-base">
                                 Turn coding into a healthy competition. The leaderboard ranks members in your Discord server based on how many problems they solved this week.
-                            </p>
-                        </div>
-                        
-                        <div className="glass-subtle p-8 rounded-2xl hover:border-[#A78BFA]/30 hover:shadow-[0_8px_32px_-8px_rgba(167,139,250,0.2)] transition-all duration-300 group animate-reveal stagger-5 flex flex-col items-start text-left relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-[#A78BFA] opacity-0 group-hover:opacity-10 blur-[50px] rounded-full transition-opacity duration-500" />
-                            <div className="p-4 bg-[#1A1D24] border border-white/5 rounded-xl mb-6 group-hover:border-[#A78BFA]/30 transition-colors shadow-lg">
-                                <Globe className="w-7 h-7 text-[#A78BFA]" />
-                            </div>
-                            <h3 className="text-xl font-bold text-white/95 mb-4 tracking-tight group-hover:text-[#A78BFA] transition-colors">Multi-Platform Sync</h3>
-                            <p className="text-white/50 leading-relaxed text-sm md:text-base">
-                                Why choose one platform? We natively support LeetCode, Codeforces, HackerRank, CodeChef, and SmartInterviews, aggregating them into a single profile.
                             </p>
                         </div>
                     </div>
@@ -182,7 +192,7 @@ export default function Home() {
                     <div className="divide-y divide-white/10 border-y border-white/10 animate-reveal stagger-3">
                         <div className="py-8 flex flex-col gap-3 group">
                             <h3 className="text-lg font-bold text-white/90 group-hover:text-white transition-colors">Do I need to manually update my stats?</h3>
-                            <p className="text-white/50 leading-relaxed">No. Once your accounts are linked via the dashboard or bot commands, CodeSync automatically scrapes your progress multiple times a day.</p>
+                            <p className="text-white/50 leading-relaxed">No. Once your accounts are linked via the dashboard or bot commands, CodeSync automatically scrapes your progress multiple times a day using a stateful 365-day cache engine.</p>
                         </div>
                         <div className="py-8 flex flex-col gap-3 group">
                             <h3 className="text-lg font-bold text-white/90 group-hover:text-white transition-colors">Is it free to use?</h3>
@@ -190,7 +200,7 @@ export default function Home() {
                         </div>
                         <div className="py-8 flex flex-col gap-3 group">
                             <h3 className="text-lg font-bold text-white/90 group-hover:text-white transition-colors">How do I add it to my server?</h3>
-                            <p className="text-white/50 leading-relaxed">Simply click the "Add Bot" button at the top, select your server, and authorize the bot. You can then use the <code className="text-[#60A5FA] bg-[#3B82F6]/10 px-1.5 py-0.5 rounded font-mono text-sm">/set-channel</code> command to specify where daily leaderboards should be posted.</p>
+                            <p className="text-white/50 leading-relaxed">Simply click the "Add Bot" button at the top, select your server, and authorize the bot. You can then use the <code className="text-[#60A5FA] bg-[#3B82F6]/10 px-1.5 py-0.5 rounded font-mono text-sm">/setup</code> command or visit the Web Admin Portal (<code className="text-[#10B981] bg-[#10B981]/10 px-1.5 py-0.5 rounded font-mono text-sm">/dashboard/settings</code>) to upload CSV rosters and manage channels.</p>
                         </div>
                     </div>
                 </div>

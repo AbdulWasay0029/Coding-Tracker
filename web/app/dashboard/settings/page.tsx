@@ -15,39 +15,56 @@ export default async function SettingsPage() {
         redirect('/api/auth/signin');
     }
 
-    // Fetch user's guilds from Discord for the Admin Panel
+    // Fetch user's guilds from Discord for the Admin Panel (or provide Mock Dev Guild when in Dev Bypass Mode)
     let adminGuilds = [];
-    try {
-        const res = await fetch('https://discord.com/api/users/@me/guilds', {
-            headers: {
-                Authorization: `Bearer ${session.accessToken}`,
-            },
-            cache: 'no-store'
+    if (session.accessToken === 'mock-dev-access-token') {
+        const mockGuildId = 'dev-server-alpha-101';
+        await prisma.guildConfig.upsert({
+            where: { guildId: mockGuildId },
+            update: {},
+            create: {
+                guildId: mockGuildId
+            }
         });
-
-        if (res.ok) {
-            const allGuilds = await res.json();
-            
-            // Filter for guilds where the user has ADMINISTRATOR permissions (0x8)
-            const adminGuildsRaw = allGuilds.filter((guild: any) => {
-                try {
-                    const perms = BigInt(guild.permissions);
-                    const adminFlag = BigInt(8);
-                    return (perms & adminFlag) === adminFlag;
-                } catch {
-                    return false;
-                }
+        adminGuilds = [{
+            id: mockGuildId,
+            name: '⚡ Dev Server Alpha (Local Testing)',
+            icon: null,
+            permissions: '8'
+        }];
+    } else {
+        try {
+            const res = await fetch('https://discord.com/api/users/@me/guilds', {
+                headers: {
+                    Authorization: `Bearer ${session.accessToken}`,
+                },
+                cache: 'no-store'
             });
 
-            const configuredGuilds = await prisma.guildConfig.findMany({ select: { guildId: true } });
-            const botGuildIds = new Set(configuredGuilds.map(g => g.guildId));
+            if (res.ok) {
+                const allGuilds = await res.json();
+                
+                // Filter for guilds where the user has ADMINISTRATOR permissions (0x8)
+                const adminGuildsRaw = allGuilds.filter((guild: any) => {
+                    try {
+                        const perms = BigInt(guild.permissions);
+                        const adminFlag = BigInt(8);
+                        return (perms & adminFlag) === adminFlag;
+                    } catch {
+                        return false;
+                    }
+                });
 
-            adminGuilds = adminGuildsRaw.filter((guild: any) => botGuildIds.has(guild.id));
-        } else {
-            console.error(`[Settings] Failed to fetch guilds from Discord: ${res.status} ${res.statusText}`);
+                const configuredGuilds = await prisma.guildConfig.findMany({ select: { guildId: true } });
+                const botGuildIds = new Set(configuredGuilds.map(g => g.guildId));
+
+                adminGuilds = adminGuildsRaw.filter((guild: any) => botGuildIds.has(guild.id));
+            } else {
+                console.error(`[Settings] Failed to fetch guilds from Discord: ${res.status} ${res.statusText}`);
+            }
+        } catch (e) {
+            console.error('[Settings] Error fetching guilds', e);
         }
-    } catch (e) {
-        console.error('[Settings] Error fetching guilds', e);
     }
 
     return (

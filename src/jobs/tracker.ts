@@ -43,7 +43,7 @@ export async function runTrackerForUser(
     const existingTrackedRows = await prisma.trackedDate.findMany({
         where: { discordUserId }
     });
-    const trackedDatesCache = new Set(existingTrackedRows.map(r => `${r.platform}-${r.date}`));
+    const trackedDatesCache = new Set(existingTrackedRows.map((r: any) => `${r.platform}-${r.date}`));
 
     // Parallelize all requests to save huge amounts of waiting time O(M*N) -> O(Max(M))
     const fetchPromises = profiles.map(async (profile) => {

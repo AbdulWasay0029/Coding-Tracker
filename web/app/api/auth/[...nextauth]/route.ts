@@ -1,8 +1,10 @@
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import DiscordProvider from 'next-auth/providers/discord';
+import CredentialsProvider from 'next-auth/providers/credentials';
 
 async function refreshDiscordToken(token: any) {
     try {
+        if (token.accessToken === 'mock-dev-access-token') return token;
         const response = await fetch('https://discord.com/api/oauth2/token', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -39,12 +41,33 @@ export const authOptions: NextAuthOptions = {
             clientSecret: process.env.DISCORD_CLIENT_SECRET || '',
             authorization: { params: { scope: 'identify guilds' } },
         }),
+        CredentialsProvider({
+            id: 'dev-bypass',
+            name: '⚡ Local Dev Bypass (Test Mode)',
+            credentials: {},
+            async authorize() {
+                // Only allow this when running locally on localhost
+                if (process.env.NODE_ENV === 'production') return null;
+                return {
+                    id: '123456789012345678',
+                    name: 'Local Dev Admin',
+                    email: 'admin@codesync.local',
+                    image: 'https://cdn.discordapp.com/embed/avatars/0.png'
+                };
+            }
+        })
     ],
-    secret: process.env.NEXTAUTH_SECRET,
+    secret: process.env.NEXTAUTH_SECRET || 'dev-secret-key-for-local-testing-only-12345',
     callbacks: {
-        async jwt({ token, account }) {
+        async jwt({ token, account, user }) {
             // Initial sign in
             if (account) {
+                if (account.provider === 'dev-bypass') {
+                    token.accessToken = 'mock-dev-access-token';
+                    token.sub = user?.id || '123456789012345678';
+                    token.accessTokenExpires = Date.now() + 604800000;
+                    return token;
+                }
                 token.accessToken = account.access_token;
                 token.refreshToken = account.refresh_token;
                 // Discord tokens usually expire in 604800 seconds (7 days)

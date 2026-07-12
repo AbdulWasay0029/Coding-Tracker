@@ -42,10 +42,11 @@ Read the full history in the [CodeSync Story](CODESYNC_STORY.md) and the [Projec
 CodeSync is split into two primary components: the **Discord Bot** and the **Web Dashboard**.
 
 ### 💻 The Web Dashboard
-The `web/` directory houses a Next.js (v16) application that provides a sleek, flat-design UI (inspired by a classic cyber aesthetic: Deep Space Black, Neon Cyan, and Toxic Green).
+The `web/` directory houses a Next.js (v16) application that provides a sleek, Neo Kinpaku UI (Deep Space Black, Electric Blue, and Kinetic Glassmorphism).
 - **Global Leaderboard**: View realtime rankings of all registered students based on daily problem solves.
-- **Student Profiles**: Interactive dashboards to view individual progress and historical data.
-- **NextAuth Integration**: Secure login and session management.
+- **Server Roster & Defaulter Accountability**: Institutional admins can upload student roll-number CSV rosters (`GuildRosterMember`) to automatically map Discord handles and detect zero-solve defaulters with instant Excel export.
+- **Student Profiles & Heatmaps**: Interactive dashboards to view individual progress and historical contribution graphs.
+- **NextAuth & Dev Bypass**: Secure login via Discord OAuth with an instant ⚡ Dev Bypass mode for effortless localhost testing.
 
 <div align="center">
   <img src="assets/web_landing.png" alt="CodeSync Web Landing" width="100%" />
@@ -53,10 +54,11 @@ The `web/` directory houses a Next.js (v16) application that provides a sleek, f
   <img src="assets/web_dashboard.png" alt="CodeSync Dashboard" width="100%" />
 </div>
 
-### 🤖 The Discord Bot
-A high-performance, 24/7 autonomous bot powered by `discord.js`.
+### 🤖 The Discord Bot & Stateful Scraping Worker
+A high-performance, 24/7 autonomous bot and background scraping engine powered by `discord.js` and Prisma.
 - **Military-Grade Security**: Uses native `crypto` AES-256 to encrypt sensitive platform tokens (like SmartInterviews JWTs) at rest.
-- **Zero-Latency Caching**: In-memory caching layer prevents platform IP-bans and serves identical requests in 0ms.
+- **365-Day Stateful Backfill Engine (`FULL_HISTORY`)**: Automatically scans a student's past year of submissions upon profile creation without blocking the UI, populating their historical heatmap permanently.
+- **Zero-Latency Caching (`TrackedDate`)**: In-memory and persistent `TrackedDate` caching records fully explored dates so historical days are never re-scraped twice, preventing platform IP-bans and saving database pool connections.
 - **Parallel Database Clustering**: `Promise.allSettled` clusters are used to decouple DB writes, ensuring lightning-fast UI responses within Discord.
 - **Scheduled Tracking**: A highly reliable `cron-job.org` trigger automatically generates a comprehensive daily report of all students at 11:00 PM IST and pushes it via Webhook.
 
@@ -71,16 +73,19 @@ A high-performance, 24/7 autonomous bot powered by `discord.js`.
 
 | Command | Description |
 | --- | --- |
-| `/setup` | Server administrators configure tracking and announcement channels. |
-| `/add-profile` | Get a secure link to the Web Dashboard to link new accounts. |
-| `/update-profile` | Get a secure link to the Web Dashboard to edit accounts. |
-| `/remove-profile` | Get a secure link to the Web Dashboard to unlink accounts. |
-| `/list-profiles` | Get a secure link to the Web Dashboard to view linked platforms. |
-| `/check [date]` | Generate a personal progress report for today (or a past date). |
-| `/leaderboard` | View the top 10 solvers for this week. |
-| `/export-report` | Download a CSV of student data for this server. |
-| `/refresh` | Force refresh today's scrape globally. |
-| `/help` | Display the command list and usage. |
+| `/setup` | Server administrators configure tracking, announcement channels, and access the Web Admin Portal. |
+| `/add-profile` | Get a secure link to the Web Dashboard to link new platform accounts. |
+| `/update-profile` | Get a secure link to the Web Dashboard to edit or rotate account tokens. |
+| `/remove-profile` | Get a secure link to the Web Dashboard to unlink platform accounts. |
+| `/list-profiles` | Get a secure link to the Web Dashboard to view all currently linked platforms. |
+| `/check [date]` | Generate a personal problem-solving progress report for today (or any past date). |
+| `/leaderboard` | View the top solvers and weekly rankings across your Discord server. |
+| `/stats [user]` | Display detailed problem-solving statistics and platform breakdowns for a user. |
+| `/compare [user1] [user2]` | Head-to-head comparison of two students across LeetCode, Codeforces, and HackerRank. |
+| `/badges [user]` | View earned gamified achievements and streak badges. |
+| `/export-report` | Download a comprehensive CSV report of student data and solve counts for this server. |
+| `/refresh` | Force refresh today's problem scrape across all tracked profiles globally. |
+| `/help` | Display the full command list, usage examples, and support links. |
 
 ---
 

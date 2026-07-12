@@ -287,10 +287,18 @@ export async function getGuildRosterAccountability(guildId: string): Promise<Ros
     const session = await getServerSession(authOptions);
     if (!session || !session.user?.id) throw new Error('Unauthorized');
 
-    const roster = await prisma.guildRosterMember.findMany({
-        where: { guildId },
-        orderBy: { rollNumber: 'asc' }
-    });
+    let roster: any[] = [];
+    try {
+        roster = await prisma.guildRosterMember.findMany({
+            where: { guildId },
+            orderBy: { rollNumber: 'asc' }
+        });
+    } catch (err: any) {
+        if (err.code === 'P2021' || (err.message && err.message.includes('does not exist'))) {
+            throw new Error("Database table 'GuildRosterMember' does not exist yet! Please run 'npx prisma db push' in your Vercel/terminal to initialize the new table.");
+        }
+        throw new Error(`Database query failed: ${err.message || 'Unknown error'}`);
+    }
 
     if (roster.length === 0) return [];
 

@@ -5,8 +5,11 @@ import { getGuildChannels, getGuildRoles, getGuildConfig, updateGuildConfig } fr
 import { Settings, Save, AlertTriangle, ShieldCheck } from 'lucide-react';
 import { GuildRosterManager } from './GuildRosterManager';
 
-export function AdminClient({ guilds }: { guilds: any[] }) {
-    const [selectedGuild, setSelectedGuild] = useState<string | null>(null);
+export function AdminClient({ guilds, initialTab }: { guilds: any[], initialTab?: string }) {
+    const [selectedGuild, setSelectedGuild] = useState<string | null>(() => {
+        if (guilds.length > 0) return guilds[0].id;
+        return null;
+    });
     const [channels, setChannels] = useState<{id: string, name: string}[]>([]);
     const [roles, setRoles] = useState<{id: string, name: string}[]>([]);
     const [config, setConfig] = useState<{contestChannelId: string | null, contestRoleId: string | null, reminderChannelId: string | null, reminderTime: string | null}>({ contestChannelId: null, contestRoleId: null, reminderChannelId: null, reminderTime: null });
@@ -206,51 +209,53 @@ export function AdminClient({ guilds }: { guilds: any[] }) {
                                         </div>
                                     </div>
                                 </div>
-
-                                <div className="glass-subtle p-5 rounded-2xl border border-[#3B82F6]/20 bg-[#3B82F6]/[0.03] flex flex-col md:flex-row items-center justify-between gap-4">
-                                    <div>
-                                        <h4 className="font-bold text-white/95 mb-1 text-sm flex items-center gap-2">
-                                            <span className="w-2 h-2 rounded-full bg-[#60A5FA] animate-pulse" />
-                                            Force Sync Leaderboard
-                                        </h4>
-                                        <p className="text-xs text-white/60">Manually trigger a full server data scrape. Limited to 1 use per day.</p>
-                                    </div>
-                                    <button 
-                                        type="button"
-                                        disabled={loading}
-                                        onClick={async () => {
-                                            if (confirm('Are you sure? This will scrape data for all users in your server and may take a few minutes.')) {
-                                                setLoading(true);
-                                                try {
-                                                    const { forceSyncServer } = require('./actions');
-                                                    const res = await forceSyncServer(selectedGuild);
-                                                    alert(`✅ Sync initiated in the background for ${res.count} members! Please wait a few minutes for the leaderboard to update.`);
-                                                } catch (err: any) {
-                                                    alert(`❌ ${err.message}`);
-                                                }
-                                                setLoading(false);
-                                            }
-                                        }}
-                                        className="px-4 py-2 bg-[#1A1D24] border border-white/10 text-[#60A5FA] hover:bg-[#60A5FA]/10 hover:border-[#60A5FA]/30 rounded-xl font-mono font-bold text-xs transition-all whitespace-nowrap disabled:opacity-50"
-                                    >
-                                        {loading ? 'Syncing...' : 'Force Sync (Beta)'}
-                                    </button>
-                                </div>
-
-                                <GuildRosterManager guildId={selectedGuild} />
-
-                                <div className="pt-6 border-t border-white/10 mt-8 flex justify-end">
-                                    <button 
-                                        onClick={handleSave}
-                                        disabled={loading}
-                                        className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white px-6 py-3 rounded-xl font-bold text-sm flex items-center gap-2 transition-all duration-300 hover:-translate-y-0.5 shadow-[0_0_25px_rgba(37,99,235,0.3)] disabled:opacity-50"
-                                    >
-                                        <Save className="w-4 h-4" />
-                                        {loading ? 'Saving...' : success ? 'Saved!' : 'Save Settings'}
-                                    </button>
-                                </div>
                             </div>
                         )}
+
+                        <div className="space-y-6 mt-6">
+                            <div className="glass-subtle p-5 rounded-2xl border border-[#3B82F6]/20 bg-[#3B82F6]/[0.03] flex flex-col md:flex-row items-center justify-between gap-4">
+                                <div>
+                                    <h4 className="font-bold text-white/95 mb-1 text-sm flex items-center gap-2">
+                                        <span className="w-2 h-2 rounded-full bg-[#60A5FA] animate-pulse" />
+                                        Force Sync Leaderboard (Background Queue)
+                                    </h4>
+                                    <p className="text-xs text-white/60">Manually trigger a full server data scrape into the background queue without rate-limiting or getting banned.</p>
+                                </div>
+                                <button 
+                                    type="button"
+                                    disabled={loading}
+                                    onClick={async () => {
+                                        if (confirm('Are you sure? This will queue background scrape jobs for all users in your server safely.')) {
+                                            setLoading(true);
+                                            try {
+                                                const { forceSyncServer } = require('./actions');
+                                                const res = await forceSyncServer(selectedGuild);
+                                                alert(`✅ Sync initiated in the background for ${res.count} members! The queue is processing slowly and safely.`);
+                                            } catch (err: any) {
+                                                alert(`❌ ${err.message}`);
+                                            }
+                                            setLoading(false);
+                                        }
+                                    }}
+                                    className="px-4 py-2 bg-[#1A1D24] border border-white/10 text-[#60A5FA] hover:bg-[#60A5FA]/10 hover:border-[#60A5FA]/30 rounded-xl font-mono font-bold text-xs transition-all whitespace-nowrap disabled:opacity-50"
+                                >
+                                    {loading ? 'Queueing...' : 'Force Sync (Queue)'}
+                                </button>
+                            </div>
+
+                            <GuildRosterManager guildId={selectedGuild} />
+
+                            <div className="pt-6 border-t border-white/10 mt-8 flex justify-end">
+                                <button 
+                                    onClick={handleSave}
+                                    disabled={loading}
+                                    className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white px-6 py-3 rounded-xl font-bold text-sm flex items-center gap-2 transition-all duration-300 hover:-translate-y-0.5 shadow-[0_0_25px_rgba(37,99,235,0.3)] disabled:opacity-50"
+                                >
+                                    <Save className="w-4 h-4" />
+                                    {loading ? 'Saving...' : success ? 'Saved!' : 'Save Settings'}
+                                </button>
+                            </div>
+                        </div>
                         
                         {loading && channels.length === 0 && (
                             <div className="flex justify-center py-12">

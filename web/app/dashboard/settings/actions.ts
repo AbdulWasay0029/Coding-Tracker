@@ -156,7 +156,48 @@ export async function forceSyncServer(guildId: string) {
         console.error(`[Web Sync] Failed to queue jobs for guild ${guildId}:`, err);
     }
 
-    return { success: true, count: trackedUsers.length };
+}
+
+export async function forceSyncAllUsersGlobal() {
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user?.id) {
+        throw new Error('Unauthorized');
+    }
+
+    const usersWithProfiles = await prisma.userProfile.findMany({
+        select: { discordUserId: true },
+        distinct: ['discordUserId']
+    });
+
+    if (usersWithProfiles.length === 0) {
+        return { success: true, count: 0, message: 'No users with linked profiles found to sync.' };
+    }
+
+    const now = new Date();
+    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const startTimestamp = Math.floor(startOfDay.getTime() / 1000);
+    const endTimestamp = startTimestamp + 86399;
+
+    const jobs = usersWithProfiles.map(u => ({
+        discordUserId: u.discordUserId,
+        startTimestamp: startTimestamp,
+        endTimestamp: endTimestamp,
+        jobType: 'FULL_HISTORY',
+        status: 'PENDING'
+    }));
+
+    try {
+        await (prisma.scrapeJob as any).createMany({
+            data: jobs,
+            skipDuplicates: true
+        });
+        console.log(`[Global Sync] Successfully queued ${jobs.length} background jobs across all users.`);
+    } catch (err) {
+        console.error(`[Global Sync] Error queuing jobs:`, err);
+        throw new Error('Failed to create sync jobs in database queue.');
+    }
+
+    return { success: true, count: usersWithProfiles.length, message: `Successfully queued background scrape jobs for ${usersWithProfiles.length} users!` };
 }
 
 // ==========================================

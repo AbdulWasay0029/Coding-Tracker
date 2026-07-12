@@ -8,7 +8,7 @@ import SettingsPlatformsManager from './SettingsPlatformsManager';
 import { AdminClient } from './AdminClient';
 import WidgetsClient from './widgets/WidgetsClient';
 import DocsClient from './docs/DocsClient';
-import { FileText, Code2, Server, LogOut } from 'lucide-react';
+import { FileText, Code2, Server, LogOut, Users, RefreshCw } from 'lucide-react';
 
 export default function SettingsHub({ session: serverSession, adminGuilds }: { session: any, adminGuilds: any[] }) {
     const { data: clientSession } = useSession();
@@ -18,6 +18,7 @@ export default function SettingsHub({ session: serverSession, adminGuilds }: { s
     const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'platforms');
     const [isPublic, setIsPublic] = useState(true);
     const [isLoadingPrivacy, setIsLoadingPrivacy] = useState(true);
+    const [isSyncingGlobal, setIsSyncingGlobal] = useState(false);
 
     useEffect(() => {
         const tab = searchParams.get('tab');
@@ -53,13 +54,14 @@ export default function SettingsHub({ session: serverSession, adminGuilds }: { s
         { id: 'appearance', label: 'Appearance', icon: Palette },
         { id: 'security', label: 'Security & Privacy', icon: Shield },
         { id: 'admin', label: 'Server Admin', icon: Server },
+        { id: 'roster', label: 'Roster & Defaulters', icon: Users },
         { id: 'widgets', label: 'GitHub Widgets', icon: Code2 },
         { id: 'docs', label: 'Documentation', icon: FileText },
     ];
 
     return (
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
-            <div className="mb-10 animate-reveal">
+            <div className="mb-8 animate-reveal">
                 <h1 className="text-3xl font-bold text-white/95 tracking-tight flex items-center gap-3">
                     <div className="p-2 bg-[#3B82F6]/10 border border-[#3B82F6]/20 rounded-lg">
                         <User className="w-6 h-6 text-[#60A5FA]" />
@@ -67,6 +69,36 @@ export default function SettingsHub({ session: serverSession, adminGuilds }: { s
                     Settings
                 </h1>
                 <p className="text-white/50 mt-2">Manage your profile, preferences, and platform integrations.</p>
+            </div>
+
+            <div className="mb-8 glass-subtle p-6 rounded-2xl border border-[#3B82F6]/30 bg-gradient-to-r from-[#3B82F6]/10 to-transparent flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 animate-reveal">
+                <div>
+                    <div className="flex items-center gap-2">
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#10B981] animate-pulse" />
+                        <h3 className="font-bold text-white text-base">Global Background Queue Sync (Anti-Ban)</h3>
+                    </div>
+                    <p className="text-xs text-white/60 mt-1">Force sync all tracked platform users into the background processing queue. Prevents IP bans by rate-limiting requests.</p>
+                </div>
+                <button
+                    onClick={async () => {
+                        if (confirm('Queue background sync jobs for all users across the entire platform right now?')) {
+                            setIsSyncingGlobal(true);
+                            try {
+                                const { forceSyncAllUsersGlobal } = require('./actions');
+                                const res = await forceSyncAllUsersGlobal();
+                                alert(`✅ ${res.message}`);
+                            } catch (err: any) {
+                                alert(`❌ ${err.message}`);
+                            }
+                            setIsSyncingGlobal(false);
+                        }
+                    }}
+                    disabled={isSyncingGlobal}
+                    className="px-5 py-2.5 bg-[#3B82F6] hover:bg-[#2563EB] text-white rounded-xl font-bold text-xs flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] disabled:opacity-50 whitespace-nowrap"
+                >
+                    <RefreshCw className={`w-4 h-4 ${isSyncingGlobal ? 'animate-spin' : ''}`} />
+                    {isSyncingGlobal ? 'Queueing Sync Jobs...' : 'Force Sync All Users'}
+                </button>
             </div>
 
             <div className="flex flex-col lg:flex-row gap-8">
@@ -190,6 +222,10 @@ export default function SettingsHub({ session: serverSession, adminGuilds }: { s
 
                     {activeTab === 'admin' && (
                         <AdminClient guilds={adminGuilds} />
+                    )}
+
+                    {activeTab === 'roster' && (
+                        <AdminClient guilds={adminGuilds} initialTab="roster" />
                     )}
 
                     {activeTab === 'widgets' && (

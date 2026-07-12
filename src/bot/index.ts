@@ -3,6 +3,15 @@ import dotenv from 'dotenv';
 import path from 'path';
 
 dotenv.config({ path: path.resolve(process.cwd(), '.env') });
+if (!process.env.DISCORD_BOT_TOKEN) {
+    dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
+}
+if (!process.env.DISCORD_BOT_TOKEN) {
+    dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+}
+if (!process.env.DISCORD_BOT_TOKEN) {
+    dotenv.config({ path: path.resolve(__dirname, '../.env') });
+}
 
 import { prisma } from '../core/prisma';
 import { handleAddProfile } from './commands/add-profile';

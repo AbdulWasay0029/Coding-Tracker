@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "tsx src/bot/index.ts",
-    "build": "tsc",
+    "build": "tsc && node prepare-dist.js",
     "start": "node dist/src/bot/index.js",
     "lint": "eslint",
     "postinstall": "prisma generate",

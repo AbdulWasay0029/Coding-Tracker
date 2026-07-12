@@ -165,20 +165,34 @@ export function GuildRosterManager({ guildId }: { guildId: string }) {
     };
 
     return (
-        <div className="mt-8 p-6 rounded-xl border border-border bg-surface shadow-sm animate-reveal">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-border pb-6 mb-6">
+        <div className="mt-8 glass-strong rounded-2xl p-6 md:p-8 border border-white/10 shadow-[0_12px_40px_-10px_rgba(59,130,246,0.15)] animate-reveal relative overflow-hidden">
+            {/* Atmospheric background glow */}
+            <div className="absolute top-[-40%] right-[-10%] w-[50%] h-[120%] bg-[#3B82F6] opacity-[0.06] blur-[120px] rounded-full pointer-events-none" />
+
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 border-b border-white/10 pb-6 mb-6 relative z-10">
                 <div>
-                    <h3 className="text-lg font-bold text-text-primary flex items-center gap-2">
-                        <Users className="w-5 h-5 text-primary" />
-                        Roster Mapping & Accountability Matrix
-                    </h3>
-                    <p className="text-xs text-text-secondary mt-1">
-                        Upload your batch CSV (`Roll Number, Name, Identifier/Email`). Unlinked students sort strictly to the top.
-                    </p>
+                    <div className="flex items-center gap-3">
+                        <div className="p-2.5 rounded-xl bg-[#3B82F6]/10 border border-[#3B82F6]/30 text-[#60A5FA]">
+                            <Users className="w-6 h-6" />
+                        </div>
+                        <div>
+                            <h3 className="text-xl font-bold text-white/95 tracking-tight flex items-center gap-3">
+                                Roster Mapping & Accountability
+                                {rows.length > 0 && (
+                                    <span className="text-xs font-mono px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/70">
+                                        {rows.length} students ({rows.filter(r => !r.discordUserId).length} unlinked)
+                                    </span>
+                                )}
+                            </h3>
+                            <p className="text-xs text-white/60 mt-1 leading-relaxed">
+                                Upload your batch CSV (<code className="text-[#60A5FA] bg-[#3B82F6]/10 px-1 py-0.5 rounded font-mono">Roll Number, Name, Identifier</code>). Unlinked defaulters sort strictly to the top.
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-3">
-                    <label className="cursor-pointer bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-lg font-bold text-xs flex items-center gap-2 transition-all disabled:opacity-50 shadow-sm">
+                <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+                    <label className="cursor-pointer bg-[#2563EB] hover:bg-[#1D4ED8] text-white px-5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 transition-all duration-300 hover:-translate-y-0.5 shadow-[0_0_20px_rgba(37,99,235,0.3)] disabled:opacity-50">
                         {importing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
                         <span>{importing ? 'Importing CSV...' : 'Upload Roster CSV'}</span>
                         <input 
@@ -193,7 +207,7 @@ export function GuildRosterManager({ guildId }: { guildId: string }) {
                     <button
                         onClick={handleExportExcel}
                         disabled={loading || rows.length === 0}
-                        className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-bold text-xs flex items-center gap-2 transition-all disabled:opacity-50 shadow-sm"
+                        className="bg-[#10B981] hover:bg-[#059669] text-white px-5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 transition-all duration-300 hover:-translate-y-0.5 shadow-[0_0_20px_rgba(16,185,129,0.25)] disabled:opacity-50"
                     >
                         <FileSpreadsheet className="w-4 h-4" />
                         <span>Export to Excel (.xlsx)</span>
@@ -202,105 +216,108 @@ export function GuildRosterManager({ guildId }: { guildId: string }) {
             </div>
 
             {error && (
-                <div className="mb-4 p-3 bg-error/10 border border-error/20 rounded-lg flex items-center gap-2 text-error text-xs">
-                    <AlertCircle className="w-4 h-4 shrink-0" />
-                    <span>{error}</span>
+                <div className="mb-6 p-4 bg-[#EF4444]/10 border border-[#EF4444]/30 rounded-xl flex items-center gap-3 text-[#EF4444] text-xs relative z-10 animate-reveal">
+                    <AlertCircle className="w-5 h-5 shrink-0" />
+                    <span className="font-medium">{error}</span>
                 </div>
             )}
 
             {successMessage && (
-                <div className="mb-4 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg flex items-center gap-2 text-emerald-400 text-xs">
-                    <CheckCircle2 className="w-4 h-4 shrink-0" />
-                    <span>{successMessage}</span>
+                <div className="mb-6 p-4 bg-[#10B981]/10 border border-[#10B981]/30 rounded-xl flex items-center gap-3 text-[#10B981] text-xs relative z-10 animate-reveal">
+                    <CheckCircle2 className="w-5 h-5 shrink-0" />
+                    <span className="font-medium">{successMessage}</span>
                 </div>
             )}
 
             {loading ? (
-                <div className="flex justify-center py-12">
-                    <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                <div className="flex flex-col items-center justify-center py-16 gap-3 relative z-10">
+                    <Loader2 className="w-8 h-8 animate-spin text-[#60A5FA]" />
+                    <span className="text-xs font-mono text-white/50 uppercase tracking-widest">Cross-Referencing Roster...</span>
                 </div>
             ) : rows.length === 0 ? (
-                <div className="bg-background/50 border border-dashed border-border rounded-lg p-10 text-center text-text-secondary">
-                    <Users className="w-10 h-10 mx-auto text-border mb-3" />
-                    <p className="text-sm font-medium text-text-primary">No Roster Uploaded Yet</p>
-                    <p className="text-xs mt-1 max-w-md mx-auto">
-                        Click **Upload Roster CSV** above to import your batch roster. CodeSync will automatically cross-reference existing linked profiles.
+                <div className="bg-[#0B0E14]/60 border border-dashed border-white/10 rounded-2xl p-12 text-center relative z-10">
+                    <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-4">
+                        <Users className="w-7 h-7 text-white/30" />
+                    </div>
+                    <p className="text-base font-bold text-white/90">No Roster Uploaded Yet</p>
+                    <p className="text-xs text-white/50 mt-2 max-w-md mx-auto leading-relaxed">
+                        Click <strong className="text-[#60A5FA]">Upload Roster CSV</strong> above to import your batch roster. CodeSync will automatically cross-reference existing linked profiles.
                     </p>
                 </div>
             ) : (
-                <div className="overflow-x-auto rounded-lg border border-border">
+                <div className="overflow-x-auto rounded-xl border border-white/10 bg-[#0B0E14]/80 relative z-10 custom-scrollbar">
                     <table className="w-full text-left border-collapse text-xs">
                         <thead>
-                            <tr className="bg-background border-b border-border text-text-secondary uppercase tracking-wider">
-                                <th className="p-3 font-bold">Roll Number</th>
-                                <th className="p-3 font-bold">Student Name</th>
-                                <th className="p-3 font-bold">Identifier</th>
-                                <th className="p-3 font-bold">Link Status</th>
-                                <th className="p-3 font-bold">Connected Platforms</th>
-                                <th className="p-3 font-bold">Today's Solves</th>
-                                <th className="p-3 font-bold text-right">Action</th>
+                            <tr className="bg-[#1A1D24] border-b border-white/10 text-white/60 uppercase tracking-wider font-mono">
+                                <th className="p-4 font-bold">Roll Number</th>
+                                <th className="p-4 font-bold">Student Name</th>
+                                <th className="p-4 font-bold">Identifier</th>
+                                <th className="p-4 font-bold">Link Status</th>
+                                <th className="p-4 font-bold">Connected Platforms</th>
+                                <th className="p-4 font-bold">Today's Solves</th>
+                                <th className="p-4 font-bold text-right">Action</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-border">
+                        <tbody className="divide-y divide-white/5">
                             {rows.map(r => (
                                 <tr 
                                     key={r.id} 
-                                    className={`transition-colors ${
+                                    className={`transition-colors duration-200 ${
                                         r.status === 'UNLINKED' 
-                                            ? 'bg-rose-500/5 hover:bg-rose-500/10 border-l-2 border-l-rose-500' 
+                                            ? 'bg-[#EF4444]/[0.08] hover:bg-[#EF4444]/[0.15] border-l-4 border-l-[#EF4444]' 
                                             : r.status === 'ACTIVE'
-                                                ? 'hover:bg-background/80'
-                                                : 'hover:bg-background/80 opacity-80'
+                                                ? 'hover:bg-white/[0.04]'
+                                                : 'hover:bg-white/[0.04] opacity-85'
                                     }`}
                                 >
-                                    <td className="p-3 font-mono font-bold text-text-primary">{r.rollNumber}</td>
-                                    <td className="p-3 font-medium text-text-primary">{r.name}</td>
-                                    <td className="p-3 text-text-secondary font-mono">{r.identifier || '—'}</td>
-                                    <td className="p-3">
+                                    <td className="p-4 font-mono font-bold tabular-nums text-white/95">{r.rollNumber}</td>
+                                    <td className="p-4 font-semibold text-white/95">{r.name}</td>
+                                    <td className="p-4 text-white/60 font-mono">{r.identifier || '—'}</td>
+                                    <td className="p-4">
                                         {r.discordUserId ? (
-                                            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-medium border border-emerald-500/20">
-                                                <CheckCircle2 className="w-3 h-3" />
+                                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#10B981]/15 text-[#10B981] font-mono text-[11px] font-bold border border-[#10B981]/30">
+                                                <CheckCircle2 className="w-3.5 h-3.5" />
                                                 Linked
                                             </span>
                                         ) : (
-                                            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-400 font-medium border border-rose-500/20 animate-pulse">
-                                                <XCircle className="w-3 h-3" />
+                                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#EF4444]/15 text-[#EF4444] font-mono text-[11px] font-bold border border-[#EF4444]/30 animate-pulse">
+                                                <XCircle className="w-3.5 h-3.5" />
                                                 Unlinked
                                             </span>
                                         )}
                                     </td>
-                                    <td className="p-3">
+                                    <td className="p-4">
                                         {r.platforms.length > 0 ? (
-                                            <div className="flex flex-wrap gap-1">
+                                            <div className="flex flex-wrap gap-1.5">
                                                 {r.platforms.map(p => (
-                                                    <span key={p} className="px-1.5 py-0.5 rounded bg-surface border border-border font-mono text-[10px] text-primary">
+                                                    <span key={p} className="px-2 py-0.5 rounded-md bg-[#1A1D24] border border-white/10 font-mono text-[10px] text-[#60A5FA] font-bold">
                                                         {p.replace('SMARTINTERVIEWS', 'SI')}
                                                     </span>
                                                 ))}
                                             </div>
                                         ) : (
-                                            <span className="text-text-secondary italic">None</span>
+                                            <span className="text-white/40 italic">None</span>
                                         )}
                                     </td>
-                                    <td className="p-3">
+                                    <td className="p-4 font-mono">
                                         {r.status === 'ACTIVE' ? (
-                                            <span className="inline-flex items-center gap-1.5 font-bold text-emerald-400">
-                                                <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_6px_#10B981]" />
+                                            <span className="inline-flex items-center gap-2 font-bold text-[#10B981]">
+                                                <span className="w-2 h-2 rounded-full bg-[#10B981] shadow-[0_0_8px_#10B981]" />
                                                 Solved Today
                                             </span>
                                         ) : r.status === 'INACTIVE' ? (
-                                            <span className="inline-flex items-center gap-1.5 text-amber-400">
-                                                <span className="w-2 h-2 rounded-full bg-amber-500" />
+                                            <span className="inline-flex items-center gap-2 text-[#F59E0B]">
+                                                <span className="w-2 h-2 rounded-full bg-[#F59E0B]" />
                                                 0 Solves Today
                                             </span>
                                         ) : (
-                                            <span className="text-rose-400 font-medium">Defaulter (No Profile)</span>
+                                            <span className="text-[#EF4444] font-bold">Defaulter (No Profile)</span>
                                         )}
                                     </td>
-                                    <td className="p-3 text-right">
+                                    <td className="p-4 text-right">
                                         <button 
                                             onClick={() => handleDeleteRow(r.id, r.rollNumber)}
-                                            className="text-text-secondary hover:text-rose-400 p-1 rounded transition-colors"
+                                            className="text-white/40 hover:text-[#EF4444] p-1.5 rounded-lg hover:bg-white/5 transition-colors"
                                             title="Remove from roster"
                                         >
                                             <Trash2 className="w-4 h-4" />

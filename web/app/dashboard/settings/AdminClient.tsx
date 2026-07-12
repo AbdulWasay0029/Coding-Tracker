@@ -121,19 +121,20 @@ export function AdminClient({ guilds }: { guilds: any[] }) {
 
                         {!error && channels.length > 0 && (
                             <div className="space-y-6">
-                                <div className="p-4 rounded-lg border border-border bg-background">
-                                    <h4 className="font-bold text-text-primary mb-2 text-md flex items-center gap-2">
+                                <div className="glass-subtle p-6 rounded-2xl border border-white/10 bg-[#0B0E14]/70 relative overflow-hidden">
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#3B82F6] opacity-[0.05] blur-[50px] rounded-full pointer-events-none" />
+                                    <h4 className="font-bold text-white/95 mb-2 text-base flex items-center gap-2">
                                         🌙 Nightly Reports (Automated)
                                     </h4>
-                                    <p className="text-sm text-text-secondary mb-4">CodeSync will automatically compile a daily report of every problem solved by everyone in the server and post it at your specified time.</p>
+                                    <p className="text-xs text-white/60 mb-5 leading-relaxed">CodeSync automatically compiles a daily report of every problem solved by everyone in the server and posts it at your specified time.</p>
                                     
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div>
-                                            <label className="block text-xs font-bold text-text-secondary mb-2 uppercase tracking-wider">
+                                            <label className="block text-[11px] font-mono font-bold text-white/70 mb-2 uppercase tracking-wider">
                                                 Report Channel
                                             </label>
                                             <select 
-                                                className="w-full bg-surface border border-border p-3 rounded-lg text-text-primary focus:ring-2 focus:ring-primary outline-none transition-all"
+                                                className="w-full bg-[#1A1D24] border border-white/10 p-3 rounded-xl text-white/90 focus:border-[#60A5FA] focus:ring-1 focus:ring-[#60A5FA] outline-none transition-all text-xs font-mono"
                                                 value={config.reminderChannelId || ''}
                                                 onChange={e => setConfig(prev => ({ ...prev, reminderChannelId: e.target.value }))}
                                                 disabled={loading}
@@ -145,11 +146,11 @@ export function AdminClient({ guilds }: { guilds: any[] }) {
                                             </select>
                                         </div>
                                         <div>
-                                            <label className="block text-xs font-bold text-text-secondary mb-2 uppercase tracking-wider">
+                                            <label className="block text-[11px] font-mono font-bold text-white/70 mb-2 uppercase tracking-wider">
                                                 Time (IST)
                                             </label>
                                             <select 
-                                                className="w-full bg-surface border border-border p-3 rounded-lg text-text-primary focus:ring-2 focus:ring-primary outline-none transition-all"
+                                                className="w-full bg-[#1A1D24] border border-white/10 p-3 rounded-xl text-white/90 focus:border-[#60A5FA] focus:ring-1 focus:ring-[#60A5FA] outline-none transition-all text-xs font-mono"
                                                 value={config.reminderTime || ''}
                                                 onChange={e => setConfig(prev => ({ ...prev, reminderTime: e.target.value }))}
                                                 disabled={loading || !config.reminderChannelId}
@@ -163,19 +164,20 @@ export function AdminClient({ guilds }: { guilds: any[] }) {
                                     </div>
                                 </div>
 
-                                <div className="p-4 rounded-lg border border-border bg-background">
-                                    <h4 className="font-bold text-text-primary mb-2 text-md flex items-center gap-2">
+                                <div className="glass-subtle p-6 rounded-2xl border border-white/10 bg-[#0B0E14]/70 relative overflow-hidden">
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#A78BFA] opacity-[0.05] blur-[50px] rounded-full pointer-events-none" />
+                                    <h4 className="font-bold text-white/95 mb-2 text-base flex items-center gap-2">
                                         ⚡ Live Contest Alerts
                                     </h4>
-                                    <p className="text-sm text-text-secondary mb-4">Automated 10-minute warnings before LeetCode and Codeforces contests begin.</p>
+                                    <p className="text-xs text-white/60 mb-5 leading-relaxed">Automated 10-minute warnings before LeetCode and Codeforces contests begin.</p>
                                     
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div>
-                                            <label className="block text-xs font-bold text-text-secondary mb-2 uppercase tracking-wider">
+                                            <label className="block text-[11px] font-mono font-bold text-white/70 mb-2 uppercase tracking-wider">
                                                 Alert Channel
                                             </label>
                                             <select 
-                                                className="w-full bg-surface border border-border p-3 rounded-lg text-text-primary focus:ring-2 focus:ring-primary outline-none transition-all"
+                                                className="w-full bg-[#1A1D24] border border-white/10 p-3 rounded-xl text-white/90 focus:border-[#60A5FA] focus:ring-1 focus:ring-[#60A5FA] outline-none transition-all text-xs font-mono"
                                                 value={config.contestChannelId || ''}
                                                 onChange={e => setConfig(prev => ({ ...prev, contestChannelId: e.target.value }))}
                                                 disabled={loading}
@@ -187,11 +189,11 @@ export function AdminClient({ guilds }: { guilds: any[] }) {
                                             </select>
                                         </div>
                                         <div>
-                                            <label className="block text-xs font-bold text-text-secondary mb-2 uppercase tracking-wider">
+                                            <label className="block text-[11px] font-mono font-bold text-white/70 mb-2 uppercase tracking-wider">
                                                 Ping Role
                                             </label>
                                             <select 
-                                                className="w-full bg-surface border border-border p-3 rounded-lg text-text-primary focus:ring-2 focus:ring-primary outline-none transition-all"
+                                                className="w-full bg-[#1A1D24] border border-white/10 p-3 rounded-xl text-white/90 focus:border-[#60A5FA] focus:ring-1 focus:ring-[#60A5FA] outline-none transition-all text-xs font-mono"
                                                 value={config.contestRoleId || ''}
                                                 onChange={e => setConfig(prev => ({ ...prev, contestRoleId: e.target.value }))}
                                                 disabled={loading || !config.contestChannelId}
@@ -205,10 +207,13 @@ export function AdminClient({ guilds }: { guilds: any[] }) {
                                     </div>
                                 </div>
 
-                                <div className="p-4 mt-8 rounded-lg border border-primary/20 bg-primary/5 flex flex-col md:flex-row items-center justify-between gap-4">
+                                <div className="glass-subtle p-5 rounded-2xl border border-[#3B82F6]/20 bg-[#3B82F6]/[0.03] flex flex-col md:flex-row items-center justify-between gap-4">
                                     <div>
-                                        <h4 className="font-bold text-text-primary mb-1 text-sm">Force Sync Leaderboard</h4>
-                                        <p className="text-xs text-text-secondary">Manually trigger a full server data scrape. Limited to 1 use per day.</p>
+                                        <h4 className="font-bold text-white/95 mb-1 text-sm flex items-center gap-2">
+                                            <span className="w-2 h-2 rounded-full bg-[#60A5FA] animate-pulse" />
+                                            Force Sync Leaderboard
+                                        </h4>
+                                        <p className="text-xs text-white/60">Manually trigger a full server data scrape. Limited to 1 use per day.</p>
                                     </div>
                                     <button 
                                         type="button"
@@ -226,7 +231,7 @@ export function AdminClient({ guilds }: { guilds: any[] }) {
                                                 setLoading(false);
                                             }
                                         }}
-                                        className="px-4 py-2 bg-background border border-primary text-primary hover:bg-primary/10 rounded font-medium text-sm transition-all whitespace-nowrap disabled:opacity-50"
+                                        className="px-4 py-2 bg-[#1A1D24] border border-white/10 text-[#60A5FA] hover:bg-[#60A5FA]/10 hover:border-[#60A5FA]/30 rounded-xl font-mono font-bold text-xs transition-all whitespace-nowrap disabled:opacity-50"
                                     >
                                         {loading ? 'Syncing...' : 'Force Sync (Beta)'}
                                     </button>
@@ -234,11 +239,11 @@ export function AdminClient({ guilds }: { guilds: any[] }) {
 
                                 <GuildRosterManager guildId={selectedGuild} />
 
-                                <div className="pt-6 border-t border-border mt-8 flex justify-end">
+                                <div className="pt-6 border-t border-white/10 mt-8 flex justify-end">
                                     <button 
                                         onClick={handleSave}
                                         disabled={loading}
-                                        className="bg-primary hover:bg-primary-hover text-white px-6 py-2 rounded-lg font-bold flex items-center gap-2 transition-all disabled:opacity-50"
+                                        className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white px-6 py-3 rounded-xl font-bold text-sm flex items-center gap-2 transition-all duration-300 hover:-translate-y-0.5 shadow-[0_0_25px_rgba(37,99,235,0.3)] disabled:opacity-50"
                                     >
                                         <Save className="w-4 h-4" />
                                         {loading ? 'Saving...' : success ? 'Saved!' : 'Save Settings'}

@@ -9,3 +9,9 @@ package-lock.json
 .DS_Store
 web/impeccable-main
 web/taste-skill-main
+bencium-marketplace-main/
+impeccable-main/
+taste-skill-main/
+ui-ux-pro-max-skill-main/
+design-skills-unified/
+.agents/

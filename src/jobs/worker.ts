@@ -34,8 +34,8 @@ async function pollQueue() {
         console.log(`[Worker] Processing Job ${job.id} for user ${job.discordUserId}`);
 
         try {
-            // Run the heavy tracker logic (which is now internally rate-limited)
-            await runTrackerForUser(job.discordUserId, job.startTimestamp, job.endTimestamp);
+            // Run the heavy tracker logic (which is now internally rate-limited and statefully cached)
+            await runTrackerForUser(job.discordUserId, job.startTimestamp, job.endTimestamp, undefined, job.jobType);
 
             // Mark completed
             await prisma.scrapeJob.update({

@@ -24,7 +24,8 @@ export async function runTrackerForUser(
     discordUserId: string,
     startTimestamp: number,
     endTimestamp: number,
-    fetchStartOverride?: number
+    fetchStartOverride?: number,
+    jobType: string = 'DAILY_SYNC'
 ): Promise<TrackerResult> {
     const actualStartTimestamp = fetchStartOverride ?? startTimestamp;
     
@@ -38,27 +39,54 @@ export async function runTrackerForUser(
         return { links: [], groupedLinks: {}, errors: ['no_profiles'] };
     }
 
+    // Load all already tracked dates from cache for this user
+    const existingTrackedRows = await prisma.trackedDate.findMany({
+        where: { discordUserId }
+    });
+    const trackedDatesCache = new Set(existingTrackedRows.map(r => `${r.platform}-${r.date}`));
+
     // Parallelize all requests to save huge amounts of waiting time O(M*N) -> O(Max(M))
     const fetchPromises = profiles.map(async (profile) => {
         let submissions: any[] = [];
         const platformKey = profile.platform.toUpperCase();
 
         try {
+            // Check if all historical dates in window are already tracked
+            let needsFetch = false;
+            let checkDayMs = actualStartTimestamp * 1000 + (5.5 * 3600 * 1000);
+            const endCheckDayMs = endTimestamp * 1000 + (5.5 * 3600 * 1000);
+            const nowOffset = 5.5 * 60 * 60 * 1000;
+            const todayIstStr = new Date(Date.now() + nowOffset).toISOString().split('T')[0];
+            
+            while (checkDayMs <= endCheckDayMs) {
+                const dStr = new Date(checkDayMs).toISOString().split('T')[0];
+                if (dStr !== todayIstStr && !trackedDatesCache.has(`${platformKey}-${dStr}`)) {
+                    needsFetch = true;
+                    break;
+                }
+                checkDayMs += 86400 * 1000;
+            }
+
+            if (!needsFetch && jobType === 'FULL_HISTORY') {
+                console.log(`[Tracker] Skipping ${profile.platform}/${profile.username} - completely tracked in cache`);
+                return { profile, platformKey, submissions: [], error: null };
+            }
+
             if (profile.platform === 'LEETCODE') {
-                submissions = await withCache(`lc-${profile.username}-${actualStartTimestamp}`, 300, () => fetchLeetCodeSubmissions(profile.username, actualStartTimestamp));
+                submissions = await withCache(`lc-${profile.username}-${actualStartTimestamp}-${jobType}`, 300, () => fetchLeetCodeSubmissions(profile.username, actualStartTimestamp));
             } else if (profile.platform === 'CODEFORCES') {
-                submissions = await withCache(`cf-${profile.username}-${actualStartTimestamp}`, 300, () => fetchCodeforcesSubmissions(profile.username, actualStartTimestamp));
+                submissions = await withCache(`cf-${profile.username}-${actualStartTimestamp}-${jobType}`, 300, () => fetchCodeforcesSubmissions(profile.username, actualStartTimestamp));
             } else if (profile.platform === 'CODECHEF') {
-                submissions = await withCache(`cc-${profile.username}-${actualStartTimestamp}`, 300, () => fetchCodeChefSubmissions(profile.username, actualStartTimestamp));
+                submissions = await withCache(`cc-${profile.username}-${actualStartTimestamp}-${jobType}`, 300, () => fetchCodeChefSubmissions(profile.username, actualStartTimestamp));
             } else if (profile.platform === 'SMARTINTERVIEWS') {
                 const decryptedToken = profile.token ? decrypt(profile.token) : undefined;
-                submissions = await withCache(`si-${profile.username}-${actualStartTimestamp}`, 300, () => fetchSmartInterviewsSubmissions(
+                submissions = await withCache(`si-${profile.username}-${actualStartTimestamp}-${jobType}`, 300, () => fetchSmartInterviewsSubmissions(
                     profile.username,
                     decryptedToken,
                     actualStartTimestamp
                 ));
             } else if (profile.platform === 'HACKERRANK') {
-                submissions = await withCache(`hr-${profile.username}-${actualStartTimestamp}`, 300, () => fetchHackerRankSubmissions(profile.username, actualStartTimestamp));
+                submissions = await withCache(`hr-${profile.username}-${actualStartTimestamp}-${jobType}`, 300, () => fetchHackerRankSubmissions(profile.username, actualStartTimestamp));
             }
             return { profile, platformKey, submissions, error: null };
         } catch (err: any) {
@@ -70,6 +98,11 @@ export async function runTrackerForUser(
     const results = await Promise.all(fetchPromises);
 
     const globalUpsertTasks: (() => Promise<any>)[] = [];
+    const newTrackedDatesToSave: Set<string> = new Set();
+    
+    // Get "today" in IST so we NEVER cache today as "fully tracked"
+    const nowOffset = 5.5 * 60 * 60 * 1000;
+    const todayIstStr = new Date(Date.now() + nowOffset).toISOString().split('T')[0];
     
     for (const { profile, submissions, error } of results) {
         if (error) {
@@ -83,19 +116,22 @@ export async function runTrackerForUser(
         const seen = new Set<string>();
 
         for (const sub of submissions) {
-            // Filter out anything older than our fetch boundary
-            if (sub.timestamp < actualStartTimestamp) continue;
+            // Filter out anything older than our fetch boundary on DAILY_SYNC
+            if (jobType === 'DAILY_SYNC' && sub.timestamp < actualStartTimestamp) continue;
             
             if (seen.has(sub.titleSlug)) continue;
             seen.add(sub.titleSlug);
 
             // Create a deterministic unique ID for this problem on this specific day (IST)
-            // This prevents duplicates from multiple check commands or multiple submissions on the same day,
-            // while allowing the user to solve the same problem again on a different day!
             const istOffset = 5.5 * 60 * 60 * 1000;
             const istDate = new Date(sub.timestamp * 1000 + istOffset);
             const dateStr = istDate.toISOString().split('T')[0];
             const uniqueProblemId = `${sub.titleSlug}-${dateStr}`;
+
+            // If we already fully tracked this date in the past, skip DB upsert to save latency!
+            if (trackedDatesCache.has(`${platformKey}-${dateStr}`)) {
+                if (!(sub.timestamp >= startTimestamp && sub.timestamp < endTimestamp)) continue;
+            }
 
             // Cluster all DB writes into a sequential task queue to prevent connection pool exhaustion
             globalUpsertTasks.push(() => 
@@ -119,11 +155,22 @@ export async function runTrackerForUser(
             );
 
             // IMPORTANT: Only return links for the specific daily report window requested!
-            // This allows us to silently heal older DB entries without spamming Discord
             if (sub.timestamp >= startTimestamp && sub.timestamp < endTimestamp) {
                 links.push(sub.url);
                 platformGroup.push({ title: sub.title, url: sub.url });
             }
+        }
+
+        // Mark every day inside the window (except today) as tracked
+        let currentDayMs = actualStartTimestamp * 1000 + (5.5 * 3600 * 1000); // IST
+        const endDayMs = endTimestamp * 1000 + (5.5 * 3600 * 1000);
+        
+        while (currentDayMs <= endDayMs) {
+            const dStr = new Date(currentDayMs).toISOString().split('T')[0];
+            if (dStr !== todayIstStr) { // NEVER cache today!
+                newTrackedDatesToSave.add(`${platformKey}|${dStr}`);
+            }
+            currentDayMs += 86400 * 1000; // Add 1 day
         }
 
         if (links.length > 0) {
@@ -138,6 +185,20 @@ export async function runTrackerForUser(
             await task();
         } catch (err: any) {
             console.error('[Tracker] Upsert failed:', err.message);
+        }
+    }
+
+    // Bulk save the new Tracked Dates so future runs skip immediately
+    for (const item of newTrackedDatesToSave) {
+        const [platform, dateStr] = item.split('|');
+        try {
+            await prisma.trackedDate.upsert({
+                where: { discordUserId_platform_date: { discordUserId, platform, date: dateStr } },
+                update: {},
+                create: { discordUserId, platform, date: dateStr }
+            });
+        } catch (e) {
+            // Ignore unique constraint races
         }
     }
 

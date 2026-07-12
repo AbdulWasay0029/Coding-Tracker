@@ -67,6 +67,7 @@ model AnalyticsEvent {
 model ScrapeJob {
   id            String   @id @default(uuid())
   discordUserId String
+  jobType       String   @default("DAILY_SYNC") // "DAILY_SYNC" or "FULL_HISTORY"
   startTimestamp Int
   endTimestamp   Int
   status        String   @default("PENDING") // PENDING, PROCESSING, COMPLETED, FAILED
@@ -92,5 +93,17 @@ model GuildRosterMember {
 
   @@unique([guildId, rollNumber])
   @@index([guildId])
+  @@index([discordUserId])
+}
+
+// Caching layer: permanently records which days have been fully scraped for a user
+model TrackedDate {
+  id            String   @id @default(uuid())
+  discordUserId String
+  platform      String
+  date          String   // e.g. "2026-06-12"
+  createdAt     DateTime @default(now())
+
+  @@unique([discordUserId, platform, date])
   @@index([discordUserId])
 }

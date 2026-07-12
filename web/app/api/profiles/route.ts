@@ -60,19 +60,20 @@ export async function POST(req: Request) {
             }
         });
 
-        // Fire-and-forget: Queue an asynchronous historical backfill job (past 365 days)
-        // This permanently populates the user's contribution heatmap without blocking profile creation!
+        // Fire-and-forget: Queue an asynchronous FULL_HISTORY backfill job (past 365 days)
+        // This permanently populates the user's contribution heatmap and caches tracked dates without blocking!
         try {
             const now = Math.floor(Date.now() / 1000);
             const oneYearAgo = now - (365 * 86400);
             await prisma.scrapeJob.create({
                 data: {
                     discordUserId: session.user.id,
+                    jobType: 'FULL_HISTORY',
                     startTimestamp: oneYearAgo,
                     endTimestamp: now + 86400
                 }
             });
-            console.log(`[Backfill Engine] Queued 365-day history pull for ${session.user.id} (${formattedPlatform})`);
+            console.log(`[Backfill Engine] Queued FULL_HISTORY pull for ${session.user.id} (${formattedPlatform})`);
         } catch (queueErr) {
             console.error(`[Backfill Engine] Non-fatal error queuing backfill for ${session.user.id}:`, queueErr);
         }

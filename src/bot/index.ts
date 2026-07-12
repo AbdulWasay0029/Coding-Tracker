@@ -41,7 +41,15 @@ const port = process.env.PORT || 7860;
 app.get('/', (req, res) => res.send('🚀 CodeSync Bot is running!'));
 app.get('/health', (req, res) => res.status(200).send('OK'));
 
-app.listen(port, () => console.log(`🌍 Health check server on port ${port}`));
+app.listen(port, () => {
+    console.log(`🌍 Health check server on port ${port}`);
+    console.log(`[Bot Startup] Verifying DISCORD_BOT_TOKEN...`);
+    if (!process.env.DISCORD_BOT_TOKEN) {
+        console.error(`❌ [CRITICAL ERROR] DISCORD_BOT_TOKEN is completely missing from process.env! Check your HeavenCloud .env file.`);
+    } else {
+        console.log(`[Bot Startup] DISCORD_BOT_TOKEN found (Length: ${process.env.DISCORD_BOT_TOKEN.length} chars). Initiating Discord Gateway connection...`);
+    }
+});
 
 const client = new Client({ 
     intents: [
@@ -49,6 +57,9 @@ const client = new Client({
         GatewayIntentBits.GuildMembers,
     ] 
 });
+
+client.on('error', (err) => console.error('❌ [Discord Client Error]:', err));
+client.on('shardError', (error, shardId) => console.error(`❌ [Discord Shard ${shardId} Error]:`, error));
 
 import { ActivityType } from 'discord.js';
 
@@ -111,4 +122,8 @@ client.on('interactionCreate', async (interaction: Interaction) => {
 });
 
 
-client.login(process.env.DISCORD_BOT_TOKEN);
+client.login(process.env.DISCORD_BOT_TOKEN)
+    .then(() => console.log('[Bot Startup] client.login() promise resolved. Waiting for Discord Shard ready...'))
+    .catch((err) => {
+        console.error('❌ [Bot Startup] client.login() FAILED completely:', err.message || err);
+    });

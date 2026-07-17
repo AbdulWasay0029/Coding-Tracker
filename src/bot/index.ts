@@ -1,9 +1,3 @@
-import dns from 'dns';
-try {
-    // Force Node.js/undici to resolve IPv4 first. Prevents infinite timeouts when containers have broken IPv6 routing.
-    dns.setDefaultResultOrder('ipv4first');
-} catch (e) {}
-
 import { Client, GatewayIntentBits, Interaction, EmbedBuilder, TextChannel } from 'discord.js';
 import dotenv from 'dotenv';
 import path from 'path';
@@ -47,15 +41,7 @@ const port = process.env.PORT || 7860;
 app.get('/', (req, res) => res.send('🚀 CodeSync Bot is running!'));
 app.get('/health', (req, res) => res.status(200).send('OK'));
 
-app.listen(port, () => {
-    console.log(`🌍 Health check server on port ${port}`);
-    console.log(`[Bot Startup] Verifying DISCORD_BOT_TOKEN...`);
-    if (!process.env.DISCORD_BOT_TOKEN) {
-        console.error(`❌ [CRITICAL ERROR] DISCORD_BOT_TOKEN is completely missing from process.env! Check your HeavenCloud .env file.`);
-    } else {
-        console.log(`[Bot Startup] DISCORD_BOT_TOKEN found (Length: ${process.env.DISCORD_BOT_TOKEN.length} chars). Initiating Discord Gateway connection...`);
-    }
-});
+app.listen(port, () => console.log(`🌍 Health check server on port ${port}`));
 
 const client = new Client({ 
     intents: [
@@ -64,13 +50,7 @@ const client = new Client({
     ] 
 });
 
-client.on('debug', (info) => {
-    if (info.includes('Heartbeat') || info.includes('Checking for token')) return;
-    console.log(`[Discord Debug]: ${info}`);
-});
 
-client.on('error', (err) => console.error('❌ [Discord Client Error]:', err));
-client.on('shardError', (error, shardId) => console.error(`❌ [Discord Shard ${shardId} Error]:`, error));
 
 import { ActivityType } from 'discord.js';
 
@@ -133,12 +113,4 @@ client.on('interactionCreate', async (interaction: Interaction) => {
 });
 
 
-const loginTimeout = new Promise((_, reject) => 
-    setTimeout(() => reject(new Error('Discord Gateway connection timed out after 30 seconds! Check if HeavenCloud has outbound port 443 blocked or if Cloudflare is rate-limiting this container IP.')), 30000)
-);
-
-Promise.race([client.login(process.env.DISCORD_BOT_TOKEN), loginTimeout])
-    .then(() => console.log('[Bot Startup] client.login() promise resolved! Handshake sent to Discord Gateway...'))
-    .catch((err: any) => {
-        console.error('❌ [Bot Startup] client.login() FAILED or TIMED OUT:', err.message || err);
-    });
+client.login(process.env.DISCORD_BOT_TOKEN);

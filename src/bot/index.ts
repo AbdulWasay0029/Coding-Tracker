@@ -1,3 +1,9 @@
+import dns from 'dns';
+try {
+    // Force Node.js/undici to resolve IPv4 first. Prevents infinite timeouts when containers have broken IPv6 routing.
+    dns.setDefaultResultOrder('ipv4first');
+} catch (e) {}
+
 import { Client, GatewayIntentBits, Interaction, EmbedBuilder, TextChannel } from 'discord.js';
 import dotenv from 'dotenv';
 import path from 'path';
@@ -56,6 +62,11 @@ const client = new Client({
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMembers,
     ] 
+});
+
+client.on('debug', (info) => {
+    if (info.includes('Heartbeat') || info.includes('Checking for token')) return;
+    console.log(`[Discord Debug]: ${info}`);
 });
 
 client.on('error', (err) => console.error('❌ [Discord Client Error]:', err));
@@ -122,8 +133,12 @@ client.on('interactionCreate', async (interaction: Interaction) => {
 });
 
 
-client.login(process.env.DISCORD_BOT_TOKEN)
-    .then(() => console.log('[Bot Startup] client.login() promise resolved. Waiting for Discord Shard ready...'))
-    .catch((err) => {
-        console.error('❌ [Bot Startup] client.login() FAILED completely:', err.message || err);
+const loginTimeout = new Promise((_, reject) => 
+    setTimeout(() => reject(new Error('Discord Gateway connection timed out after 30 seconds! Check if HeavenCloud has outbound port 443 blocked or if Cloudflare is rate-limiting this container IP.')), 30000)
+);
+
+Promise.race([client.login(process.env.DISCORD_BOT_TOKEN), loginTimeout])
+    .then(() => console.log('[Bot Startup] client.login() promise resolved! Handshake sent to Discord Gateway...'))
+    .catch((err: any) => {
+        console.error('❌ [Bot Startup] client.login() FAILED or TIMED OUT:', err.message || err);
     });

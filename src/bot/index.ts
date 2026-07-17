@@ -50,6 +50,12 @@ const client = new Client({
     ] 
 });
 
+client.on('error', (err) => console.error('❌ [Discord Client Error]:', err.message || err));
+client.on('warn', (info) => console.warn('⚠️ [Discord Client Warning]:', info));
+client.on('shardError', (error, shardId) => console.error(`❌ [Discord Shard ${shardId} Error]:`, error.message || error));
+client.on('shardDisconnect', (event, shardId) => console.warn(`⚠️ [Discord Shard ${shardId} Disconnected]: Code ${event.code}, reason: ${event.reason || 'None'}`));
+client.on('shardReconnecting', (shardId) => console.log(`🔄 [Discord Shard ${shardId}] Reconnecting to Discord Gateway...`));
+
 
 
 import { ActivityType } from 'discord.js';
@@ -113,4 +119,35 @@ client.on('interactionCreate', async (interaction: Interaction) => {
 });
 
 
-client.login(process.env.DISCORD_BOT_TOKEN);
+async function probeDiscordGateway() {
+    console.log('[Bot Startup] Probing Discord Gateway API accessibility (outbound port 443)...');
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000);
+        const res = await fetch('https://discord.com/api/v10/gateway/bot', {
+            headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` },
+            signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        
+        if (!res.ok) {
+            console.error(`❌ [Bot Startup Probe] Discord API responded with HTTP status ${res.status}: ${res.statusText}`);
+            const body = await res.text().catch(() => '');
+            if (body) console.error(`   API Response Body: ${body}`);
+        } else {
+            const data = await res.json() as any;
+            console.log(`✅ [Bot Startup Probe] Discord API reachable over HTTPS! Gateway URL: ${data.url}, Recommended Shards: ${data.shards}`);
+        }
+    } catch (err: any) {
+        if (err.name === 'AbortError') {
+            console.error(`❌ [Bot Startup Probe] HTTPS connection to discord.com/api/v10/gateway/bot timed out after 15 seconds! Check if HeavenCloud container blocks outbound port 443 or has broken IPv6 routing.`);
+        } else {
+            console.error(`❌ [Bot Startup Probe] Network error reaching Discord API: ${err.message || err}`);
+        }
+    }
+}
+
+probeDiscordGateway();
+client.login(process.env.DISCORD_BOT_TOKEN).catch((err: any) => {
+    console.error(`❌ [Bot Startup] client.login() rejected with fatal error:`, err.message || err);
+});
